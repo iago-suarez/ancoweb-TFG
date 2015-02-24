@@ -88,4 +88,23 @@ body {
 	#map-outer  { height: 650px }
 }
 
-/* --- */
+/* - ADDED BY IAGO - */
+
+#video-list{
+    margin-top: 15px;
+}
+.video-fragment{
+    list-style-type: none;
+    display: inline-block;
+    min-width: 100%;
+    margin: 3px;
+}
+
+.video-fragment a{
+    font-size: 24px;
+}
+
+.defaultVideoIcon {
+    max-width:70%;
+    max-height:70%;
+}

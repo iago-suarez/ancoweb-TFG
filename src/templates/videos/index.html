@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ block.super }}Home{% endblock %}
+
+{% block navbar-left %}
+  {% include "_navbar.html" with active_link="videos" %}
+{% endblock %}
+
+{% block container %}
+
+<div class="container" id="video-list">
+  <div class="row">
+
+    {% if video_list %}
+        <ul>
+        {% for video in video_list %}
+            <li class="video-fragment" style="display: inline-block">
+                <div class="col-xs-3 text-center">
+                    <a href="{% url 'videos:details' video %}">
+                        <img class="defaultVideoIcon" src="{% static defaultVideoIcon %}"/>
+                    </a>
+                </div>
+                <div class="col-xs-9">
+                    <a href="{% url 'videos:details' video %}">{{ video }}</a>
+                    <p> Descripcion</p>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No videos are available.</p>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock container %}

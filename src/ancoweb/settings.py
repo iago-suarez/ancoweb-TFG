@@ -9,13 +9,16 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
 # Build paths inside the project like this: BASE_DIR / "directory"
+import os
 from pathlib import Path
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIRS = [str(BASE_DIR / 'templates'), ]
 STATICFILES_DIRS = [str(BASE_DIR / 'static'), ]
 
 # Use 12factor inspired environment variables or from a file
 import environ
+
 env = environ.Env()
 # Ideally move env file should be outside the git repo
 # i.e. BASE_DIR.parent.parent
@@ -40,6 +43,7 @@ ALLOWED_HOSTS = []
 # Turn off debug while imported by Celery with a workaround
 # See http://stackoverflow.com/a/4806384
 import sys
+
 if "celery" in sys.argv[0]:
     DEBUG = False
 
@@ -97,6 +101,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = 'media/'
+
 STATIC_URL = '/static/'
 
 # Crispy Form Theme - Bootstrap 3
@@ -104,6 +111,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # For Bootstrap 3, change error alert to 'danger'
 from django.contrib import messages
+
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
@@ -112,3 +120,8 @@ MESSAGE_TAGS = {
 if DEBUG:
     INSTALLED_APPS += (
         'debug_toolbar.apps.DebugToolbarConfig',)
+
+
+# Custom Settings
+
+DEFAULT_VIDEO_ICON = 'site/img/default-video-image.png'
