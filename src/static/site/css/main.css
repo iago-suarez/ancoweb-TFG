@@ -108,3 +108,7 @@ body {
     max-width:70%;
     max-height:70%;
 }
+
+#video-player{
+    max-width: 100%;
+}

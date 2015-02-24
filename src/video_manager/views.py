@@ -1,15 +1,16 @@
 # Create your views here.
-from django.shortcuts import render
 from django.views import generic
 import os
 from ancoweb import settings
+from accounts.views import SignInAndSignUp
 
 
-class IndexView(generic.ListView):
+class IndexView(generic.ListView, SignInAndSignUp):
     template_name = 'videos/index.html'
     context_object_name = 'video_list'
 
-    def get_queryset(self):
+    @property
+    def object_list(self):
         """Return the elements."""
         videos = []
         directory = os.path.join(settings.MEDIA_ROOT, 'videos/')
@@ -26,7 +27,15 @@ class IndexView(generic.ListView):
         context['defaultVideoIcon'] = settings.DEFAULT_VIDEO_ICON
         return context
 
-def details(request, videoName):
-    context = {'videoUrl': 'videos/' + videoName + '.ogv',
-               'videoName': videoName}
-    return render(request, 'videos/details.html', context)
+
+class DetailsView(SignInAndSignUp, generic.TemplateView):
+
+    template_name = 'videos/details.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(DetailsView, self).get_context_data(**kwargs)
+        # Add in the publisher
+        context['videoName'] = kwargs['videoName']
+        context['videoUrl'] = 'videos/' + kwargs['videoName'] + '.ogv'
+        return context

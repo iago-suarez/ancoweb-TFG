@@ -5,5 +5,5 @@ from django.conf.urls.static import static
 
 urlpatterns = patterns('',
                        url(r'^$', views.IndexView.as_view(), name='index'),
-                       url(r'^(?P<videoName>.+)/$', views.details, name='details'),
+                           url(r'^(?P<videoName>.+)/$', views.DetailsView.as_view(), name='details'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

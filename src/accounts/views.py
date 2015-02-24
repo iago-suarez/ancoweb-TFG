@@ -73,5 +73,5 @@ class LogoutView(generic.RedirectView):
         return super().get(request, *args, **kwargs)
 
 
-class AboutView(generic.TemplateView):
+class AboutView(SignInAndSignUp, generic.TemplateView):
     template_name = "about.html"

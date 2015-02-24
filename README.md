@@ -1,24 +1,19 @@
-> __Delete this blockquote.__
->
-> __edge__ - a lighter, cutting-edge Django project skeleton.
->
-> FEATURES: Python 3/Django 1.7 support, Bootstrap bundled, No South
->
-> Quick start:
-> `$ django-admin.py startproject --template=https://github.com/arocks/edge/archive/master.zip --extension=py,md,html,env myproj`
->
-> More information at: https://github.com/arocks/edge/wiki
-
 # ancoweb-TFG
 ## Web application for the analysis of human behavior
-ancoweb is a Web application for the analysis of human behavior built with [Python][0] using the [Django Web Framework][1].
+Ancoweb is a Web application for the analysis of human behavior built with [Python][0] using the [Django Web Framework][1].
 
 This project has the following basic apps:
 
-* TODO - Add Modules
-* TODO 2 - Add Modules
+* accounts - Manage Accounst System
 
 ## Installation
+
+
+### Download
+
+To download the source code:
+
+    git clone https://github.com/iago-suarez/ancoweb-TFG
 
 ### Quick start
 
@@ -39,7 +34,12 @@ Now the pip commands should work smoothly. Install all dependencies:
 
 Run migrations:
 
+    cd src
     python manage.py migrate
+
+Run server:
+
+    python manage.py runserver
 
 ### Detailed instructions
 
