@@ -1,6 +1,6 @@
 # Create your views here.
 from django import forms
-from django.forms import ModelForm, Textarea
+from django.forms import ModelForm, Textarea, ClearableFileInput
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.views import generic
@@ -42,6 +42,7 @@ class VideoForm(ModelForm):
         fields = ['title', 'video', 'description']
         widgets = {
             'description': Textarea(attrs={'cols': 40, 'rows': 8}),
+            'video': ClearableFileInput(attrs={'accept': '.mp4, .ogv, .avi, .flv'}),
         }
 
 
@@ -72,13 +73,6 @@ class UploadView(SignInAndSignUp):
         else:
             # POST is not from video form
             super().post(self, request, *args, **kwargs)
-
-
-# def handle_uploaded_file(f, name):
-#     video_file = os.path.join(settings.MEDIA_ROOT, VIDEOS_FOLDER, name)
-#     with open(video_file, 'wb+') as destination:
-#         for chunk in f.chunks():
-#             destination.write(chunk)
 
 
 class DetailsView(SignInAndSignUp, generic.TemplateView):
