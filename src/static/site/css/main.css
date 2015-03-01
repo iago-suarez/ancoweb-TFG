@@ -90,6 +90,12 @@ body {
 
 /* - ADDED BY IAGO - */
 
+/* Redefining bootstrap */
+input [type="file"] {
+    display: initial;
+}
+
+/* Page style*/
 #video-list{
     margin-top: 15px;
 }
@@ -111,4 +117,14 @@ body {
 
 #video-player{
     max-width: 100%;
+}
+
+#upload-video{
+    display: inline-block;
+    margin-top: 20px;
+}
+
+#upload-video p textarea {
+    display: block;
+
 }

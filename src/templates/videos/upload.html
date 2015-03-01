@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ block.super }}Home{% endblock %}
+
+{% block navbar-left %}
+  {% include "_navbar.html" %}
+{% endblock %}
+
+{% block navbar-right %}
+  {% if not user.is_authenticated %}
+    {% crispy signin_form %}
+  {% else %}
+    {{ block.super }}
+  {% endif %}
+{% endblock %}
+
+{% block container %}
+
+<div class="container">
+    <div class="row text-center">
+        <h2>Upload New Video</h2>
+        <div id="upload-video" class=" text-left">
+            <form id="upload_form" action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="upload_form" value="upload_form"/>
+                {{ upload_form.as_p }}
+                <input id="form_submit_button" class="btn btn-default" type="submit" value="OK" />
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock container %}
