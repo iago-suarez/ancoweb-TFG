@@ -24,16 +24,16 @@
 
     {% if video_list %}
         <ul>
-        {% for video in video_list %}
-            <li class="video-fragment" style="display: inline-block">
+        {% for video in object_list %}
+            <li class="video-fragment">
                 <div class="col-xs-3 text-center">
-                    <a href="{% url 'videos:details' video %}">
+                    <a href="{% url 'videos:details' video.id %}">
                         <img class="defaultVideoIcon" src="{% static defaultVideoIcon %}"/>
                     </a>
                 </div>
                 <div class="col-xs-9">
-                    <a href="{% url 'videos:details' video %}">{{ video }}</a>
-                    <p> Descripcion</p>
+                    <a href="{% url 'videos:details' video.id  %}">{{ video }}</a>
+                    <p> {{ video.description }} </p>
                 </div>
             </li>
         {% endfor %}

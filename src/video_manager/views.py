@@ -9,24 +9,22 @@ from ancoweb import settings
 from accounts.views import SignInAndSignUp
 from django.contrib import messages
 from video_manager import models
+from video_manager.models import Video
 
 VIDEOS_FOLDER = 'videos/'
 
 
-class IndexView(generic.ListView, SignInAndSignUp):
+class IndexView(SignInAndSignUp, generic.ListView):
     template_name = 'videos/index.html'
-    context_object_name = 'video_list'
+    model = Video
 
-    @property
-    def object_list(self):
-        """Return the elements."""
-        videos = []
-        directory = os.path.join(settings.MEDIA_ROOT, VIDEOS_FOLDER)
-        # 'videos/' file should exist in static path. otherwise, error will occur
-        for file in os.listdir(directory):
-            if file.endswith(".ogv"):
-                videos.append(file.replace(".ogv", ""))
-        return videos
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.object_list = Video.objects.order_by('title')
+
+    def get_queryset(self):
+        """Return the last five published questions."""
+        return Video.objects.order_by('title')[:10]
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -75,16 +73,9 @@ class UploadView(SignInAndSignUp):
             super().post(self, request, *args, **kwargs)
 
 
-class DetailsView(SignInAndSignUp, generic.TemplateView):
+class DetailsView(generic.DetailView):
+    model = Video
     template_name = 'videos/details.html'
-
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(DetailsView, self).get_context_data(**kwargs)
-        # Add in the publisher
-        context['videoName'] = kwargs['videoName']
-        context['videoUrl'] = VIDEOS_FOLDER + kwargs['videoName'] + '.ogv'
-        return context
 
 
 class SuccessfulUpload(SignInAndSignUp, generic.TemplateView):
