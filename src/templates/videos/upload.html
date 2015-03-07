@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
-{% load staticfiles %}
 {% load crispy_forms_tags %}
+{% load progress_bar %}
 
 {% block title %}{{ block.super }}Home{% endblock %}
 
@@ -28,6 +28,7 @@
                 <input type="hidden" name="upload_form" value="upload_form"/>
                 {{ upload_form.as_p }}
                 <input id="form_submit_button" class="btn btn-default" type="submit" value="OK" />
+                {% progress_bar %}
             </form>
 
         </div>
@@ -35,3 +36,6 @@
 </div>
 
 {% endblock container %}
+{% block scripts %}
+    {% progress_bar_media %}
+{% endblock scripts %}

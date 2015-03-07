@@ -13,5 +13,6 @@ urlpatterns = patterns(
     url(r'^accounts/logout$', LogoutView.as_view(),
         name='logout'),
     url(r'^videos/', include('video_manager.urls', namespace='videos')),
+    url(r'^progressbarupload/', include('progressbarupload.urls')),
     url(r'^admin/', include(admin.site.urls)),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
