@@ -21,20 +21,16 @@ class IndexView(SignInAndSignUp, generic.ListView):
     template_name = 'videos/index.html'
     model = VideoModel
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.object_list = VideoModel.objects.order_by('title')
+    def get(self, request, *args, **kwargs):
+        return generic.ListView.get(self, request, *args, **kwargs)
 
     def get_queryset(self):
-        try:
-            name = self.kwargs['name']
-        except:
-            name = ''
-        if name != '':
-            object_list = self.model.objects.filter(name__icontains=name)
-        else:
-            VideoModel.objects.order_by('title')[:10]
-        return object_list
+        qs = super(IndexView, self).get_queryset()
+        #Filter if we are in a special search
+        name = self.request.GET.get('name')
+        if name:
+            return qs.filter(title__contains=name)
+        return qs
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
