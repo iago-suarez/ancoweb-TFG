@@ -5,6 +5,10 @@
 
 {% block title %}{{ block.super }}Home{% endblock %}
 
+{% block styles %}
+<link href="{% static 'image-picker/image-picker.css' %}" rel="stylesheet">
+{% endblock styles %}
+
 {% block navbar-left %}
   {% include "_navbar.html" %}
 {% endblock %}
@@ -25,10 +29,26 @@
         <p>Please select one image to show it: </p>
     </div>
 
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="picker">
+            <select class="image-picker show-html" name="main_image" id="id_main_image">
+                {% for image in image_urls %}
+                <option data-img-src="{{ image }}" value="{{ image }}">  Image 1  </option>
+                {% endfor %}
+            </select>
+            {{ form }}
+        </div>
 
-    image_urls
-
-
+        <input class="btn btn-default" type="submit" value="OK">
+    </form>
 </div>
 
 {% endblock container %}
+{% block scripts %}
+    <script src="{% static 'image-picker/image-picker.js' %}"></script>
+    <script>
+        $("select").imagepicker();
+        $('li:has(div[class*="thumbnail"])').addClass('col-md-4').addClass('col-xs-6');
+    </script>
+{% endblock scripts %}

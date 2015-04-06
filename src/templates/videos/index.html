@@ -20,29 +20,44 @@
 {% block container %}
 
 <div class="container" id="video-list">
-  <div class="row">
+    <div class="row text-center">
+        <div>
+        <form id="search-video-form" class="navbar-form navbar-left" role="search" action="" method="get">
 
-    {% if video_list %}
-        <ul>
-        {% for video in object_list %}
-            <li class="video-fragment">
-                <div class="col-xs-3 text-center">
-                    <a href="{% url 'videos:details' video.id %}">
-                        <img class="defaultVideoIcon" src="{% static defaultVideoIcon %}"/>
-                    </a>
-                </div>
-                <div class="col-xs-9">
-                    <a href="{% url 'videos:details' video.id  %}">{{ video }}</a>
-                    <p> {{ video.description }} </p>
-                </div>
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No videos are available.</p>
-    {% endif %}
+            <div class="input-group">
+                <input class="form-control" type="text" name="name" id="id_name" placeholder="Search Videos"/>
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </span>
+            </div><!-- /input-group -->
+        </form>
+        </div>
+    </div>
+    <div class="row">
 
-  </div>
+        {% if video_list %}
+            <ul>
+            {% for video in object_list %}
+                <li class="video-fragment">
+                    <div class="col-xs-3 text-center">
+                        <a href="{% url 'videos:details' video.id %}">
+                            <img class="defaultVideoIcon" src="{% static defaultVideoIcon %}"/>
+                        </a>
+                    </div>
+                    <div class="col-xs-9">
+                        <a href="{% url 'videos:details' video.id  %}">{{ video }}</a>
+                        <p> {{ video.description }} </p>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No videos are available.</p>
+        {% endif %}
+
+    </div>
 </div>
 
 {% endblock container %}

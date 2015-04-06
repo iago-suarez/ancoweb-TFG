@@ -12,7 +12,7 @@ def file_path(self, filename):
     return "videos/" + filename
 
 
-class Video(models.Model):
+class VideoModel(models.Model):
 
     title = models.CharField(max_length=50)
     video = models.FileField(upload_to=file_path)

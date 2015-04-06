@@ -96,6 +96,8 @@ input [type="file"] {
 }
 
 /* Page style*/
+
+
 #video-list{
     margin-top: 15px;
 }
@@ -127,4 +129,14 @@ input [type="file"] {
 #upload-video p textarea {
     display: block;
 
+}
+
+div[class*="thumbnail"]{
+    margin: 0;
+    padding: 0;
+}
+
+ul.thumbnails.image_picker_selector li {
+  margin: 0px 0px;
+  padding: 8px;
 }
