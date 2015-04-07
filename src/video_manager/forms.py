@@ -72,12 +72,3 @@ class VideoModelForm(forms.ModelForm):
             'video': forms.ClearableFileInput(attrs={'accept': '.mp4, .ogv, .avi, .flv'}),
         }
         exclude = ('image',)
-
-
-class MainImageForm(forms.Form):
-    def __init__(self, video_obj, user_id, *args, **kwargs):
-        super(MainImageForm, self).__init__(*args, **kwargs)
-        self.fields['image'] = \
-            forms.ChoiceField(choices=[(img, img) for img in generate_video_frames(video_obj, user_id)],
-                              label='main_image',
-                              widget=forms.Select(attrs={'class':'image-picker show-html'}))

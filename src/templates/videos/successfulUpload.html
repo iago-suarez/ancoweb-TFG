@@ -34,10 +34,9 @@
         <div class="picker">
             <select class="image-picker show-html" name="main_image" id="id_main_image">
                 {% for image in image_urls %}
-                <option data-img-src="{{ image }}" value="{{ image }}">  Image 1  </option>
+                <option data-img-src="{{ image }}" value="{{ image }}"> </option>
                 {% endfor %}
             </select>
-            {{ form }}
         </div>
 
         <input class="btn btn-default" type="submit" value="OK">

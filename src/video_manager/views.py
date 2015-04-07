@@ -1,16 +1,12 @@
-# Create your views here.
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
-from django.views.generic import FormView
 from ancoweb import settings
 from accounts.views import SignInAndSignUp
 from django.contrib import messages
-from video_manager.forms import VideoModelForm, MainImageForm
+from video_manager.forms import VideoModelForm, generate_video_frames
 from video_manager.handlers import VideoUploadHandler
 from video_manager.models import VideoModel
-import os, subprocess
-from video_manager.utils import TimeUtils
 
 VIDEOS_FOLDER = 'videos/'
 TEMPORAL_FOLDER = 'tmp/'
@@ -81,29 +77,17 @@ class SuccessfulUpload(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(SuccessfulUpload, self).get_context_data(**kwargs)
-        context['form'] = MainImageForm(self.object, self.request.user.id)
+        context['image_urls'] = generate_video_frames(self.object, self.request.user.id)
         return context
 
     def post(self, request, *args, **kwargs):
-        form = MainImageForm(self.object, request.user.id, request.POST)
-        if form.is_valid():
-            # Guardamos la imagen correspondiente y borramos la anterior
-            video_id = kwargs['pk']
-            return HttpResponseRedirect(reverse('videos:details', args=(video_id,)))
-        else:
-            # If the video form has errors
-            messages.add_message(request,
-                                 messages.ERROR,
-                                 "You have errors in your form, please check it!")
-            return super().get(request)
+        # Save the POSTed url like an image
+        image_url = request.POST.get('main_image')
+        image_path = image_url.split(settings.MEDIA_URL)[1]
+        videoModel = self.get_object()
+        videoModel.image = image_path
+        videoModel.save()
 
+        # Delete the generated images
 
-class SuccessfulUploadForm(FormView):
-    form_class = MainImageForm
-
-    def form_valid(self, form):
-        # This method is called when valid form data has been POSTed.
-        # It should return an HttpResponse.
-        print('Siii!')
-        video_id = self.kwargs['pk']
-        return HttpResponseRedirect(reverse('videos:details', args=(video_id,)))
+        return HttpResponseRedirect(reverse('videos:details', args=(videoModel.id,)))
