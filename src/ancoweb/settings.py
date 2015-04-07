@@ -61,7 +61,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'video_manager',
-    'progressbarupload'
+    'videoUpload'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -127,7 +127,7 @@ if DEBUG:
 # Progressbar settings
 
 FILE_UPLOAD_HANDLERS = (
-    "progressbarupload.uploadhandler.ProgressBarUploadHandler",
+    "videoUpload.handlers.VideoUploadHandler",
     "django.core.files.uploadhandler.MemoryFileUploadHandler",
     "django.core.files.uploadhandler.TemporaryFileUploadHandler",
 )
