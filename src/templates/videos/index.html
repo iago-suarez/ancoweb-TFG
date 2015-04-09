@@ -43,7 +43,12 @@
                 <li class="video-fragment">
                     <div class="col-xs-3 text-center">
                         <a href="{% url 'videos:details' video.id %}">
-                            <img class="defaultVideoIcon" src="{% static defaultVideoIcon %}"/>
+                            <img class="defaultVideoIcon" src="
+                            {% if video.image.url != None %}
+                                {{ video.image.url }}
+                            {% else %}
+                                {% static defaultVideoIcon %}
+                            {% endif%}"/>
                         </a>
                     </div>
                     <div class="col-xs-9">

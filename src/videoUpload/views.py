@@ -1,3 +1,4 @@
+import os
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -7,6 +8,7 @@ from django.contrib import messages
 
 from ancoweb import settings
 from accounts.views import SignInAndSignUp
+from videoUpload import utils
 from videoUpload.forms import VideoModelForm
 from videoUpload.utils import generate_video_frames
 from video_manager.models import VideoModel
@@ -88,11 +90,31 @@ class SuccessfulUpload(generic.DetailView):
     def post(self, request, *args, **kwargs):
         # Save the POSTed url like an image
         image_url = request.POST.get('main_image')
-        image_path = image_url.split(settings.MEDIA_URL)[1]
-        videoModel = self.get_object()
-        videoModel.image = image_path
-        videoModel.save()
+        old_path = os.path.join(settings.MEDIA_ROOT, image_url.split(settings.MEDIA_URL)[1])
+        video_model = self.get_object()
+        # Move the file to the final location
+        relocate_image(video_model, old_path)
+        video_model.save()
 
         # Delete the generated images
 
-        return HttpResponseRedirect(reverse('videos:details', args=(videoModel.id,)))
+        return HttpResponseRedirect(reverse('videos:details', args=(video_model.id,)))
+
+
+def relocate_image(video_model, old_path):
+    """
+    Move the file located on old_path to a new path in /images/userId/videoId.png
+    :param video_model:
+    :param old_path:
+    :return:
+    """
+    new_path = os.path.join(utils.IMAGES_FOLDER,
+                            str(video_model.owner.id), str(video_model.id) + utils.IMAGE_DEFAULT_EXT)
+    new_path_root= os.path.join(settings.MEDIA_ROOT, new_path)
+    directory, file = os.path.split(new_path_root)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    os.rename(old_path, new_path_root)
+    # Debemos extraer la parte correspondiente a MEDIA_ROOT
+    video_model.image = new_path
+    return new_path_root

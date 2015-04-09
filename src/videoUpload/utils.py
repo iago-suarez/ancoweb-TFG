@@ -4,7 +4,9 @@ from urllib.parse import unquote
 from ancoweb import settings
 
 VIDEOS_FOLDER = 'videos/'
+IMAGES_FOLDER = 'images'
 TEMPORAL_FOLDER = 'tmp/'
+IMAGE_DEFAULT_EXT = '.png'
 DEF_FRAMES_NUM = 5
 
 
@@ -26,7 +28,6 @@ def generate_video_frames(video_obj, user_id):
 
     def get_video_seconds():
         """ Devuelve un int con el número de segundos"""
-        q = unquote(video_obj.video.url)
         shell_result = Popen('ffmpeg -i %s 2>&1 | grep Duration' %
                                         (str(settings.BASE_DIR) + unquote(video_obj.video.url)),
                                         shell='TRUE', stdout=PIPE,
@@ -53,7 +54,7 @@ def generate_video_frames(video_obj, user_id):
     img_paths = []
     # Generamos todas las imágenes
     for second in select_seconds(get_video_seconds()):
-        filename = 'video%s_second%s.png' % (video_obj.id, str(second))
+        filename = 'video%s_second%s%s' % (video_obj.id, str(second), IMAGE_DEFAULT_EXT)
         create_video_frame(TimeUtils.print_sec(second),
                            directory + filename)
         img_paths.append(str(settings.MEDIA_URL) + TEMPORAL_FOLDER
