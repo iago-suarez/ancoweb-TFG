@@ -1,5 +1,6 @@
-import os
-import subprocess
+from os import path, makedirs
+from subprocess import call, Popen, STDOUT, PIPE
+from urllib.parse import unquote
 from ancoweb import settings
 
 VIDEOS_FOLDER = 'videos/'
@@ -19,16 +20,17 @@ def generate_video_frames(video_obj, user_id):
 
     def create_video_frame(time, output_file):
         """ time wil be a string with format hh:mm:ss """
-        input_path = str(settings.BASE_DIR) + video_obj.video.url
-        subprocess.call('ffmpeg -n -i %s -ss %s -vframes 1 %s' %
+        input_path = str(settings.BASE_DIR) + unquote(video_obj.video.url)
+        call('ffmpeg -n -i %s -ss %s -vframes 1 %s' %
                         (input_path, time, output_file), shell='TRUE')
 
     def get_video_seconds():
         """ Devuelve un int con el número de segundos"""
-        shell_result = subprocess.Popen('ffmpeg -i %s 2>&1 | grep Duration' %
-                                        (str(settings.BASE_DIR) + video_obj.video.url),
-                                        shell='TRUE', stdout=subprocess.PIPE,
-                                        stderr=subprocess.STDOUT)
+        q = unquote(video_obj.video.url)
+        shell_result = Popen('ffmpeg -i %s 2>&1 | grep Duration' %
+                                        (str(settings.BASE_DIR) + unquote(video_obj.video.url)),
+                                        shell='TRUE', stdout=PIPE,
+                                        stderr=STDOUT)
 
         line = str(shell_result.stdout.readline())
         return TimeUtils.get_sec(line.split()[2])
@@ -46,8 +48,8 @@ def generate_video_frames(video_obj, user_id):
     # Creamos esa carpeta
     directory = str(
         settings.MEDIA_ROOT) + TEMPORAL_FOLDER + str(user_id) + '/'
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    if not path.exists(directory):
+        makedirs(directory)
     img_paths = []
     # Generamos todas las imágenes
     for second in select_seconds(get_video_seconds()):

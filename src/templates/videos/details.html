@@ -21,12 +21,14 @@
 
 <div class="container">
     <div class="row text-center">
-        <h2> {{ object.title }}</h2>
+        <h2> {{ object.title }} </h2>
         <video id="video-player" controls>
             <source src="{{ object.video.url }}" type="video/ogg">
             Your browser does not support the video tag.
         </video>
+        <p> Creation Date: {{ object.creation_timestamp }} </p>
         <br/>
+        <h4 class="owner-label"> {{ object.owner }} </h4>
         <p>{{ object.description}}</p>
     </div>
 </div>

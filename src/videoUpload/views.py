@@ -1,13 +1,14 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.utils.decorators import method_decorator
 from django.views import generic
 from django.contrib import messages
 
 from ancoweb import settings
 from accounts.views import SignInAndSignUp
-from videoUpload.handlers import VideoUploadHandler
+from videoUpload.forms import VideoModelForm
 from videoUpload.utils import generate_video_frames
-from video_manager.forms import VideoModelForm
 from video_manager.models import VideoModel
 
 from django.http import HttpResponse
@@ -20,6 +21,7 @@ except ImportError:
     from django.utils import simplejson as json
 
 
+# TODO Mover esto al fichero handlers.py, ya que tiene mucha más coherencia
 def upload_progress(request):
     """
     Used by Ajax calls
@@ -38,13 +40,15 @@ def upload_progress(request):
 
 class UploadView(SignInAndSignUp):
     template_name = 'videoUpload/upload.html'
-
     upload_form_class = VideoModelForm
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(UploadView, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         if "upload_form" not in kwargs:
             kwargs["upload_form"] = self.upload_form_class()
-            request.upload_handlers.insert(0, VideoUploadHandler())
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -52,7 +56,9 @@ class UploadView(SignInAndSignUp):
             form = self.upload_form_class(request.POST, request.FILES)
             if form.is_valid():
                 # If the video form is OK
-                instance = form.save()
+                instance = form.save(commit=False)
+                instance.owner = request.user
+                instance.save()
                 return HttpResponseRedirect(reverse('videoUpload:success-upload', args=(instance.id,)))
             else:
                 # If the video form has errors
@@ -69,6 +75,10 @@ class UploadView(SignInAndSignUp):
 class SuccessfulUpload(generic.DetailView):
     template_name = 'videoUpload/successfulUpload.html'
     model = VideoModel
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(SuccessfulUpload, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(SuccessfulUpload, self).get_context_data(**kwargs)

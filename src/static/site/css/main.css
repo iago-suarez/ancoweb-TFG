@@ -88,16 +88,7 @@ body {
 	#map-outer  { height: 650px }
 }
 
-/* - ADDED BY IAGO - */
-
-/* Redefining bootstrap */
-input [type="file"] {
-    display: initial;
-}
-
-/* Page style*/
-
-
+/******************* VIDEO *****************/
 #video-list{
     margin-top: 15px;
 }
@@ -121,6 +112,24 @@ input [type="file"] {
     max-width: 100%;
 }
 
+.owner-label{
+    background-color: #d9edf7;
+    padding: 15px;
+    font-weight: bold;
+    border-radius: 20px;
+    float: right;
+}
+
+#search-video-form {
+    width: 100%;
+}
+
+
+#search-video-form input{
+    width: 100%;
+}
+/*************** UPLOAD VIDEO ***********************/
+
 #upload-video{
     display: inline-block;
     margin-top: 20px;
@@ -140,3 +149,10 @@ ul.thumbnails.image_picker_selector li {
   margin: 0px 0px;
   padding: 8px;
 }
+
+/* Redefining bootstrap */
+input [type="file"] {
+    display: initial;
+}
+
+

@@ -45,7 +45,7 @@
           </button>
           <a class="navbar-brand" href="{% url 'home' %}">
             {% block navbar-brand %}
-              <img src="{% static 'site/img/logo.png' %}" alt="logo">
+              <img src="{% static 'site/img/logo.png' %}" alt="logo" style="display: inline;">
               {% include "_brandname.html" %}
             {% endblock %}
           </a>

@@ -19,7 +19,7 @@ def progress_bar():
 
     return html5 tag to display the progress bar
     and url of ajax function needed to get upload progress
-    in js/progress_bar.js file.
+    in site/js/progress_bar.js file.
     """
     progress_bar_tag = '<progress id="progressBar" ' \
         'data-progress_bar_uuid="%s" style="width:100%%" value="0" max="100" ' \
@@ -40,7 +40,7 @@ def progress_bar_media():
         js = ["http://code.jquery.com/jquery-1.8.3.min.js",]
     else:
         js = []
-    js.append("js/progress_bar.js")
+    js.append("site/js/progress_bar.js")
 
     m = Media(js=js)
     return m.render()
