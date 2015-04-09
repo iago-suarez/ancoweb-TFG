@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.utils.decorators import method_decorator
 from django.views import generic
 from django.contrib import messages
+import shutil
 
 from ancoweb import settings
 from accounts.views import SignInAndSignUp
@@ -84,7 +85,7 @@ class SuccessfulUpload(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(SuccessfulUpload, self).get_context_data(**kwargs)
-        context['image_urls'] = generate_video_frames(self.object, self.request.user.id)
+        context['image_urls'] = generate_video_frames(self.object)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -97,6 +98,7 @@ class SuccessfulUpload(generic.DetailView):
         video_model.save()
 
         # Delete the generated images
+        shutil.rmtree(utils.image_tmp_folder(video_model))
 
         return HttpResponseRedirect(reverse('videos:details', args=(video_model.id,)))
 

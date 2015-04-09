@@ -1,37 +1,37 @@
 from os import path, makedirs
+import os
 from subprocess import call, Popen, STDOUT, PIPE
-from urllib.parse import unquote
 from ancoweb import settings
 
 VIDEOS_FOLDER = 'videos/'
 IMAGES_FOLDER = 'images'
 TEMPORAL_FOLDER = 'tmp/'
 IMAGE_DEFAULT_EXT = '.png'
-DEF_FRAMES_NUM = 5
+VIDEO_DEFAULT_EXT = '.mp4'
+DEF_FRAMES_NUM = 3
 
 
-def generate_video_frames(video_obj, user_id):
+def generate_video_frames(video_instance):
     """
     Generates DEF_FRAMES_NUM frames from the videoModel video_obj, when the user
     with identifier user_id is logged in.
 
-    :param video_obj:
-    :param user_id:
+    :param video_instance:
     :return: the list of relative paths of the generated video frames
     """
 
     def create_video_frame(time, output_file):
         """ time wil be a string with format hh:mm:ss """
-        input_path = str(settings.BASE_DIR) + unquote(video_obj.video.url)
+        input_path = os.path.join(video_instance.video.storage.location, video_instance.video.name)
         call('ffmpeg -n -i %s -ss %s -vframes 1 %s' %
                         (input_path, time, output_file), shell='TRUE')
 
     def get_video_seconds():
         """ Devuelve un int con el número de segundos"""
         shell_result = Popen('ffmpeg -i %s 2>&1 | grep Duration' %
-                                        (str(settings.BASE_DIR) + unquote(video_obj.video.url)),
-                                        shell='TRUE', stdout=PIPE,
-                                        stderr=STDOUT)
+                             os.path.join(video_instance.video.storage.location,
+                                          video_instance.video.name),
+                             shell='TRUE', stdout=PIPE, stderr=STDOUT)
 
         line = str(shell_result.stdout.readline())
         return TimeUtils.get_sec(line.split()[2])
@@ -47,20 +47,28 @@ def generate_video_frames(video_obj, user_id):
 
     # Las imágenes se almacenan en una carpeta temporal en media/tmp/usrId
     # Creamos esa carpeta
-    directory = str(
-        settings.MEDIA_ROOT) + TEMPORAL_FOLDER + str(user_id) + '/'
-    if not path.exists(directory):
-        makedirs(directory)
+    directory = image_tmp_folder(video_instance)
     img_paths = []
+
     # Generamos todas las imágenes
     for second in select_seconds(get_video_seconds()):
-        filename = 'video%s_second%s%s' % (video_obj.id, str(second), IMAGE_DEFAULT_EXT)
+        filename = 'video%s_second%s%s' % (video_instance.id,
+                                           str(second), IMAGE_DEFAULT_EXT)
         create_video_frame(TimeUtils.print_sec(second),
-                           directory + filename)
-        img_paths.append(str(settings.MEDIA_URL) + TEMPORAL_FOLDER
-                         + str(user_id) + '/' + filename)
+                           os.path.join(directory, filename))
+        img_paths.append(os.path.join(settings.MEDIA_URL, TEMPORAL_FOLDER,
+                                      str(video_instance.owner.id), filename))
+
     # Devolvemos los paths de ellas
     return img_paths
+
+
+def image_tmp_folder(video_instance):
+    directory = os.path.join(settings.MEDIA_ROOT, TEMPORAL_FOLDER,
+                             str(video_instance.owner.id))
+    if not path.exists(directory):
+        makedirs(directory)
+    return directory
 
 
 class TimeUtils:
