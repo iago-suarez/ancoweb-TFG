@@ -2,13 +2,14 @@ from django.views import generic
 from ancoweb import settings
 from accounts.views import SignInAndSignUp
 from video_manager.models import VideoModel
+from video_manager.notification_views import NotificationsView
 
 VIDEOS_FOLDER = 'videos/'
 TEMPORAL_FOLDER = 'tmp/'
 DEF_FRAMES_NUM = 5
 
 
-class IndexView(SignInAndSignUp, generic.ListView):
+class IndexView(NotificationsView, SignInAndSignUp, generic.ListView):
     template_name = 'videos/index.html'
     model = VideoModel
 
@@ -31,6 +32,6 @@ class IndexView(SignInAndSignUp, generic.ListView):
         return context
 
 
-class DetailsView(generic.DetailView):
+class DetailsView(NotificationsView, generic.DetailView):
     model = VideoModel
     template_name = 'videos/details.html'

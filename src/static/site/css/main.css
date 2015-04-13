@@ -155,4 +155,19 @@ input [type="file"] {
     display: initial;
 }
 
+/* Notifications */
+.notification {
+    margin: 10px;
+    padding: 10px 20px;
+}
 
+#notifications-panel{
+    position:fixed;
+    z-index: 500;
+    right: 0px;
+    top: 50px;
+}
+
+.delete-notification {
+    float: right;
+}

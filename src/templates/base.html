@@ -78,6 +78,9 @@
     </div>
     {% endblock %}
 
+    <!-- UploadNotifications fragment -->
+    {% include 'videoUpload/notifications_fragment.html' %}
+
     {% block messages %}
       {% if messages %}
         {% for message in messages %}
@@ -120,12 +123,16 @@
       </div>
     {% endblock %}
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- JQuery JavaScript === -->
     <script src="{% static 'site/js/jquery-1.10.2.min.js' %}"></script>
+    <script src="{% static 'site/js/jquery.cookie.js' %}"></script>
+
+    <!-- Bootstrap core JavaScript -->
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+    <!-- Placed at the end of the document so the pages load faster -->
     <script src="{% static 'site/js/site.js' %}"></script>
+
     {% block scripts %}
     {% endblock scripts %}
   </body>

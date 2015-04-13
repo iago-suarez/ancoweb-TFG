@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib import messages
+from video_manager.notification_views import NotificationsView
 
 
 class SignInAndSignUp(generic.edit.FormMixin, generic.TemplateView):
@@ -63,7 +64,11 @@ class SignInAndSignUp(generic.edit.FormMixin, generic.TemplateView):
         return redirect("home")
 
 
-class LogoutView(generic.RedirectView):
+class HomeView(NotificationsView, SignInAndSignUp, generic.TemplateView):
+    template_name = "home.html"
+
+
+class LogoutView(NotificationsView, generic.RedirectView):
     url = reverse_lazy("home")
 
     def get(self, request, *args, **kwargs):
@@ -73,5 +78,5 @@ class LogoutView(generic.RedirectView):
         return super().get(request, *args, **kwargs)
 
 
-class AboutView(SignInAndSignUp, generic.TemplateView):
+class AboutView(NotificationsView, SignInAndSignUp, generic.TemplateView):
     template_name = "about.html"

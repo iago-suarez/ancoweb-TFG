@@ -1,3 +1,4 @@
 from django.contrib import admin
+from videoUpload.models import UploadNotification
 
-# Register your models here.
+admin.site.register(UploadNotification)

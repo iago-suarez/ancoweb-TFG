@@ -1,0 +1,5 @@
+<h2>Deleting {{ object.notification_text }}</h2>
+<form method="post">{% csrf_token %}
+    Are you sure you want to delete "{{ object.notification_text }}" ?
+    <input type="submit" value="Submit" />
+</form>
