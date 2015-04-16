@@ -1,5 +1,4 @@
-function getUrlParameter(sParam)
-{
+function getUrlParameter(sParam){
     var sPageURL = window.location.search.substring(1);
     var sURLVariables = sPageURL.split('&');
     for (var i = 0; i < sURLVariables.length; i++)
@@ -20,7 +19,7 @@ $(document).ready(function(){
     $('.delete-notification').click(function(){
         var not_id = $(this).next('.notificationId').attr('value');
         var $this = $(this);
-        $.post( 'videoUpload/notifications/delete/'.concat(not_id).concat('/'), function(data, status){
+        $.post( '/videoUpload/notifications/delete/'.concat(not_id).concat('/'), function(data, status){
             //Si todo ha ido bien borramos la notificacion
             $this.parent().fadeOut(500);
         }).error(function(data){
@@ -42,4 +41,39 @@ $(document).ready(function(){
             }
         }
     });
+
+    function refresh_notification(not_dom, not_json){
+        if(not_json.fields.is_finished && !($('.video-finished-btn').length)){
+            not_dom.children('.progress').remove();
+            var new_dom =
+                '<div class=\"text-center\"> \
+                    <a class=\"btn btn-primary video-finished-btn\" \
+                        href=\"/videoUpload/upload/' + not_json.fields.video_model + '/success/"> \
+                            Finish \
+                    </a> \
+                </div>';
+            not_dom.append($(new_dom));
+        } else {
+            not_dom.find('.progress-bar')
+                .attr('aria-valuenow', not_json.fields.progress)
+                .css('width', not_json.fields.progress + '%');
+            not_dom.find('.progress-bar span').text(not_json.fields.progress + '% Complete');
+        }
+        not_dom.children('.state_message').text(not_json.fields.state_message);
+    }
+
+    function refresh_notifications(){
+        // If there is no notification of a rise in progress we left
+        if (!$('.notification:has(.progress-bar)').length)
+            return true;
+        // For all notifications we update it state
+        $.getJSON("videoUpload/notificationsJson", function(notifications){
+            $.each(notifications, function (i, elem) {
+                refresh_notification($('.notification:has(span[value=' + elem.pk + '])'), elem);
+            });
+        })
+        window.setTimeout(refresh_notifications, 300);
+    }
+    refresh_notifications();
+
 });

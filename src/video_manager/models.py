@@ -5,8 +5,8 @@ from videoUpload import utils
 
 
 def video_file_path(self, filename):
-    return os.path.join(utils.VIDEOS_FOLDER, str(self.owner.id),
-                        (self.title + utils.VIDEO_DEFAULT_EXT))
+
+    return os.path.join(utils.VIDEOS_FOLDER, str(self.owner.id), ("v" + utils.VIDEO_DEFAULT_EXT))
 
 
 class VideoModel(models.Model):

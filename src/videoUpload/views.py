@@ -1,17 +1,22 @@
+import json
 import os
+import threading
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.core import serializers
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.utils.decorators import method_decorator
 from django.views import generic
 from django.contrib import messages
 import shutil
+from django.views.generic import TemplateView
 
 from ancoweb import settings
 from accounts.views import SignInAndSignUp
 from videoUpload import utils
 from videoUpload.forms import VideoModelForm
-from videoUpload.utils import generate_video_frames
+from videoUpload.models import UploadNotification
+from videoUpload.utils import get_video_frames_paths
 from video_manager.models import VideoModel
 from video_manager.notification_views import NotificationsView
 
@@ -37,7 +42,10 @@ class UploadView(NotificationsView, SignInAndSignUp):
                 instance = form.save(commit=False)
                 instance.owner = request.user
                 instance.save()
-                return HttpResponseRedirect(reverse('videoUpload:success-upload', args=(instance.id,)))
+                notification = UploadNotification.objects.create(video_model=instance)
+                notification.process()
+
+                return HttpResponseRedirect(reverse('home'))
             else:
                 # If the video form has errors
                 messages.add_message(request,
@@ -60,7 +68,7 @@ class SuccessfulUpload(NotificationsView, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(SuccessfulUpload, self).get_context_data(**kwargs)
-        context['image_urls'] = generate_video_frames(self.object)
+        context['image_urls'] = get_video_frames_paths(self.object)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -75,7 +83,19 @@ class SuccessfulUpload(NotificationsView, generic.DetailView):
         # Delete the generated images
         shutil.rmtree(utils.image_tmp_folder(video_model))
 
+        # Delete notification if exists
+        UploadNotification.objects.filter(video_model=video_model).delete()
+
         return HttpResponseRedirect(reverse('videos:details', args=(video_model.id,)))
+
+
+def notifications_as_json(request):
+    JSONSerializer = serializers.get_serializer("json")
+    json_serializer = JSONSerializer()
+
+    notifications_qs = UploadNotification.objects.filter(owner=request.user)
+    json_serializer.serialize(notifications_qs)
+    return HttpResponse(json_serializer.getvalue())
 
 
 def relocate_image(video_model, old_path):
@@ -87,7 +107,7 @@ def relocate_image(video_model, old_path):
     """
     new_path = os.path.join(utils.IMAGES_FOLDER,
                             str(video_model.owner.id), str(video_model.id) + utils.IMAGE_DEFAULT_EXT)
-    new_path_root= os.path.join(settings.MEDIA_ROOT, new_path)
+    new_path_root = os.path.join(settings.MEDIA_ROOT, new_path)
     directory, file = os.path.split(new_path_root)
     if not os.path.exists(directory):
         os.makedirs(directory)

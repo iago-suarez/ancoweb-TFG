@@ -171,3 +171,12 @@ input [type="file"] {
 .delete-notification {
     float: right;
 }
+
+.progress {
+    margin-bottom: 5px;
+}
+
+.video-finished-btn {
+    width: 150px;
+    margin-top: 15px;
+}
