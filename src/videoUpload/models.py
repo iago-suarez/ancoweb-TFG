@@ -1,69 +1,14 @@
 import threading
 from django.contrib.auth.models import User
 from django.db import models
-import time
-from videoUpload import utils
+import shutil
+from videostream import utils
+from videoUpload import tasks
+from videoUpload.utils import ImageUtils
 from video_manager.models import VideoModel
 
 
-class UploadState(object):
-    def __init__(self, name, upload_model):
-        self.name = name
-        self.upload_model = upload_model
-        self.upload_model.state_message = name
-        self.upload_model.progress = 0
-        self.upload_model.save()
-
-    def set_progress(self, progress):
-        self.upload_model.progress = progress
-        self.upload_model.save()
-
-    def exec(self, **args):
-        raise NotImplementedError("Subclasses should implement this!")
-
-
-class GeneratingImagesState(UploadState):
-    def __init__(self, upload_model):
-        super(GeneratingImagesState, self).__init__("Generating image", upload_model)
-
-    def exec(self):
-        utils.generate_video_frames(self.upload_model.video_model)
-
-
-class AnalyzeVideo(UploadState):
-    def __init__(self, upload_model):
-        super(AnalyzeVideo, self).__init__("Analyzing video", upload_model)
-
-    def exec(self):
-        # TODO Implementar
-        for i in range(0, 100):
-            time.sleep(.01)
-            if i % 3 == 0:
-                self.set_progress(i)
-
-
-class CovertVideo(UploadState):
-    def __init__(self, upload_model):
-        super(CovertVideo, self).__init__("Converting video", upload_model)
-
-    def exec(self):
-        # TODO Implementar
-        for i in range(0, 100):
-            time.sleep(.01)
-            if i % 3 == 0:
-                self.set_progress(i)
-
-
-class FinishedStated(UploadState):
-    def __init__(self, upload_model):
-        super(FinishedStated, self).__init__("Your video has been successfully uploaded", upload_model)
-
-    def exec(self):
-        self.upload_model.is_finished = True
-        self.upload_model.save()
-
-
-class UploadNotification(models.Model):
+class VideoUpload(models.Model):
     video_model = models.ForeignKey(VideoModel)
     progress = models.IntegerField(default=0)
     title = models.CharField(max_length=100)  # default=video_model.title
@@ -77,22 +22,47 @@ class UploadNotification(models.Model):
             self.title = self.video_model.title
         if not self.owner_id:
             self.owner = self.video_model.owner
-        super(UploadNotification, self).save(*args, **kwargs)
+        super(VideoUpload, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
 
     def process(self):
-        threading.Thread(
+        self.exec_thread = threading.Thread(
             target=self.exec_states
-        ).start()
+        )
+        self.exec_thread.start()
 
     def exec_states(self):
-        AnalyzeVideo(self).exec()
-        CovertVideo(self).exec()
-        GeneratingImagesState(self).exec()
-        FinishedStated(self).exec()
+        tasks.AnalyzeVideo(self).exec()
+        tasks.CovertVideo(self).exec()
+        tasks.GeneratingImagesState(self).exec()
+        tasks.FinishedStated(self).exec()
 
     def delete(self, using=None):
-        # TODO Implementar
-        super(UploadNotification, self).delete()
+        # launch this in a new thread, because it can make it
+        # waiting to thread running video management
+        self.exec_thread = threading.Thread(
+            target=delete_upload,
+            args=(self, ),
+        )
+        self.exec_thread.start()
+
+
+def delete_upload(upload, using=None):
+    """
+    If the video still is being handled, then wait for the end to delete it,
+    and after that call to super(...).delete()
+    :param upload: The upload model to delete it
+    :param using:
+    :return:
+    """
+    if (not upload.is_finished) and hasattr(upload, 'exec_thread') \
+            and upload.exec_thread.is_alive():
+        # TODO ver porque el join no funciona correctamente y arreglarlo
+        upload.exec_thread.join()
+
+    # Delete the generated images
+    shutil.rmtree(ImageUtils.image_tmp_folder(upload.video_model))
+
+    super(VideoUpload, upload).delete(using)

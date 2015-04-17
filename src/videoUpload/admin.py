@@ -1,4 +1,4 @@
 from django.contrib import admin
-from videoUpload.models import UploadNotification
+from videoUpload.models import VideoUpload
 
-admin.site.register(UploadNotification)
+admin.site.register(VideoUpload)

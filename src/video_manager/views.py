@@ -1,8 +1,10 @@
 from django.views import generic
+
 from ancoweb import settings
 from accounts.views import SignInAndSignUp
 from video_manager.models import VideoModel
-from video_manager.notification_views import NotificationsView
+from videoUpload.notification_views import NotificationsView
+
 
 VIDEOS_FOLDER = 'videos/'
 TEMPORAL_FOLDER = 'tmp/'

@@ -1,9 +1,8 @@
 from django.conf.urls import patterns, url
 from django.conf import settings
 from django.conf.urls.static import static
-from videoUpload import views
-from videoUpload import handlers
-from video_manager import notification_views
+
+from videoUpload import views, handlers, notification_views
 
 urlpatterns = patterns('',
                        url(r'^$', views.UploadView.as_view(), name='upload'),

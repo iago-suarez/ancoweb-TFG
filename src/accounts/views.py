@@ -1,13 +1,14 @@
 # from django.shortcuts import render
 from django.views import generic
-from . import forms
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib import messages
-from video_manager.notification_views import NotificationsView
+
+from . import forms
+from videoUpload.notification_views import NotificationsView
 
 
 class SignInAndSignUp(generic.edit.FormMixin, generic.TemplateView):
