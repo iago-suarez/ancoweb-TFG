@@ -24,7 +24,7 @@ class VideoUtils:
         """
         input_path = os.path.join(video_instance.video.storage.location, video_instance.video.name)
         call('ffmpeg -n -i %s -ss %s -vframes 1 %s' %
-                        (input_path, time, output_file), shell='TRUE')
+             (input_path, time, output_file), shell='TRUE')
 
     @staticmethod
     def get_video_seconds(video_instance):
@@ -74,9 +74,21 @@ class VideoUtils:
         # Devolvemos los paths de ellas
         return img_paths
 
+    @staticmethod
+    def get_number_frames(video_path):
+        """
+        Return the frames number for the video on video_path
+        :param video_path:
+        :return:
+        """
+        p = Popen("ffmpeg -i %s -vcodec copy -f rawvideo "
+                  "-y /dev/null 2>&1 | tr ^M '\n' | awk "
+                  "'/^frame=/ {print $2}'|tail -n 1" % video_path,
+                  shell='TRUE', stdout=PIPE, stderr=STDOUT, universal_newlines=True)
+        return int(p.stdout.readline())
+
 
 class ImageUtils:
-
     @staticmethod
     def image_tmp_folder(video_instance):
         directory = os.path.join(settings.MEDIA_ROOT, TEMPORAL_FOLDER,

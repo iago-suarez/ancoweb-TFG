@@ -19,9 +19,9 @@ $(document).ready(function(){
     $('.delete-notification').click(function(){
         var not_id = $(this).next('.notificationId').attr('value');
         var $this = $(this);
-        $.post( '/videoUpload/notifications/delete/'.concat(not_id).concat('/'), function(data, status){
+        $.post( '/videoUpload/notifications/delete/' + not_id + '/', function(data, status){
             //Si todo ha ido bien borramos la notificacion
-            $this.parent().fadeOut(500);
+            $this.parent().fadeOut(500, function() { $(this).remove(); });
         }).error(function(data){
             alert(data.statusText.concat("\n\n", data.responseText))
         })
@@ -67,7 +67,7 @@ $(document).ready(function(){
         if (!$('.notification:has(.progress-bar)').length)
             return true;
         // For all notifications we update it state
-        $.getJSON("videoUpload/notificationsJson", function(notifications){
+        $.getJSON("/videoUpload/notificationsJson", function(notifications){
             $.each(notifications, function (i, elem) {
                 refresh_notification($('.notification:has(span[value=' + elem.pk + '])'), elem);
             });

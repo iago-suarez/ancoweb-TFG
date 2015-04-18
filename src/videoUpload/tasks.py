@@ -3,6 +3,7 @@ import time
 from ancoweb import settings
 from videoUpload import utils
 from videoUpload.utils import VideoUtils, TimeUtils, ImageUtils
+from subprocess import call, Popen, PIPE, STDOUT
 
 
 class UploadState(object):
@@ -52,7 +53,7 @@ class GeneratingImagesState(UploadState):
             filename = 'video%s_second%s%s' % (self.upload_model.video_model.id,
                                                str(second), utils.IMAGE_DEFAULT_EXT)
             VideoUtils.create_video_frame(self.upload_model.video_model, TimeUtils.print_sec(second),
-                               os.path.join(directory, filename))
+                                          os.path.join(directory, filename))
             img_paths.append(os.path.join(settings.MEDIA_URL, utils.TEMPORAL_FOLDER,
                                           str(self.upload_model.video_model.owner.id), filename))
 
@@ -77,8 +78,51 @@ class CovertVideo(UploadState):
         super(CovertVideo, self).__init__("Converting video", upload_model)
 
     def exec(self):
-        # TODO Implementar
-        for i in range(0, 100):
-            time.sleep(.01)
-            if i % 3 == 0:
-                self.set_progress(i)
+
+        def convert_video(input_file, output_files):
+            """
+            Covert input_file video to output_files, and update the
+            progress of the upload_model object according to the process
+            :param input_file:
+            :param output_files:
+            :return:
+            """
+            frames_num = VideoUtils.get_number_frames(input_file)
+            # calculate the number of files with the same extension as're not
+            # consume processing time
+
+            def has_input_ext(filename):
+                return os.path.splitext(filename)[1] == os.path.splitext(input_file)[1]
+
+            num_files_same_ext = len(list(filter(has_input_ext, output_files)))
+            progress_points_by_video = 100 / (len(output_files) - num_files_same_ext)
+            passed_files_same_ext = 0
+
+            for i in range(len(output_files)):
+                # for each video we convert and update progress
+                p = Popen(
+                    'ffmpeg -n -stats -i %s %s | grep "frame" 2>&1' %
+                    (input_file, output_files[i]),
+                    shell='TRUE', stdout=PIPE, stderr=STDOUT,
+                    universal_newlines=True)
+                # If the file will not be converted, the value of the
+                # variable i must decrease by 1 when calculating progress
+                if has_input_ext(output_files[i]):
+                    passed_files_same_ext += 1
+                else:
+                    while True:
+                        line = p.stdout.readline()
+                        if line == "":
+                            break
+                        words = line.split()
+                        # If the output corresponds to a frame number, you update the progress
+                        if (len(words) > 2) and (words[0] == "frame="):
+                            progress_of_1 = int(words[1]) / frames_num
+                            progress = progress_points_by_video * (i - passed_files_same_ext + progress_of_1)
+                            self.set_progress(round(progress))
+                            print(round(progress))
+
+        original = os.path.join(self.upload_model.video_model.video.storage.location,
+                                self.upload_model.video_model.video.name)
+        file, ext = os.path.splitext(original)
+        convert_video(original, [file + ".mp4", file + ".ogv", file + ".webm"])

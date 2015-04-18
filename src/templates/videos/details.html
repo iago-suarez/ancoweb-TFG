@@ -2,6 +2,7 @@
 
 {% load staticfiles %}
 {% load crispy_forms_tags %}
+{% load videosources %}
 
 {% block title %}{{ block.super }}Home{% endblock %}
 
@@ -23,7 +24,7 @@
     <div class="row text-center">
         <h2> {{ object.title }} </h2>
         <video id="video-player" controls>
-            <source src="{{ object.video.url }}" type="video/ogg">
+            {% videosources object %}
             Your browser does not support the video tag.
         </video>
         <p> Creation Date: {{ object.creation_timestamp }} </p>

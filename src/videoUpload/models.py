@@ -2,7 +2,6 @@ import threading
 from django.contrib.auth.models import User
 from django.db import models
 import shutil
-from videostream import utils
 from videoUpload import tasks
 from videoUpload.utils import ImageUtils
 from video_manager.models import VideoModel
@@ -61,6 +60,7 @@ def delete_upload(upload, using=None):
             and upload.exec_thread.is_alive():
         # TODO ver porque el join no funciona correctamente y arreglarlo
         upload.exec_thread.join()
+        upload.video_model.delete()
 
     # Delete the generated images
     shutil.rmtree(ImageUtils.image_tmp_folder(upload.video_model))
