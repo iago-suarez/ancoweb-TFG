@@ -1,9 +1,11 @@
+import os
 import threading
 from django.contrib.auth.models import User
 from django.db import models
-import shutil
+
+from ancoweb import settings
 from videoUpload import tasks
-from videoUpload.utils import ImageUtils
+from videoUpload.utils import ImageUtils, VideoUtils, media_url_to_path
 from video_manager.models import VideoModel
 
 
@@ -63,6 +65,13 @@ def delete_upload(upload, using=None):
         upload.video_model.delete()
 
     # Delete the generated images
-    shutil.rmtree(ImageUtils.image_tmp_folder(upload.video_model))
-
+    images = VideoUtils.get_video_frames_paths(upload.video_model)
+    try:
+        for image in images:
+            path = os.path.join(str(settings.BASE_DIR), media_url_to_path(image))
+            os.remove(path)
+        # If the user temporal folder is empty ew remove it
+        os.rmdir(ImageUtils.image_tmp_folder(upload.video_model))
+    except OSError as ex:
+        pass
     super(VideoUpload, upload).delete(using)

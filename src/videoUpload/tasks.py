@@ -120,7 +120,6 @@ class CovertVideo(UploadState):
                             progress_of_1 = int(words[1]) / frames_num
                             progress = progress_points_by_video * (i - passed_files_same_ext + progress_of_1)
                             self.set_progress(round(progress))
-                            print(round(progress))
 
         original = os.path.join(self.upload_model.video_model.video.storage.location,
                                 self.upload_model.video_model.video.name)

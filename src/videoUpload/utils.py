@@ -100,7 +100,7 @@ class ImageUtils:
     @staticmethod
     def relocate_image(video_model, old_path):
         """
-        Move the file located on old_path to a new path in /images/userId/videoId.png
+        Move the file located on old_path to a new path in MEDIA_ROOT/images/userId/videoId.png
         :param video_model:
         :param old_path:
         :return:
@@ -112,7 +112,6 @@ class ImageUtils:
         if not os.path.exists(directory):
             os.makedirs(directory)
         os.rename(old_path, new_path_root)
-        # Debemos extraer la parte correspondiente a MEDIA_ROOT
         video_model.image = new_path
         return new_path_root
 
@@ -130,3 +129,12 @@ class TimeUtils:
         """ hh:mm:ss.mss -> s """
         l = s.split('.')[0].split(':')
         return int(l[0]) * 3600 + int(l[1]) * 60 + int(l[2])
+
+
+def media_url_to_path(file_url):
+    """
+    Convert a media file url to a relative path into MEDIA_ROOT folder
+    :param file_url:
+    :return:
+    """
+    return os.path.join(settings.MEDIA_ROOT, file_url.split(settings.MEDIA_URL)[1])

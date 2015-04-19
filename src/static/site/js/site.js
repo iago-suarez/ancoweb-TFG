@@ -43,7 +43,7 @@ $(document).ready(function(){
     });
 
     function refresh_notification(not_dom, not_json){
-        if(not_json.fields.is_finished && !($('.video-finished-btn').length)){
+        if(not_json.fields.is_finished && !(not_dom.find('.video-finished-btn').length)){
             not_dom.children('.progress').remove();
             var new_dom =
                 '<div class=\"text-center\"> \

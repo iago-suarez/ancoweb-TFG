@@ -10,6 +10,7 @@ from django.contrib import messages
 
 from ancoweb import settings
 from accounts.views import SignInAndSignUp
+from videoUpload import utils
 from videoUpload.forms import VideoModelForm
 from videoUpload.models import VideoUpload
 from videoUpload.utils import VideoUtils, ImageUtils
@@ -70,7 +71,7 @@ class SuccessfulUpload(NotificationsView, generic.DetailView):
     def post(self, request, *args, **kwargs):
         # Save the POSTed url like an image
         image_url = request.POST.get('main_image')
-        old_path = os.path.join(settings.MEDIA_ROOT, image_url.split(settings.MEDIA_URL)[1])
+        old_path = utils.media_url_to_path(image_url)
         video_model = self.get_object()
         # Move the file to the final location
         ImageUtils.relocate_image(video_model, old_path)
