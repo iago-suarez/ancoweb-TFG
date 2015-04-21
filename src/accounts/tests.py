@@ -1,7 +1,6 @@
 from django.test import TestCase
 from django.core.urlresolvers import resolve, reverse
-from .views import SignInAndSignUp
-
+from accounts.views import HomeView
 
 class PageOpenTestCase(TestCase):
     def test_home_page_exists(self):
@@ -13,7 +12,7 @@ class PageOpenTestCase(TestCase):
         url = reverse('home')
         found = resolve(url)
         self.assertEqual(found.func.__name__,
-                         SignInAndSignUp.as_view().__name__)
+                         HomeView.as_view().__name__)
 
     def test_about_page_exists(self):
         url = reverse('about')

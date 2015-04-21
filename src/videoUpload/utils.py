@@ -138,6 +138,8 @@ class TimeUtils:
     @staticmethod
     def get_sec(s):
         """ hh:mm:ss.mss -> s """
+        if s == "":
+            return 0
         l = s.split('.')[0].split(':')
         return int(l[0]) * 3600 + int(l[1]) * 60 + int(l[2])
 
