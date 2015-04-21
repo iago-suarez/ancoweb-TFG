@@ -1,9 +1,11 @@
 import os
+from random import randint
 import time
+import shutil
 from ancoweb import settings
 from videoUpload import utils
 from videoUpload.utils import VideoUtils, TimeUtils, ImageUtils
-from subprocess import call, Popen, PIPE, STDOUT
+from subprocess import Popen, PIPE, STDOUT
 
 
 class UploadState(object):
@@ -67,6 +69,26 @@ class AnalyzeVideo(UploadState):
 
     def exec(self):
         # TODO Implementar
+
+        def generate_xml_filename(video_model):
+            """
+            Return the relative path into MEDIA_ROOT to the video
+            xml where can be loaded the behaviour analysis of video_model
+            :param video_model:
+            :return:
+            """
+            directory = os.path.join(utils.XML_FOLDER,
+                                     str(video_model.owner.id))
+            path_directory = os.path.join(settings.MEDIA_ROOT, directory)
+            if not os.path.exists(path_directory):
+                os.makedirs(path_directory)
+            return os.path.join(directory, ("x" + str(randint(1, 1000)) + ".xml"))
+
+        filename = generate_xml_filename(self.upload_model.video_model)
+        shutil.copyfile("media/xml/wk1gt.xml", os.path.join(settings.MEDIA_ROOT, filename))
+        self.upload_model.video_model.detected_objs = filename
+        self.upload_model.video_model.save()
+
         for i in range(0, 100):
             time.sleep(.01)
             if i % 3 == 0:

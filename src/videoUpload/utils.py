@@ -5,6 +5,7 @@ from ancoweb import settings
 
 VIDEOS_FOLDER = 'videos'
 IMAGES_FOLDER = 'images'
+XML_FOLDER = 'xml'
 TEMPORAL_FOLDER = 'tmp'
 IMAGE_DEFAULT_EXT = '.png'
 VIDEO_DEFAULT_EXT = '.mp4'
@@ -86,6 +87,16 @@ class VideoUtils:
                   "'/^frame=/ {print $2}'|tail -n 1" % video_path,
                   shell='TRUE', stdout=PIPE, stderr=STDOUT, universal_newlines=True)
         return int(p.stdout.readline())
+
+    @staticmethod
+    def get_fps(video_path):
+        p = Popen("ffmpeg -i %s 2>&1| grep fps" % video_path,
+                  shell='TRUE', stdout=PIPE, stderr=STDOUT, universal_newlines=True)
+        line = p.stdout.readline()
+        # De toda la linea de información buscamos los fps y los devolvemos
+        for video_property in line.split(','):
+            if 'fps' in video_property:
+                return int(video_property.split()[0])
 
 
 class ImageUtils:

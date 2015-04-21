@@ -27,6 +27,8 @@
             {% videosources object %}
             Your browser does not support the video tag.
         </video>
+        <canvas id="objects" class="drawing-layer"></canvas>
+        <span id="xml_detected_objs" value="{{ object.detected_objs.url }}"/>
         <p> Creation Date: {{ object.creation_timestamp }} </p>
         <br/>
         <h4 class="owner-label"> {{ object.owner }} </h4>
