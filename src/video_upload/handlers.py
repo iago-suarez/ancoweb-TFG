@@ -5,7 +5,7 @@ from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from django.http import HttpResponse
 
 
-class VideoUploadHandler(TemporaryFileUploadHandler):
+class video_uploadHandler(TemporaryFileUploadHandler):
     """
     Cache system for TemporaryFileUploadHandler
     """

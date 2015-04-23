@@ -3,8 +3,8 @@ from random import randint
 import time
 import shutil
 from ancoweb import settings
-from videoUpload import utils
-from videoUpload.utils import VideoUtils, TimeUtils, ImageUtils
+from video_upload import utils
+from video_upload.utils import VideoUtils, TimeUtils, ImageUtils
 from subprocess import Popen, PIPE, STDOUT
 
 

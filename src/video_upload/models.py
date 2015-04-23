@@ -4,12 +4,12 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from ancoweb import settings
-from videoUpload import tasks
-from videoUpload.utils import ImageUtils, VideoUtils, media_url_to_path
+from video_upload import tasks
+from video_upload.utils import ImageUtils, VideoUtils, media_url_to_path
 from video_manager.models import VideoModel
 
 
-class VideoUpload(models.Model):
+class video_upload(models.Model):
     video_model = models.ForeignKey(VideoModel)
     progress = models.IntegerField(default=0)
     title = models.CharField(max_length=100)  # default=video_model.title
@@ -23,7 +23,7 @@ class VideoUpload(models.Model):
             self.title = self.video_model.title
         if not self.owner_id:
             self.owner = self.video_model.owner
-        super(VideoUpload, self).save(*args, **kwargs)
+        super(video_upload, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -74,4 +74,4 @@ def delete_upload(upload, using=None):
         os.rmdir(ImageUtils.image_tmp_folder(upload.video_model))
     except OSError as ex:
         pass
-    super(VideoUpload, upload).delete(using)
+    super(video_upload, upload).delete(using)

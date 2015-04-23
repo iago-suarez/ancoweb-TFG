@@ -3,7 +3,7 @@ from django.views import generic
 from ancoweb import settings
 from accounts.views import SignInAndSignUp
 from video_manager.models import VideoModel
-from videoUpload.notification_views import NotificationsView
+from video_upload.notification_views import NotificationsView
 
 
 VIDEOS_FOLDER = 'videos/'

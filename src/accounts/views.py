@@ -8,7 +8,7 @@ from django.contrib.auth import logout
 from django.contrib import messages
 
 from . import forms
-from videoUpload.notification_views import NotificationsView
+from video_upload.notification_views import NotificationsView
 
 
 class SignInAndSignUp(generic.edit.FormMixin, generic.TemplateView):

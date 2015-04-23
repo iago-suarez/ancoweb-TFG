@@ -19,7 +19,7 @@ $(document).ready(function(){
     $('.delete-notification').click(function(){
         var not_id = $(this).next('.notificationId').attr('value');
         var $this = $(this);
-        $.post( '/videoUpload/notifications/delete/' + not_id + '/', function(data, status){
+        $.post( '/video_upload/notifications/delete/' + not_id + '/', function(data, status){
             //Si todo ha ido bien borramos la notificacion
             $this.parent().fadeOut(500, function() { $(this).remove(); });
         }).error(function(data){
@@ -48,7 +48,7 @@ $(document).ready(function(){
             var new_dom =
                 '<div class=\"text-center\"> \
                     <a class=\"btn btn-primary video-finished-btn\" \
-                        href=\"/videoUpload/upload/' + not_json.fields.video_model + '/success/"> \
+                        href=\"/video_upload/upload/' + not_json.fields.video_model + '/success/"> \
                             Finish \
                     </a> \
                 </div>';
@@ -67,7 +67,7 @@ $(document).ready(function(){
         if (!$('.notification:has(.progress-bar)').length)
             return true;
         // For all notifications we update it state
-        $.getJSON("/videoUpload/notificationsJson", function(notifications){
+        $.getJSON("/video_upload/notificationsJson", function(notifications){
             $.each(notifications, function (i, elem) {
                 refresh_notification($('.notification:has(span[value=' + elem.pk + '])'), elem);
             });

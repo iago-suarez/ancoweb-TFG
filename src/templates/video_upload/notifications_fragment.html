@@ -18,7 +18,7 @@
 
             {% if notification.is_finished %}
             <div class="text-center">
-                <a class="btn btn-primary video-finished-btn" href="{% url 'videoUpload:success-upload' notification.video_model.id %}"> Finish </a>
+                <a class="btn btn-primary video-finished-btn" href="{% url 'video_upload:success-upload' notification.video_model.id %}"> Finish </a>
             </div>
             {% endif %}
         </div>

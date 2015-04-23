@@ -10,6 +10,6 @@ urlpatterns = patterns(
     url(r'^about/$', AboutView.as_view(), name='about'),
     url(r'^accounts/logout$', LogoutView.as_view(), name='logout'),
     url(r'^videos/', include('video_manager.urls', namespace='videos')),
-    url(r'videoUpload/', include('videoUpload.urls', namespace='videoUpload')),
+    url(r'video_upload/', include('video_upload.urls', namespace='video_upload')),
     url(r'^admin/', include(admin.site.urls)),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -29,7 +29,7 @@ def progress_bar():
                        '</div>' \
                        '</div>' % (uuid.uuid4())
     upload_progress_url = '<script>upload_progress_url = "%s"</script>' \
-                          % (reverse('videoUpload:upload_progress'))
+                          % (reverse('video_upload:upload_progress'))
     return mark_safe(progress_bar_tag + upload_progress_url)
 
 

@@ -14,9 +14,9 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='VideoUpload',
+            name='video_upload',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
                 ('progress', models.IntegerField(default=0)),
                 ('title', models.CharField(max_length=100)),
                 ('state_message', models.CharField(max_length=100)),
@@ -24,5 +24,8 @@ class Migration(migrations.Migration):
                 ('owner', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
                 ('video_model', models.ForeignKey(to='video_manager.VideoModel')),
             ],
+            options={
+            },
+            bases=(models.Model,),
         ),
     ]

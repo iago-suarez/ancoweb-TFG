@@ -16,14 +16,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='VideoModel',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
                 ('title', models.CharField(max_length=50)),
                 ('video', models.FileField(upload_to=video_manager.models.video_file_path)),
-                ('detected_objs', models.FileField(upload_to='', null=True)),
-                ('image', models.ImageField(upload_to='', null=True)),
-                ('description', models.CharField(blank=True, max_length=250)),
+                ('detected_objs', models.FileField(null=True, upload_to='')),
+                ('image', models.ImageField(null=True, upload_to='')),
+                ('description', models.CharField(max_length=250, blank=True)),
                 ('creation_timestamp', models.DateTimeField(auto_now_add=True)),
                 ('owner', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
+            options={
+            },
+            bases=(models.Model,),
         ),
     ]

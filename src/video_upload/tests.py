@@ -1,5 +1,5 @@
 from django.test import TestCase
-from videoUpload import utils
+from video_upload import utils
 
 
 class TimeUtilsTestCase(TestCase):

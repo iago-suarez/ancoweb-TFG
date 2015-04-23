@@ -10,16 +10,16 @@ from django.contrib import messages
 
 from ancoweb import settings
 from accounts.views import SignInAndSignUp
-from videoUpload import utils
-from videoUpload.forms import VideoModelForm
-from videoUpload.models import VideoUpload
-from videoUpload.utils import VideoUtils, ImageUtils
+from video_upload import utils
+from video_upload.forms import VideoModelForm
+from video_upload.models import video_upload
+from video_upload.utils import VideoUtils, ImageUtils
 from video_manager.models import VideoModel
-from videoUpload.notification_views import NotificationsView
+from video_upload.notification_views import NotificationsView
 
 
 class UploadView(NotificationsView, SignInAndSignUp):
-    template_name = 'videoUpload/upload.html'
+    template_name = 'video_upload/upload.html'
     upload_form_class = VideoModelForm
 
     @method_decorator(login_required)
@@ -39,7 +39,7 @@ class UploadView(NotificationsView, SignInAndSignUp):
                 instance = form.save(commit=False)
                 instance.owner = request.user
                 instance.save()
-                notification = VideoUpload.objects.create(video_model=instance)
+                notification = video_upload.objects.create(video_model=instance)
                 notification.process()
 
                 return HttpResponseRedirect(reverse('home'))
@@ -56,7 +56,7 @@ class UploadView(NotificationsView, SignInAndSignUp):
 
 
 class SuccessfulUpload(NotificationsView, generic.DetailView):
-    template_name = 'videoUpload/successfulUpload.html'
+    template_name = 'video_upload/successfulUpload.html'
     model = VideoModel
 
     @method_decorator(login_required)
@@ -78,7 +78,7 @@ class SuccessfulUpload(NotificationsView, generic.DetailView):
         video_model.save()
 
         # Delete upload model if exists
-        VideoUpload.objects.get(video_model=video_model).delete()
+        video_upload.objects.get(video_model=video_model).delete()
 
         return HttpResponseRedirect(reverse('videos:details', args=(video_model.id,)))
 
@@ -87,7 +87,7 @@ def notifications_as_json(request):
     JSONSerializer = serializers.get_serializer("json")
     json_serializer = JSONSerializer()
 
-    notifications_qs = VideoUpload.objects.filter(owner=request.user)
+    notifications_qs = video_upload.objects.filter(owner=request.user)
     json_serializer.serialize(notifications_qs)
     return HttpResponse(json_serializer.getvalue())
 
