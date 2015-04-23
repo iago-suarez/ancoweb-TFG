@@ -1,4 +1,6 @@
 # ancoweb-TFG
+.. image:: https://travis-ci.org/iago-suarez/ancoweb-TFG.svg?branch=master
+    :target: https://travis-ci.org/iago-suarez/ancoweb-TFG
 ## Web application for the analysis of human behavior
 Ancoweb is a Web application for the analysis of human behavior built with [Python][0] using the [Django Web Framework][1].
 
@@ -19,6 +21,11 @@ To download the source code:
 
 To set up a development environment quickly, first install Python 3.4. It
 comes with virtualenv built-in. So create a virtual env by:
+
+> In ubuntu 14.04(tested) is neccesary:
+> sudo pip install --upgrade virtualenv
+> virtualenv-3.4 ancoweb
+> . ancoweb/bin/activate
 
     $ python3.4 -m venv ancoweb
     $ . ancoweb/bin/activate

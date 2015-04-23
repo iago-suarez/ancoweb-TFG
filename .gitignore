@@ -4,3 +4,4 @@
 src/media/videos/*
 src/media/images/*
 src/media/tmp
+src/db.sqlite3
