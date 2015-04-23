@@ -50,7 +50,6 @@ if "celery" in sys.argv[0]:
 # Application definition
 
 INSTALLED_APPS = (
-    'django_admin_bootstrapped.bootstrap3',
     'django_admin_bootstrapped',
     'crispy_forms',
 
