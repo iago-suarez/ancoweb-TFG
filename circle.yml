@@ -1,6 +1,0 @@
-general:
-  build_dir: src
-
-machine:
-  python:
-    version: 3.4.0
