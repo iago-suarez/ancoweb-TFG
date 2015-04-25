@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load staticfiles %}
+{% load notifications %}
+{% load signin_form %}
+{% load crispy_forms_tags %}
 
   <head>
     <meta charset="utf-8">
@@ -55,6 +58,7 @@
           <ul class="nav navbar-nav">
             {% block navbar-left %}{% endblock %}
           </ul>
+
           <ul class="nav navbar-nav navbar-right">
             {% block navbar-right %}
               {% if user.is_authenticated %}
@@ -68,10 +72,15 @@
                     <li><a href="{% url 'logout' %}">Logout</a></li>
                   </ul>
                 </li>
+              {% else %}
+              <!-- Generate signin_form variable -->
+                {% signin_form %}
+              <!--Generate crispy gorm from variable-->
+                {% crispy signin_form %}
               {% endif %}
             {% endblock %}
           </ul>
-          </ul>
+
         </div><!--/.nav-collapse -->
         {% endblock %}
       </div>
@@ -81,7 +90,6 @@
     {% if user.is_authenticated %}
 
         <!-- UploadNotifications fragment -->
-        {%  load notifications %}
         {% notifications user %}
 
     {% endif %}

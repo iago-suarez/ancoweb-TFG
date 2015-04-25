@@ -1,6 +1,5 @@
 import os
 from django import template
-from ancoweb import settings
 from video_upload.utils import VideoUtils
 
 register = template.Library()

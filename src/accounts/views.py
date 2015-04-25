@@ -19,7 +19,7 @@ class SignInAndSignUp(generic.edit.FormMixin, generic.TemplateView):
             kwargs["signin_form"] = self.signin_form_class()
         if "signup_form" not in kwargs:
             kwargs["signup_form"] = self.signup_form_class()
-        return super().get(request, *args, **kwargs)
+        return super(SignInAndSignUp, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         if 'sign_in' in request.POST:

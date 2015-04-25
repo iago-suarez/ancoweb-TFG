@@ -1,8 +1,7 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field
-from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
+from crispy_forms.layout import Layout, Submit, Field
 
 
 class LoginForm(AuthenticationForm):
@@ -10,6 +9,7 @@ class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.set_form_action('/')
         self.helper.form_class = 'form-inline navbar-form pull-right'
         self.helper.form_id = 'signin-form'
         self.helper.form_show_labels = False
@@ -27,7 +27,6 @@ class SignupForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'signup-form'
-        #self.helper.form_class = 'form-inline navbar-form pull-right'
         self.helper.form_show_labels = False
         self.helper.form_show_errors = False
         self.helper.help_text_inline = False

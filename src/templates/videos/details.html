@@ -1,21 +1,12 @@
 {% extends "base.html" %}
 
 {% load staticfiles %}
-{% load crispy_forms_tags %}
 {% load videosources %}
 
 {% block title %}{{ block.super }}Home{% endblock %}
 
 {% block navbar-left %}
   {% include "_navbar.html" with active_link="videos" %}
-{% endblock %}
-
-{% block navbar-right %}
-  {% if not user.is_authenticated %}
-    {% crispy signin_form %}
-  {% else %}
-    {{ block.super }}
-  {% endif %}
 {% endblock %}
 
 {% block container %}

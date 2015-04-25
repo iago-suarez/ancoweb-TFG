@@ -9,14 +9,6 @@
   {% include "_navbar.html" %}
 {% endblock %}
 
-{% block navbar-right %}
-  {% if not user.is_authenticated %}
-    {% crispy signin_form %}
-  {% else %}
-    {{ block.super }}
-  {% endif %}
-{% endblock %}
-
 {% block container %}
 
 <div class="container">
