@@ -78,8 +78,13 @@
     </div>
     {% endblock %}
 
-    <!-- UploadNotifications fragment -->
-    {% include 'video_upload/notifications_fragment.html' %}
+    {% if user.is_authenticated %}
+
+        <!-- UploadNotifications fragment -->
+        {%  load notifications %}
+        {% notifications user %}
+
+    {% endif %}
 
     {% block messages %}
       {% if messages %}

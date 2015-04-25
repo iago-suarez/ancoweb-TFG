@@ -8,17 +8,15 @@ from django.utils.decorators import method_decorator
 from django.views import generic
 from django.contrib import messages
 
-from ancoweb import settings
 from accounts.views import SignInAndSignUp
 from video_upload import utils
 from video_upload.forms import VideoModelForm
 from video_upload.models import video_upload
 from video_upload.utils import VideoUtils, ImageUtils
 from video_manager.models import VideoModel
-from video_upload.notification_views import NotificationsView
 
 
-class UploadView(NotificationsView, SignInAndSignUp):
+class UploadView(SignInAndSignUp):
     template_name = 'video_upload/upload.html'
     upload_form_class = VideoModelForm
 
@@ -55,7 +53,7 @@ class UploadView(NotificationsView, SignInAndSignUp):
             super().post(self, request, *args, **kwargs)
 
 
-class SuccessfulUpload(NotificationsView, generic.DetailView):
+class SuccessfulUpload(generic.DetailView):
     template_name = 'video_upload/successfulUpload.html'
     model = VideoModel
 

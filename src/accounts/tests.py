@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.core.urlresolvers import resolve, reverse
 from accounts.views import HomeView
 
+
 class PageOpenTestCase(TestCase):
     def test_home_page_exists(self):
         url = reverse('home')
