@@ -1,5 +1,3 @@
-import os
-
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.http import HttpResponseRedirect, HttpResponse
@@ -8,7 +6,6 @@ from django.utils.decorators import method_decorator
 from django.views import generic
 from django.contrib import messages
 
-from accounts.views import SignInAndSignUp
 from video_upload import utils
 from video_upload.forms import VideoModelForm
 from video_upload.models import video_upload
@@ -16,7 +13,7 @@ from video_upload.utils import VideoUtils, ImageUtils
 from video_manager.models import VideoModel
 
 
-class UploadView(SignInAndSignUp):
+class UploadView(generic.TemplateView):
     template_name = 'video_upload/upload.html'
     upload_form_class = VideoModelForm
 

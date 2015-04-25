@@ -1,7 +1,6 @@
 from django.views import generic
 
 from ancoweb import settings
-from accounts.views import SignInAndSignUp
 from video_manager.models import VideoModel
 
 
@@ -10,7 +9,7 @@ TEMPORAL_FOLDER = 'tmp/'
 DEF_FRAMES_NUM = 5
 
 
-class IndexView(SignInAndSignUp, generic.ListView):
+class IndexView(generic.ListView):
     template_name = 'videos/index.html'
     model = VideoModel
 
@@ -20,6 +19,7 @@ class IndexView(SignInAndSignUp, generic.ListView):
     def get_queryset(self):
         qs = super(IndexView, self).get_queryset()
         # Filter if we are in a special search
+        qs = qs.order_by('creation_timestamp').reverse()
         name = self.request.GET.get('name')
         if name:
             return qs.filter(title__contains=name)

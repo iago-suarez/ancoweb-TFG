@@ -14,13 +14,6 @@ class SignInAndSignUp(generic.edit.FormMixin, generic.TemplateView):
     signin_form_class = forms.LoginForm
     signup_form_class = forms.SignupForm
 
-    def get(self, request, *args, **kwargs):
-        if "signin_form" not in kwargs:
-            kwargs["signin_form"] = self.signin_form_class()
-        if "signup_form" not in kwargs:
-            kwargs["signup_form"] = self.signup_form_class()
-        return super(SignInAndSignUp, self).get(request, *args, **kwargs)
-
     def post(self, request, *args, **kwargs):
         if 'sign_in' in request.POST:
             form = self.signin_form_class(**self.get_form_kwargs())
@@ -65,6 +58,10 @@ class SignInAndSignUp(generic.edit.FormMixin, generic.TemplateView):
 
 class HomeView(SignInAndSignUp, generic.TemplateView):
     template_name = "home.html"
+
+    def get_context_data(self, **kwargs):
+        kwargs["signup_form"] = self.signup_form_class()
+        return super(HomeView, self).get_context_data(**kwargs)
 
 
 class LogoutView(generic.RedirectView):
