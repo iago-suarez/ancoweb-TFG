@@ -51,7 +51,7 @@ class GeneratingImagesState(UploadState):
         img_paths = []
 
         # Generamos todas las imágenes
-        for second in VideoUtils.select_seconds(VideoUtils.get_video_seconds(self.upload_model.video_model)):
+        for second in VideoUtils.select_seconds(VideoUtils.get_video_seconds(self.upload_model.video_model), utils.DEF_FRAMES_NUM):
             filename = 'video%s_second%s%s' % (self.upload_model.video_model.id,
                                                str(second), utils.IMAGE_DEFAULT_EXT)
             VideoUtils.create_video_frame(self.upload_model.video_model, TimeUtils.print_sec(second),
@@ -85,7 +85,7 @@ class AnalyzeVideo(UploadState):
             return os.path.join(directory, ("x" + str(randint(1, 1000)) + ".xml"))
 
         filename = generate_xml_filename(self.upload_model.video_model)
-        shutil.copyfile("media/xml/wk1gt.xml", os.path.join(settings.MEDIA_ROOT, filename))
+        shutil.copyfile("media/tests_resources/wk1gt.xml", os.path.join(settings.MEDIA_ROOT, filename))
         self.upload_model.video_model.detected_objs = filename
         self.upload_model.video_model.save()
 

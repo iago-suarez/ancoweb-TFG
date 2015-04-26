@@ -5,7 +5,7 @@ from django.test import Client
 from video_manager.models import VideoModel
 
 
-class SimpleTest(unittest.TestCase):
+class IndexTest(unittest.TestCase):
     def setUp(self):
         # Every test needs a client.
         self.client = Client()

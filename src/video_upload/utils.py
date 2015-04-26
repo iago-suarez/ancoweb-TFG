@@ -44,15 +44,17 @@ class VideoUtils:
         return TimeUtils.get_sec(line.split()[2])
 
     @staticmethod
-    def select_seconds(tot_sec):
+    def select_seconds(tot_sec, parts):
         """
-        Returns a list of seconds that are central  DEF_FRAMES_NUM frames of a tot_sec length video.
+        Returns a list of seconds(int) that are central  parts frames of a tot_sec length video.
         :param tot_sec:
+        :param parts:
         :return:
         """
-        interval = tot_sec // (DEF_FRAMES_NUM + 1)
+        interval = tot_sec // (parts + 1)
+
         result = []
-        for i in range(1, DEF_FRAMES_NUM + 1):
+        for i in range(1, parts + 1):
             result.append(i * interval)
         return result
 
@@ -66,7 +68,7 @@ class VideoUtils:
         img_paths = []
 
         # Generamos todas las imágenes
-        for second in VideoUtils.select_seconds(VideoUtils.get_video_seconds(video_instance)):
+        for second in VideoUtils.select_seconds(VideoUtils.get_video_seconds(video_instance, DEF_FRAMES_NUM)):
             filename = 'video%s_second%s%s' % (video_instance.id,
                                                str(second), IMAGE_DEFAULT_EXT)
             img_paths.append(os.path.join(settings.MEDIA_URL, TEMPORAL_FOLDER,
@@ -86,7 +88,10 @@ class VideoUtils:
                   "-y /dev/null 2>&1 | tr ^M '\n' | awk "
                   "'/^frame=/ {print $2}'|tail -n 1" % video_path,
                   shell='TRUE', stdout=PIPE, stderr=STDOUT, universal_newlines=True)
-        return int(p.stdout.readline())
+        try:
+            return int(p.stdout.readline())
+        except ValueError:
+            raise IOError(p.stdout.readline())
 
     @staticmethod
     def get_fps(video_path):
@@ -96,7 +101,7 @@ class VideoUtils:
         # De toda la linea de información buscamos los fps y los devolvemos
         for video_property in line.split(','):
             if 'fps' in video_property:
-                return int(video_property.split()[0])
+                return round(float(video_property.split()[0]))
 
 
 class ImageUtils:
