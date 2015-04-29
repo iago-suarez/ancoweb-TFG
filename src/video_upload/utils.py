@@ -68,7 +68,7 @@ class VideoUtils:
         img_paths = []
 
         # Generamos todas las imágenes
-        for second in VideoUtils.select_seconds(VideoUtils.get_video_seconds(video_instance, DEF_FRAMES_NUM)):
+        for second in VideoUtils.select_seconds(VideoUtils.get_video_seconds(video_instance), DEF_FRAMES_NUM):
             filename = 'video%s_second%s%s' % (video_instance.id,
                                                str(second), IMAGE_DEFAULT_EXT)
             img_paths.append(os.path.join(settings.MEDIA_URL, TEMPORAL_FOLDER,
