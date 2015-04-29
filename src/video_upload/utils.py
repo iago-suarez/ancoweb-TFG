@@ -38,9 +38,14 @@ class VideoUtils:
         shell_result = Popen('ffmpeg -i %s 2>&1 | grep Duration' %
                              os.path.join(video_instance.video.storage.location,
                                           video_instance.video.name),
-                             shell='TRUE', stdout=PIPE, stderr=STDOUT)
+                             shell='TRUE', stdout=PIPE, stderr=STDOUT, universal_newlines=True)
 
         line = str(shell_result.stdout.readline())
+        # De toda la linea de información buscamos la duración y la devolvemos
+        for video_property in line.split(','):
+            if 'Duration' in video_property:
+                return TimeUtils.get_sec(video_property.split()[1])
+
         return TimeUtils.get_sec(line.split()[2])
 
     @staticmethod
