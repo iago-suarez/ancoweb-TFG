@@ -46,8 +46,6 @@ class VideoUtils:
             if 'Duration' in video_property:
                 return TimeUtils.get_sec(video_property.split()[1])
 
-        return TimeUtils.get_sec(line.split()[2])
-
     @staticmethod
     def select_seconds(tot_sec, parts):
         """
