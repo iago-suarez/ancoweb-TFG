@@ -84,7 +84,7 @@ class VideoUtils:
     def get_number_frames(video_path):
         """
         Return the frames number for the video on video_path
-        :param video_path:
+        :param video_path: the absolute path to the video
         :return:
         """
         p = Popen("ffmpeg -i %s -vcodec copy -f rawvideo "

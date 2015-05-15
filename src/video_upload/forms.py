@@ -8,6 +8,6 @@ class VideoModelForm(forms.ModelForm):
         fields = ['title', 'video', 'description']
         widgets = {
             'description': forms.Textarea(attrs={'cols': 40, 'rows': 8}),
-            'video': forms.ClearableFileInput(attrs={'accept': '.mp4, .ogv, .avi, .flv'}),
+            'video': forms.ClearableFileInput(attrs={'accept': '.mp4, .ogv, .avi, .flv, .webm'}),
         }
         exclude = ('image',)

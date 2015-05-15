@@ -35,8 +35,8 @@ class video_upload(models.Model):
         self.exec_thread.start()
 
     def exec_states(self):
-        tasks.AnalyzeVideo(self).exec()
         tasks.CovertVideo(self).exec()
+        tasks.AnalyzeVideo(self).exec()
         tasks.GeneratingImagesState(self).exec()
         tasks.FinishedStated(self).exec()
 

@@ -1,11 +1,10 @@
 import os
 from random import randint
-import time
-import shutil
 from ancoweb import settings
 from video_upload import utils
 from video_upload.utils import VideoUtils, TimeUtils, ImageUtils
 from subprocess import Popen, PIPE, STDOUT
+import xml.etree.ElementTree as ET
 
 
 class UploadState(object):
@@ -51,7 +50,8 @@ class GeneratingImagesState(UploadState):
         img_paths = []
 
         # Generamos todas las imágenes
-        for second in VideoUtils.select_seconds(VideoUtils.get_video_seconds(self.upload_model.video_model), utils.DEF_FRAMES_NUM):
+        for second in VideoUtils.select_seconds(VideoUtils.get_video_seconds(self.upload_model.video_model),
+                                                utils.DEF_FRAMES_NUM):
             filename = 'video%s_second%s%s' % (self.upload_model.video_model.id,
                                                str(second), utils.IMAGE_DEFAULT_EXT)
             VideoUtils.create_video_frame(self.upload_model.video_model, TimeUtils.print_sec(second),
@@ -68,7 +68,6 @@ class AnalyzeVideo(UploadState):
         super(AnalyzeVideo, self).__init__("Analyzing video", upload_model)
 
     def exec(self):
-        # TODO Implementar
 
         def generate_xml_filename(video_model):
             """
@@ -84,15 +83,38 @@ class AnalyzeVideo(UploadState):
                 os.makedirs(path_directory)
             return os.path.join(directory, ("x" + str(randint(1, 1000)) + ".xml"))
 
-        filename = generate_xml_filename(self.upload_model.video_model)
-        shutil.copyfile("media/tests_resources/wk1gt.xml", os.path.join(settings.MEDIA_ROOT, filename))
-        self.upload_model.video_model.detected_objs = filename
-        self.upload_model.video_model.save()
+        xml_relative_file = generate_xml_filename(self.upload_model.video_model)
+        xml_file = os.path.join(str(settings.BASE_DIR), settings.MEDIA_ROOT, xml_relative_file)
+        mp4_name = os.path.splitext(self.upload_model.video_model.video.name)[0]
+        mp4_name += ".mp4"
+        video_file = os.path.join(settings.BASE_DIR,
+                                  self.upload_model.video_model.video.storage.location,
+                                  mp4_name)
 
-        for i in range(0, 100):
-            time.sleep(.01)
-            if i % 3 == 0:
-                self.set_progress(i)
+        command = settings.RECOGNITIONSYS_BIN + " -i " + video_file + " -o " + xml_file + " --standar"
+        video_nframes = utils.VideoUtils.get_number_frames(video_file)
+
+        p = Popen(command, shell='TRUE', stdout=PIPE, stderr=STDOUT, universal_newlines=True)
+        while True:
+            line = p.stdout.readline()
+            if line == "":
+                break
+
+            # If the output is a frame xml object, we update the progress
+            if line.startswith("<frame"):
+                frame_element = ET.fromstring(line)
+                nframe = int(frame_element.get("number"))
+                progress = 100 * (nframe/video_nframes)
+                print("nFrame: " + str(nframe) + " progress: " + str(progress))
+                #Aumentamos el progreso de 5% en 5% para no sobrecargar la BD
+                if progress > (self.upload_model.progress + 5):
+                    print("progress: " + str(progress))
+                    self.set_progress(round(progress))
+
+            print(line)
+
+        self.upload_model.video_model.detected_objs = xml_relative_file
+        self.upload_model.video_model.save()
 
 
 class CovertVideo(UploadState):
@@ -146,4 +168,4 @@ class CovertVideo(UploadState):
         original = os.path.join(self.upload_model.video_model.video.storage.location,
                                 self.upload_model.video_model.video.name)
         file, ext = os.path.splitext(original)
-        convert_video(original, [file + ".mp4", file + ".ogv", file + ".webm"])
+        convert_video(original, [file + ".mp4", file + ".webm"])

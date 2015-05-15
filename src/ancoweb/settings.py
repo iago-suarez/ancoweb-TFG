@@ -174,3 +174,5 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.Loader',
     # 'django.template.loaders.eggs.Loader',
 )
+
+RECOGNITIONSYS_BIN = './RecognitionSystem/recognitionsystem'

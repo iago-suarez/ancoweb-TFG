@@ -13,7 +13,6 @@ def video_file_path(self, filename):
         upload_to_no_ext = os.path.splitext(upload_to)[0]
         # If the name does not exist we create the file
         if not os.path.isfile(os.path.join(upload_to_no_ext, ".mp4")) and \
-                not os.path.isfile(os.path.join(upload_to_no_ext, ".ogv")) and \
                 not os.path.isfile(os.path.join(upload_to_no_ext, ".webm")):
             break
     return upload_to
