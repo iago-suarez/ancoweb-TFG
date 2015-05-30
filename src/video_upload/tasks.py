@@ -105,13 +105,9 @@ class AnalyzeVideo(UploadState):
                 frame_element = ET.fromstring(line)
                 nframe = int(frame_element.get("number"))
                 progress = 100 * (nframe/video_nframes)
-                print("nFrame: " + str(nframe) + " progress: " + str(progress))
                 #Aumentamos el progreso de 5% en 5% para no sobrecargar la BD
                 if progress > (self.upload_model.progress + 5):
-                    print("progress: " + str(progress))
                     self.set_progress(round(progress))
-
-            print(line)
 
         self.upload_model.video_model.detected_objs = xml_relative_file
         self.upload_model.video_model.save()

@@ -13,16 +13,18 @@ $(document).ready(function(){
     var canvas_left_padding = 0;
     var canvas_top_padding = 0;
 
+    var training_lbl = document.getElementById("training-lbl");
+
     function paintFrame(){
 
-        function paint_rect(context, xc, yc, w, h){
+        function paint_rect(context, xc, yc, w, h, color, lineWidth){
             context.beginPath();
             // left, top, width, height
             context.rect(xc, yc, w, h);
             context.fillStyle = "rgba(0, 0, 0, 0)";
             context.fill();
-            context.lineWidth = 2;
-            context.strokeStyle = 'blue';
+            context.lineWidth = lineWidth;
+            context.strokeStyle = color;
             context.stroke();
         }
         var video = document.getElementById('video-player');
@@ -36,9 +38,17 @@ $(document).ready(function(){
 
         var frame_number = Math.round(video.currentTime * video_fps)
 
-        //If the system is training don't display
+        //If the system is training display the label
         if(frame_number < training_frames){
-
+            if(!$(training_lbl).is(":visible")){
+                adjustTrainingLbl(training_lbl);
+                $(training_lbl).show();
+            }
+            paint_rect(context, 4, 4, canvas.width-8, canvas.height-8,  '#f0ad4e', 4);
+            return 0;
+        } else if((frame_number >= training_frames) && ($(training_lbl).is(":visible"))){
+            //If the system isn't training hide the label
+            $(training_lbl).hide();
         }
 
         //Para cada elemento en la frame pintamos su recuadro
@@ -51,7 +61,7 @@ $(document).ready(function(){
             var yc = parseInt($(this).find('box').attr('yc'));
 
             paint_rect(context, video_proportion * xc, video_proportion * yc,
-                video_proportion * w, video_proportion * h)
+                video_proportion * w, video_proportion * h,  'blue', 2);
         });
     }
 
@@ -101,6 +111,19 @@ $(document).ready(function(){
         $('.drawing-layer').offset($('#video-player').offset());
         $('.drawing-layer').css('padding-left' , canvas_left_padding);
         $('.drawing-layer').css('padding-top' , canvas_top_padding);
+        adjustTrainingLbl(document.getElementById('training-lbl'));
+    }
+
+    function adjustTrainingLbl(training_lbl){
+
+        video_width = $('#video-player').width();
+        video_top = $('#video-player').offset().top;
+        video_left = $('#video-player').offset().left;
+        lbl_width = $(training_lbl).width();
+
+        lbl_left = video_left + Math.round(video_width/2) - Math.round(lbl_width/2);
+        $(training_lbl).css("top", video_top + 10);
+        $(training_lbl).css("left", lbl_left);
     }
 
     /* Video canvas adjust size and START */
@@ -123,10 +146,12 @@ $(document).ready(function(){
     $('#video-player').bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(e) {
         fullscreenOn = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
         if (fullscreenOn){
-            $('.drawing-layer').css('z-index', 2147483647)
+            $('.drawing-layer').css('z-index', 2147483647);
+            $('#training-lbl').css('z-index', 2147483647);
 
         }else{
-            $('.drawing-layer').css('z-index', "")
+            $('.drawing-layer').css('z-index', "");
+            $('#training-lbl').css('z-index', 50);
         }
     });
 
@@ -146,7 +171,6 @@ $(document).ready(function(){
 
     $(document).keypress(function(event){
         if(event.charCode === 32){
-            console.log("Spacee! :)");
             playAndPause(document.getElementById("video-player"));
             return false;
         }

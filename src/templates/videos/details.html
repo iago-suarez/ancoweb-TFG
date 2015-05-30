@@ -15,13 +15,17 @@
     <div class="row text-center">
         <h2> {{ object.title }} </h2>
 
+            <p id="training-lbl" class="btn-lg btn-warning">
+                Training Frames
+            </p>
+
             <div class="col-sm-4 col-md-3">
                 <div class="panel panel-primary">
                     <div class="panel-heading"><strong>Controls</strong></div>
                     <div class="panel-body text-left">
                         <div class="checkbox">
-                            <label id="show-analysis-checkbox" >
-                                <input type="checkbox" value="" checked>
+                            <label>
+                                <input id="show-analysis-checkbox" type="checkbox" value="" checked>
                                     Show Analysis
                             </label>
                         </div>
@@ -31,6 +35,7 @@
             </div>
 
             <div class="col-sm-8 col-md-6">
+
                 <video id="video-player" controls>
                     {% videosources object %}
                     Your browser does not support the video tag.
