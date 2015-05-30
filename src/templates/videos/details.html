@@ -14,16 +14,47 @@
 <div class="container">
     <div class="row text-center">
         <h2> {{ object.title }} </h2>
-        <video id="video-player" controls>
-            {% videosources object %}
-            Your browser does not support the video tag.
-        </video>
-        <canvas id="objects" class="drawing-layer"></canvas>
-        <span id="xml_detected_objs" value="{{ object.detected_objs.url }}"/>
-        <p> Creation Date: {{ object.creation_timestamp }} </p>
+
+            <div class="col-sm-4 col-md-3">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><strong>Controls</strong></div>
+                    <div class="panel-body text-left">
+                        <div class="checkbox">
+                            <label id="show-analysis-checkbox" >
+                                <input type="checkbox" value="" checked>
+                                    Show Analysis
+                            </label>
+                        </div>
+                        <button type="button" class="btn btn-success">Reload Analysis</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-8 col-md-6">
+                <video id="video-player" controls>
+                    {% videosources object %}
+                    Your browser does not support the video tag.
+                </video>
+                <canvas id="objects" class="drawing-layer"></canvas>
+                <span id="xml_detected_objs" value="{{ object.detected_objs.url }}"/>
+            </div>
+
+            <div class="col-sm-12 col-md-3">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><strong>Video Info</strong></div>
+                    <div class="panel-body text-left">
+                        <p> Creation Date: {{ object.creation_timestamp }} </p>
+                        <h4 class="owner-label"> {{ object.owner }} </h4>
+                        <p>{{ object.description}}</p>
+                    </div>
+                </div>
+            </div>
+
         <br/>
-        <h4 class="owner-label"> {{ object.owner }} </h4>
-        <p>{{ object.description}}</p>
+
+        <div class="container">
+        </div>
+
     </div>
 </div>
 
@@ -31,4 +62,5 @@
 
 {% block scripts %}
     <script src="{% static 'site/js/video-player.js'%}"></script>
+    <script src="{% static 'site/js/video-controls.js'%}"></script>
 {% endblock %}

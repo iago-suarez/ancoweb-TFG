@@ -1,6 +1,8 @@
 $(document).ready(function(){
 /****************** Video Details view ********************/
 
+    const training_frames = 35;
+
     var pos = [0,0];
     var detected_objs ;
     var video_fps;
@@ -34,6 +36,11 @@ $(document).ready(function(){
 
         var frame_number = Math.round(video.currentTime * video_fps)
 
+        //If the system is training don't display
+        if(frame_number < training_frames){
+
+        }
+
         //Para cada elemento en la frame pintamos su recuadro
         var frame = $($(detected_objs).find('frame[number=' + frame_number + ']'))
         $(frame).find('objectlist object').each(function(){
@@ -64,17 +71,9 @@ $(document).ready(function(){
         return fps;
     }
 
-    /** Adjust only position and dimesions of the Canvas Element **/
-    function adjustCanvas(){
-        $('.drawing-layer').offset($('#video-player').offset());
-        $('.drawing-layer').attr('height', $('#video-player').height());
-        $('.drawing-layer').attr('width', $('#video-player').width());
-    }
-
     /** Adjust Canvas Element including fullScreen mode **/
     function adjustCanvasExtended(video){
         // If we are in full screen mode
-        if(fullscreenOn){
             video_height = video.videoHeight;
             video_width = video.videoWidth;
             screen_height = $(video).height();
@@ -98,15 +97,7 @@ $(document).ready(function(){
                 $('.drawing-layer').attr('width', screen_width);
                 $('.drawing-layer').attr('height', video_proportion*video_height);
             }
-        } else {
-            // If we are not in fullscreen mode, only reset the size of the canvas
-            video_proportion = 1;
-            canvas_left_padding = 0;
-            canvas_top_padding = 0;
-            $('.drawing-layer').attr('height', $('#video-player').height());
-            $('.drawing-layer').attr('width', $('#video-player').width());
 
-        }
         $('.drawing-layer').offset($('#video-player').offset());
         $('.drawing-layer').css('padding-left' , canvas_left_padding);
         $('.drawing-layer').css('padding-top' , canvas_top_padding);
@@ -115,34 +106,18 @@ $(document).ready(function(){
     /* Video canvas adjust size and START */
     var video = document.getElementById("video-player");
 
-    /*************** HACEMOS DEBUG DE LOS EVENTOS DEL VÍDEO ******************/
-    $(video).bind("loadedmetadata", function(){
-        console.log("--> video.onloadedmetadata");
-    });
-
-    $(video).bind("canplay", function(){
-        console.log("--> video.canplay");
-    });
-
-    $(video).bind("loadeddata", function(){
-        console.log("--> video.loadeddata");
-    });
 
     $(video).resize(function(){
-        console.log("video.resize: " + $('video').height() + " - " + $('video').width());
+        adjustCanvasExtended(this);
     });
-    /*************************************************************************/
+
+    $(window).resize(function(){
+        adjustCanvasExtended(video);
+    });
 
     $(video).ready(function(){
-        console.log("--> video.ready: " + $('video').height() + " - " + $('video').width());
+        adjustCanvasExtended(this);
     });
-
-
-    // Cuando el vídeo ha cargado su tamano establecemos el
-    // mismo tamaño para el canvas
-    $(video).ready(adjustCanvas);
-
-    $( window, '#video-player' ).resize(adjustCanvasExtended(video));
 
     /* Entering Exiting fullscreen mode */
     $('#video-player').bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(e) {
@@ -152,6 +127,28 @@ $(document).ready(function(){
 
         }else{
             $('.drawing-layer').css('z-index', "")
+        }
+    });
+
+    /* Start and stop functions for video player */
+    function playAndPause(video){
+        if(video.paused){
+            video.play();
+        }
+        else{
+            video.pause();
+        }
+    }
+
+    $('#video-player').click(function(){
+        playAndPause(this);
+    });
+
+    $(document).keypress(function(event){
+        if(event.charCode === 32){
+            console.log("Spacee! :)");
+            playAndPause(document.getElementById("video-player"));
+            return false;
         }
     });
 });
