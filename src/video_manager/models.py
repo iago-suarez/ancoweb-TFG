@@ -1,8 +1,10 @@
 import os
+import threading
 from django.contrib.auth.models import User
 from django.db import models
 from video_upload import utils
 from random import randint
+import video_upload
 
 
 def video_file_path(self, filename):
@@ -29,3 +31,23 @@ class VideoModel(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class AnalysisProcess(models.Model):
+    video_model = models.ForeignKey(VideoModel)
+    progress = models.IntegerField(default=0)
+    state_message = models.CharField(max_length=100)
+    is_finished = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.video_model.title
+
+    def process(self):
+        self.exec_thread = threading.Thread(
+            target=self.exec_states
+        )
+        self.exec_thread.start()
+
+    def exec_states(self):
+        video_upload.tasks.AnalyzeVideo(self).exec()
+        video_upload.tasks.AnalysisFinishedStated(self).exec()

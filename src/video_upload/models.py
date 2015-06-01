@@ -9,11 +9,11 @@ from video_upload.utils import ImageUtils, VideoUtils, media_url_to_path
 from video_manager.models import VideoModel
 
 
-class video_upload(models.Model):
+class UploadProcess(models.Model):
     video_model = models.ForeignKey(VideoModel)
     progress = models.IntegerField(default=0)
-    title = models.CharField(max_length=100)  # default=video_model.title
-    owner = models.ForeignKey(User)  # default=video_model.owner
+    title = models.CharField(max_length=100)
+    owner = models.ForeignKey(User)
     state_message = models.CharField(max_length=100)
     is_finished = models.BooleanField(default=False)
 
@@ -23,7 +23,7 @@ class video_upload(models.Model):
             self.title = self.video_model.title
         if not self.owner_id:
             self.owner = self.video_model.owner
-        super(video_upload, self).save(*args, **kwargs)
+        super(UploadProcess, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -38,7 +38,7 @@ class video_upload(models.Model):
         tasks.CovertVideo(self).exec()
         tasks.AnalyzeVideo(self).exec()
         tasks.GeneratingImagesState(self).exec()
-        tasks.FinishedStated(self).exec()
+        tasks.ProcessFinishedStated(self).exec()
 
     def delete(self, using=None):
         # launch this in a new thread, because it can make it
@@ -74,4 +74,4 @@ def delete_upload(upload, using=None):
         os.rmdir(ImageUtils.image_tmp_folder(upload.video_model))
     except OSError as ex:
         pass
-    super(video_upload, upload).delete(using)
+    super(UploadProcess, upload).delete(using)

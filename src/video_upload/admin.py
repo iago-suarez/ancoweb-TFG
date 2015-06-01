@@ -1,4 +1,4 @@
 from django.contrib import admin
-from video_upload.models import video_upload
+from video_upload.models import UploadProcess
 
-admin.site.register(video_upload)
+admin.site.register(UploadProcess)

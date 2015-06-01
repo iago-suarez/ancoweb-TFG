@@ -8,7 +8,7 @@ from django.contrib import messages
 
 from video_upload import utils
 from video_upload.forms import VideoModelForm
-from video_upload.models import video_upload
+from video_upload.models import UploadProcess
 from video_upload.utils import VideoUtils, ImageUtils
 from video_manager.models import VideoModel
 
@@ -34,7 +34,7 @@ class UploadView(generic.TemplateView):
                 instance = form.save(commit=False)
                 instance.owner = request.user
                 instance.save()
-                notification = video_upload.objects.create(video_model=instance)
+                notification = UploadProcess.objects.create(video_model=instance)
                 notification.process()
 
                 return HttpResponseRedirect(reverse('home'))
@@ -73,7 +73,7 @@ class SuccessfulUpload(generic.DetailView):
         video_model.save()
 
         # Delete upload model if exists
-        video_upload.objects.get(video_model=video_model).delete()
+        UploadProcess.objects.get(video_model=video_model).delete()
 
         return HttpResponseRedirect(reverse('videos:details', args=(video_model.id,)))
 
@@ -82,7 +82,7 @@ def notifications_as_json(request):
     JSONSerializer = serializers.get_serializer("json")
     json_serializer = JSONSerializer()
 
-    notifications_qs = video_upload.objects.filter(owner=request.user)
+    notifications_qs = UploadProcess.objects.filter(owner=request.user)
     json_serializer.serialize(notifications_qs)
     return HttpResponse(json_serializer.getvalue())
 

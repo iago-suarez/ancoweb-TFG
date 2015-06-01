@@ -7,32 +7,42 @@ from subprocess import Popen, PIPE, STDOUT
 import xml.etree.ElementTree as ET
 
 
-class UploadState(object):
-    def __init__(self, name, upload_model):
+class ProcessState(object):
+    def __init__(self, name, process):
         self.name = name
-        self.upload_model = upload_model
-        self.upload_model.state_message = name
-        self.upload_model.progress = 0
-        self.upload_model.save()
+        self.process = process
+        self.process.state_message = name
+        self.process.progress = 0
+        self.process.save()
 
     def set_progress(self, progress):
-        self.upload_model.progress = progress
-        self.upload_model.save()
+        self.process.progress = progress
+        self.process.save()
 
     def exec(self, **args):
         raise NotImplementedError("Subclasses should implement this!")
 
 
-class FinishedStated(UploadState):
+class ProcessFinishedStated(ProcessState):
     def __init__(self, upload_model):
-        super(FinishedStated, self).__init__("Your video has been successfully uploaded", upload_model)
+        super(ProcessFinishedStated, self).__init__("Your video has been successfully uploaded", upload_model)
 
     def exec(self):
-        self.upload_model.is_finished = True
-        self.upload_model.save()
+        self.process.is_finished = True
+        self.process.save()
 
 
-class GeneratingImagesState(UploadState):
+class AnalysisFinishedStated(ProcessState):
+    def __init__(self, upload_model):
+        super(AnalysisFinishedStated, self).__init__("Your video has been successfully analyzed", upload_model)
+
+    def exec(self):
+        self.process.progress = 100
+        self.process.is_finished = True
+        self.process.save()
+
+
+class GeneratingImagesState(ProcessState):
     def __init__(self, upload_model):
         super(GeneratingImagesState, self).__init__("Generating image", upload_model)
 
@@ -46,24 +56,24 @@ class GeneratingImagesState(UploadState):
 
         # Las imágenes se almacenan en una carpeta temporal en media/tmp/usrId
         # Creamos esa carpeta
-        directory = ImageUtils.image_tmp_folder(self.upload_model.video_model)
+        directory = ImageUtils.image_tmp_folder(self.process.video_model)
         img_paths = []
 
         # Generamos todas las imágenes
-        for second in VideoUtils.select_seconds(VideoUtils.get_video_seconds(self.upload_model.video_model),
+        for second in VideoUtils.select_seconds(VideoUtils.get_video_seconds(self.process.video_model),
                                                 utils.DEF_FRAMES_NUM):
-            filename = 'video%s_second%s%s' % (self.upload_model.video_model.id,
+            filename = 'video%s_second%s%s' % (self.process.video_model.id,
                                                str(second), utils.IMAGE_DEFAULT_EXT)
-            VideoUtils.create_video_frame(self.upload_model.video_model, TimeUtils.print_sec(second),
+            VideoUtils.create_video_frame(self.process.video_model, TimeUtils.print_sec(second),
                                           os.path.join(directory, filename))
             img_paths.append(os.path.join(settings.MEDIA_URL, utils.TEMPORAL_FOLDER,
-                                          str(self.upload_model.video_model.owner.id), filename))
+                                          str(self.process.video_model.owner.id), filename))
 
         # Devolvemos los paths de ellas
         return img_paths
 
 
-class AnalyzeVideo(UploadState):
+class AnalyzeVideo(ProcessState):
     def __init__(self, upload_model):
         super(AnalyzeVideo, self).__init__("Analyzing video", upload_model)
 
@@ -83,12 +93,12 @@ class AnalyzeVideo(UploadState):
                 os.makedirs(path_directory)
             return os.path.join(directory, ("x" + str(randint(1, 1000)) + ".xml"))
 
-        xml_relative_file = generate_xml_filename(self.upload_model.video_model)
+        xml_relative_file = generate_xml_filename(self.process.video_model)
         xml_file = os.path.join(str(settings.BASE_DIR), settings.MEDIA_ROOT, xml_relative_file)
-        mp4_name = os.path.splitext(self.upload_model.video_model.video.name)[0]
+        mp4_name = os.path.splitext(self.process.video_model.video.name)[0]
         mp4_name += ".mp4"
         video_file = os.path.join(settings.BASE_DIR,
-                                  self.upload_model.video_model.video.storage.location,
+                                  self.process.video_model.video.storage.location,
                                   mp4_name)
 
         command = settings.RECOGNITIONSYS_BIN + " -i " + video_file + " -o " + xml_file + " --standar"
@@ -106,14 +116,14 @@ class AnalyzeVideo(UploadState):
                 nframe = int(frame_element.get("number"))
                 progress = 100 * (nframe/video_nframes)
                 #Aumentamos el progreso de 5% en 5% para no sobrecargar la BD
-                if progress > (self.upload_model.progress + 5):
+                if progress > (self.process.progress + 5):
                     self.set_progress(round(progress))
 
-        self.upload_model.video_model.detected_objs = xml_relative_file
-        self.upload_model.video_model.save()
+        self.process.video_model.detected_objs = xml_relative_file
+        self.process.video_model.save()
 
 
-class CovertVideo(UploadState):
+class CovertVideo(ProcessState):
     def __init__(self, upload_model):
         super(CovertVideo, self).__init__("Converting video", upload_model)
 
@@ -161,7 +171,7 @@ class CovertVideo(UploadState):
                             progress = progress_points_by_video * (i - passed_files_same_ext + progress_of_1)
                             self.set_progress(round(progress))
 
-        original = os.path.join(self.upload_model.video_model.video.storage.location,
-                                self.upload_model.video_model.video.name)
+        original = os.path.join(self.process.video_model.video.storage.location,
+                                self.process.video_model.video.name)
         file, ext = os.path.splitext(original)
         convert_video(original, [file + ".mp4", file + ".webm"])

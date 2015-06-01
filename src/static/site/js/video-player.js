@@ -96,21 +96,21 @@ $(document).ready(function(){
 
                 canvas_left_padding = (screen_width - (video_proportion*video_width))/2;
                 canvas_top_padding = 0;
-                $('.drawing-layer').attr('height', screen_height);
-                $('.drawing-layer').attr('width', video_proportion*video_width);
+                $('.drawing-layer').attr('height', screen_height)
+                    .attr('width', video_proportion*video_width);
             } else {
                 // El video es menos cuadrado que la pantalla
                 // Por tanto se contara un offset a la parte superior de la pantalla
 
                 canvas_left_padding = 0;
                 canvas_top_padding =  (screen_height - (video_proportion*video_height))/2;
-                $('.drawing-layer').attr('width', screen_width);
-                $('.drawing-layer').attr('height', video_proportion*video_height);
+                $('.drawing-layer').attr('width', screen_width)
+                    .attr('height', video_proportion*video_height);
             }
 
-        $('.drawing-layer').offset($('#video-player').offset());
-        $('.drawing-layer').css('padding-left' , canvas_left_padding);
-        $('.drawing-layer').css('padding-top' , canvas_top_padding);
+        $('.drawing-layer').offset($('#video-player').offset())
+            .css('padding-left' , canvas_left_padding)
+            .css('padding-top' , canvas_top_padding);
         adjustTrainingLbl(document.getElementById('training-lbl'));
     }
 
@@ -122,8 +122,7 @@ $(document).ready(function(){
         lbl_width = $(training_lbl).width();
 
         lbl_left = video_left + Math.round(video_width/2) - Math.round(lbl_width/2);
-        $(training_lbl).css("top", video_top + 10);
-        $(training_lbl).css("left", lbl_left);
+        $(training_lbl).css("top", video_top + 10).css("left", lbl_left);
     }
 
     /* Video canvas adjust size and START */
