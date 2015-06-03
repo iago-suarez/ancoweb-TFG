@@ -1,6 +1,8 @@
 .idea
 *.pyc
 *~
+*.log
+*.backup
 src/media/videos/*
 src/media/images/*
 src/media/tmp
