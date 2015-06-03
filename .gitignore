@@ -3,6 +3,14 @@
 *~
 *.log
 *.backup
+*.lof
+*.toc
+*.aux
+*.bbl
+*.blg
+*.ist
+*.lot
+*.dvi
 src/media/videos/*
 src/media/images/*
 src/media/tmp
