@@ -4,7 +4,7 @@
 
 \usepackage[spanish]{babel}
 \usepackage[a4paper, top=4cm, bottom=4cm, left=3.3cm, right=3.2cm]{geometry}
-\usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
 \usepackage{subfigure}
@@ -12,12 +12,12 @@
 \usepackage{url}
 
 
-% Aumentar la separación entre líneas
+% Aumentar la separaciÃ³n entre lÃ­neas
 \renewcommand{\baselinestretch}{1.5}
 \graphicspath{ {figures/} }
 
-% Para eliminar la cabecera de las páginas vacías al final de los
-% capítulos
+% Para eliminar la cabecera de las pÃ¡ginas vacÃ­as al final de los
+% capÃ­tulos
 \makeatletter
 \def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
   \hbox{}
@@ -36,11 +36,11 @@
 \include{portada}
 \cleardoublepage
 
-% Numeración romana de páginas
+% NumeraciÃ³n romana de pÃ¡ginas
 \pagenumbering{roman}
 
 
-% Especificación del pfc
+% EspecificaciÃ³n del pfc
 \include{especificacion}
 
 % Dedicatoria y agradecimientos
@@ -52,7 +52,7 @@
 \include{resumen}
 \cleardoublepage
 
-% Definimos el encabezado y pie de página
+% Definimos el encabezado y pie de pÃ¡gina
 \pagestyle{fancy}
 \renewcommand{\chaptermark}[1]{%
 \markboth{\thechapter.\ #1}{}}
@@ -64,59 +64,59 @@
 \fancyfoot{}
 
 
-% Índice de capítulos, secciones y subsecciones
+% Ãndice de capÃ­tulos, secciones y subsecciones
 \tableofcontents
 \cleardoublepage
 
-% Índice de figuras
+% Ãndice de figuras
 \listoffigures
 \cleardoublepage
 
 
-% Redefinición del nombre que encabeza las tablas. Por defecto es cuadro.
+% RedefiniciÃ³n del nombre que encabeza las tablas. Por defecto es cuadro.
 \renewcommand\tablename{Tabla}
-\renewcommand\listtablename{Índice de tablas}
+\renewcommand\listtablename{Ãndice de tablas}
 
-% Índice de tablas 
+% Ãndice de tablas 
 \listoftables
 \cleardoublepage
 
 
-% Numeración normal de páginas
+% NumeraciÃ³n normal de pÃ¡ginas
 \pagenumbering{arabic}
 
 
-% Definimos el encabezado y pie de página
+% Definimos el encabezado y pie de pÃ¡gina
 \fancyhead{}
 \fancyhead[LE,RO]{\thepage}
 \fancyhead[LO]{\rightmark}
 \fancyhead[ER]{\leftmark}
 
 
-% Capítulos
+% CapÃ­tulos
 
 \include{cap1}
 \include{cap2}
 
 
 
-% Apéndices
+% ApÃ©ndices
 \appendix
 
 \include{apen1}
 
 
 
-% Definimos el encabezado y pie de página
+% Definimos el encabezado y pie de pÃ¡gina
 \fancyhead{}
 \fancyhead[LE,RO]{\thepage}
 \fancyhead[LO,ER]{\rightmark}
 
-% Glosario de términos
+% Glosario de tÃ©rminos
 %\printglossary
 
 
-% Bibliografía
+% BibliografÃ­a
 \bibliographystyle{pfc-fic}
 \bibliography{biblio}
 
