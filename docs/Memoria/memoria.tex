@@ -1,0 +1,123 @@
+\documentclass[11pt, a4paper, twoside, titlepage]{book}
+
+% Paquetes usados
+
+\usepackage[spanish]{babel}
+\usepackage[a4paper, top=4cm, bottom=4cm, left=3.3cm, right=3.2cm]{geometry}
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{subfigure}
+\usepackage{booktabs}
+\usepackage{url}
+
+
+% Aumentar la separación entre líneas
+\renewcommand{\baselinestretch}{1.5}
+\graphicspath{ {figures/} }
+
+% Para eliminar la cabecera de las páginas vacías al final de los
+% capítulos
+\makeatletter
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
+  \hbox{}
+    \thispagestyle{empty}
+      \newpage
+        \if@twocolumn\hbox{}\newpage\fi\fi\fi}
+\makeatother
+%%
+
+
+\begin{document}
+
+
+\pagestyle{empty}
+
+\include{portada}
+\cleardoublepage
+
+% Numeración romana de páginas
+\pagenumbering{roman}
+
+
+% Especificación del pfc
+\include{especificacion}
+
+% Dedicatoria y agradecimientos
+\include{agradecimientos}
+
+
+
+% Resumen y palabras clave
+\include{resumen}
+\cleardoublepage
+
+% Definimos el encabezado y pie de página
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{%
+\markboth{\thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{%
+\markright{\thesection.\ #1}{}}
+\fancyhead{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO,ER]{\rightmark}
+\fancyfoot{}
+
+
+% Índice de capítulos, secciones y subsecciones
+\tableofcontents
+\cleardoublepage
+
+% Índice de figuras
+\listoffigures
+\cleardoublepage
+
+
+% Redefinición del nombre que encabeza las tablas. Por defecto es cuadro.
+\renewcommand\tablename{Tabla}
+\renewcommand\listtablename{Índice de tablas}
+
+% Índice de tablas 
+\listoftables
+\cleardoublepage
+
+
+% Numeración normal de páginas
+\pagenumbering{arabic}
+
+
+% Definimos el encabezado y pie de página
+\fancyhead{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO]{\rightmark}
+\fancyhead[ER]{\leftmark}
+
+
+% Capítulos
+
+\include{cap1}
+\include{cap2}
+
+
+
+% Apéndices
+\appendix
+
+\include{apen1}
+
+
+
+% Definimos el encabezado y pie de página
+\fancyhead{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO,ER]{\rightmark}
+
+% Glosario de términos
+%\printglossary
+
+
+% Bibliografía
+\bibliographystyle{pfc-fic}
+\bibliography{biblio}
+
+\end{document}

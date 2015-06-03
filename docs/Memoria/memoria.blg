@@ -1,0 +1,56 @@
+This is BibTeX, Version 0.99d (TeX Live 2013/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: memoria.aux
+A level-1 auxiliary file: portada.aux
+A level-1 auxiliary file: especificacion.aux
+A level-1 auxiliary file: agradecimientos.aux
+A level-1 auxiliary file: resumen.aux
+A level-1 auxiliary file: cap1.aux
+A level-1 auxiliary file: cap2.aux
+A level-1 auxiliary file: apen1.aux
+The style file: pfc-fic.bst
+Database file #1: biblio.bib
+Warning--string name "acm" is undefined
+--line 193 of file biblio.bib
+You've used 5 entries,
+            1876 wiz_defined-function locations,
+            516 strings with 4289 characters,
+and the built_in function-call counts, 1112 in all, are:
+= -- 99
+> -- 54
+< -- 0
++ -- 20
+- -- 15
+* -- 78
+:= -- 174
+add.period$ -- 9
+call.type$ -- 5
+change.case$ -- 3
+chr.to.int$ -- 0
+cite$ -- 5
+duplicate$ -- 52
+empty$ -- 118
+format.name$ -- 15
+if$ -- 266
+int.to.chr$ -- 0
+int.to.str$ -- 5
+missing$ -- 6
+newline$ -- 22
+num.names$ -- 7
+pop$ -- 24
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 22
+stack$ -- 0
+substring$ -- 32
+swap$ -- 12
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 9
+width$ -- 6
+write$ -- 53
+(There was 1 warning)

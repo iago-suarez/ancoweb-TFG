@@ -1,0 +1,28 @@
+\begin{titlepage}
+\begin{center}
+
+\includegraphics[scale=0.16]{logo.eps}
+
+
+\Large{FACULTADE DE INFORMÁTICA}
+
+\emph{\large{Departamento de XXX}}
+
+Proxecto de Fin de Carreira de Enxeñería Informática
+
+\vspace*{3cm}
+
+\textbf{\LARGE{Título del pfc}}
+
+\end{center}
+
+\vspace*{4cm}
+
+\begin{flushright}
+\large{
+\emph{Autor:} XXX\\
+\emph{Tutor: } XXX\\
+A Coruña, \today}
+\end{flushright}
+
+\end{titlepage}
