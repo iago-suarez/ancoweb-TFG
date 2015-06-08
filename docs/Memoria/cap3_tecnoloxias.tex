@@ -1,4 +1,113 @@
-\chapter{Título capítulo}
+\chapter{Estudo das tecnoloxías para a creación de aplicacións web baseadas en vídeo}
+
+	A continuación mostrase un estudo feito sobre as tecnoloxías mais empregadas hoxe en día
+	de cara ao deseño de aplicacións web baseadas en vídeo. Os criterios que se valoraron á
+	hora de escoller unha destas metodoloxías son os seguintes:
+
+\begin{itemize}
+
+	\item {\textbf{Plataforma e Portabilidade\\}}
+		Segundo as especificacións iniciais do proxecto, e de cara a facilitar a 
+		implementación deste, as ferramentas empregadas deben de executarse baixo os
+		Sistemas Operativos baseados en Linux.
+
+	\item {\textbf{Compatibilidade co algoritmo de Procesado de Vídeo\\}}
+		Dado que o algoritmo que procesa o vídeo foi parcialmente implementado en c++,
+		a tecnoloxía que se empregue para o desenvolvemento da parte web debe dispoñer da
+		máxima compatibilidade con esta linguaxe de programación.
+
+	\item {\textbf{Desenvolvemento Áxil\\}}
+		A tecnoloxía que se seleccione ten que minimizar o custe en tempo e esforzo da 
+		implementación, por este motivo valorarase positivamente que dispoña de IDE's axeitados,
+		facilidades de acceso a BD(Base de Datos),se é posible ORM(Object-Relational Mapping) 
+		integrado, recarga en quente... En xeral todo aquelo que permita axilidade e flexibilidade.
+
+\end{itemize}
+
+\section{Back-End}
+	O Back-End é a parte que procesa os datos proporcionados polo Front-End, atende as súas 
+	peticións, e xestiona o modelo de datos e os procesos implicados na aplicación. Neste
+	caso en concreto, o Back-End será o encargado de interactuar directamente co sistema de
+	Análise de Vídeo.\\
+	
+	As tecnoloxías estudadas para esta parte do sistema son as seguintes:
+
+	\subsection{Java}
+  	Java é unha das linguaxes mais empregadas actualmente. Ademais existen diversos
+  	frameworks web como Tapestry ou SpringMVC e en canto as BD Hibernate, que facilitan o 
+  	seu uso, mais é preciso integralos xa que non forman parte da plataforma en si. A súas 
+  	posibilidades de integración con c++ son altas grazas á interface JNI(Java Native 
+  	Interface), pero a súa configuración pódese volver tediosa. Un dos proxectos estudados
+  	para ver o seu funcionamento é Red5 \cite{red5-github-url}.
+  	
+	\subsection{C\#}
+	esta linguaxe en combinación con .NET resulta unha combinación bastante áxil de cara
+	á programación web, integrando na propia plataforma un deseñador Web e un ORM moi 
+	intuitivo. O gran problema polo que se descartou este entorno foi polo seu baixo grao
+	de compatibilidade cos sistemas operativos Linux.
+	
+	\subsection{C - C++}
+	C++ presenta como era de esperar a maior compatibilidade co algoritmo implementado, non
+	obstante, inda que existen algunhas utilidades que facilitan o desenvolvemento web con 
+	esta linguaxe como Wt (Web Toolkit)\cite{wt-url}, o grado de axilidade está moi por 
+	baixo do que facilitan o resto das combinacións. Tamén pode resultar de interese o
+	coñecido proxecto Icecast\cite{icecast-url}, que fai streaming de vídeo sobre unha 
+	interface web.
+	
+	\subsection{Python + Django}
+	Python presentase como a mellor opción para desenvolver o lado servidor, por unha parte
+	dispón do módulo Subprocess\cite{subprocess-module-url} que permite executar calquera
+	comando pola terminal maximizando así a modularidade e a integración co algoritmo en c++.
+	Por outra parte Django\cite{django-web-page-url} contén un potente ORM e un sistema de 
+	"Templates" que simplifica a parte web. Para concluír cabe destacar o feito de que 
+	python sexa unha linguaxe interpretada, xa que isto evita o paso previo de compilación.
+	
+	
+\section{Front-End}
+	É a parte do Sistema encargada de interactuar co usuario. O maior requisito de esta 
+	parte é ser capaz de representar todas as capas de información complexa que xera o
+	Back-End. E tratándose dunha aplicación web estudaranse aqueles xeitos que permitan
+	a reprodución de vídeo, e a maiores o debuxado de figuras en movemento sobre este vídeo.
+	
+	\subsection{Vídeo en Flash}
+		Video Flash é a tecnoloxía de reprodución de vídeo mais empregada e madura en
+		internet dende hai anos. Inicialmente creada por Macromedia e mercada por Adobe 
+		en 2005, permite crear elaboradas animacións vectoriais, que logo poden proxectarse
+		sobre un vídeo, e á vez tamén manexa os eventos de reprodución de vídeo como o 
+		play ou o stop.\\
+		
+		Ten certos problemas en tanto ao Posicionamento Web(SEO), reprodución en 
+		dispositivos móbiles, accesibilidade... pero o meirande de todos eles é que mentres
+		que outros dos exemplos estudados son 100\% libres, Flash é un programa propietario
+		para o que é preciso adquirir unha licencia.		
+		
+	
+	\subsection{Vídeo HTML5 + Javascript}
+		Está é unha das combinacións mais empregadas actualmente, xa que segue o estándar
+		do W3C (World Wide Web Consortium)\cite{w3schools-video-tag}. Nel defínese como se
+		han de mostrar e obter os vídeos dunha páxina codificada coa linguaxe HTML5, e 
+		destaca por seres extremadamente sinxelo en comparación con Flash ou outras tecnoloxías.
+		
+		Para a modificación da súa aparencia pódese empregar \emph{CSS3} (Follas de Estilos en 
+		Cascada), e para modificar o seu comportamento, o elemento $<video>$ de HTML5 achega
+		unha serie de Métodos, Eventos e Propiedades\cite{w3school-video-events} que poden
+		empregarse dende código \emph{Javascript}.
+		
+		Isto resulta de moita utilidade, xa que mediante Javascript tamén pode manexarse o
+		elemento $<canvas>$ de HTML5, que xera un mapa de bits para construír gráficos, 
+		manipular imaxes e crear dinamicamente animacións nunha páxina web. A única dúbida que
+		soe xurdir sobre esta tecnoloxía está en canto ao seu rendemento e alcance, pero
+		exemplos como os que amosa Kevin Roast na súa páxina web\cite{kevin-roast-canvas-examples}
+		despexan toda dúbida posíbel. 
+		
+		Tamén é de interese a librería de estilos web \emph{Twiter Bootstrap}
+		\cite{bootstrap-page-url} para axilizar o deseño web con CSS3, Así como a 
+		librería de Javascript \emph{JQuery} \cite{jquery-page-url} que minimiza de 
+		xeito considerable as liñas de código a implementar.
+		
+
+\vspace{2cm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Esta es una referencia a un artículo \cite{article-minimal}.
 

@@ -2,7 +2,7 @@
 
 % Paquetes usados
 
-\usepackage[spanish]{babel}
+\usepackage[galician]{babel}
 \usepackage[a4paper, top=4cm, bottom=4cm, left=3.3cm, right=3.2cm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
@@ -10,7 +10,6 @@
 \usepackage{subfigure}
 \usepackage{booktabs}
 \usepackage{url}
-
 
 % Aumentar la separación entre líneas
 \renewcommand{\baselinestretch}{1.5}
@@ -41,7 +40,7 @@
 
 
 % Especificación del pfc
-\include{especificacion}
+%TODO Necesario? \include{especificacion}
 
 % Dedicatoria y agradecimientos
 \include{agradecimientos}
@@ -74,8 +73,8 @@
 
 
 % Redefinición del nombre que encabeza las tablas. Por defecto es cuadro.
-\renewcommand\tablename{Tabla}
-\renewcommand\listtablename{Índice de tablas}
+\renewcommand\tablename{Táboa}
+\renewcommand\listtablename{Índice de Táboas}
 
 % Índice de tablas 
 \listoftables
@@ -92,13 +91,19 @@
 \fancyhead[LO]{\rightmark}
 \fancyhead[ER]{\leftmark}
 
+% Introduccion y Objetivos
+\include{introObjetivos}
 
-% Capítulos
+% Capítulos 
+\include{cap1_fundamentos}
+\include{cap2_metodoloxia}
+\include{cap3_tecnoloxias}
+\include{cap4_funcionalidades}
+\include{cap5_pruebas}
+\include{cap6_planificacion}
 
-\include{cap1}
-\include{cap2}
-
-
+% Resultados e Conclusións
+\include{resultConclu}
 
 % Apéndices
 \appendix

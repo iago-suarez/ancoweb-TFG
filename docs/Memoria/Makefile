@@ -23,7 +23,7 @@ bibtex: biblio.bib
 	
 		
 clean:
-	rm -f *.log *.lof *.toc *.aux  *.bbl *.blg *.ist *.lot *.dvi 
+	rm -f *.log *.lof *.toc *.aux  *.bbl *.blg *.ist *.lot *.dvi *.backup
 
 mrproper: clean
 	rm -f *.ps *.pdf
