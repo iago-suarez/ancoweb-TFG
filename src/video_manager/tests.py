@@ -90,7 +90,7 @@ class VideoManagerSeleniumTest(StaticLiveServerTestCase):
         self.selenium.find_element_by_id('id_video').send_keys(
             os.path.join(str(settings.BASE_DIR),
                          str(settings.MEDIA_ROOT),
-                         "tests_resources/wk1gt.xml"))
+                         "tests_resources/v61.avi"))
         self.selenium.find_element_by_id('id_description') \
             .send_keys("Funcional Tests Description \n this is a quite "
                        "important test because it'll test the video uploads")
@@ -98,7 +98,7 @@ class VideoManagerSeleniumTest(StaticLiveServerTestCase):
         self.selenium.find_element_by_id('form_submit_button').click()
 
         wait = WebDriverWait(self.selenium, 100)
-        wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'a[class*="video-finished-btn"')))
+        wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'a.video-finished-btn')))
 
         # Logout
         self.logout_user(self.john)

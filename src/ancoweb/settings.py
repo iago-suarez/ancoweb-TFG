@@ -118,11 +118,6 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
 
-# Django Debug Toolbar
-if DEBUG:
-    INSTALLED_APPS += (
-        'debug_toolbar.apps.DebugToolbarConfig',)
-
 
 # Progressbar settings
 
