@@ -2,7 +2,6 @@ from os import path, makedirs
 import os
 from subprocess import call, Popen, STDOUT, PIPE
 from ancoweb import settings
-import logging
 
 VIDEOS_FOLDER = 'videos'
 IMAGES_FOLDER = 'images'
@@ -41,6 +40,7 @@ class VideoUtils:
                              shell='TRUE', stdout=PIPE, stderr=STDOUT, universal_newlines=True)
 
         line = str(shell_result.stdout.readline())
+        print(line)
         # De toda la linea de información buscamos la duración y la devolvemos
         for video_property in line.split(','):
             if 'Duration' in video_property:
@@ -102,7 +102,6 @@ class VideoUtils:
         p = Popen("ffmpeg -i %s 2>&1| grep fps" % video_path,
                   shell='TRUE', stdout=PIPE, stderr=STDOUT, universal_newlines=True)
         line = p.stdout.readline()
-        print(line)
         # De toda la linea de información buscamos los fps y los devolvemos
         for video_property in line.split(','):
             if 'fps' in video_property:
