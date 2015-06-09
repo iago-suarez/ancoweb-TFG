@@ -51,7 +51,7 @@ class UploadView(generic.TemplateView):
 
 
 class SuccessfulUpload(generic.DetailView):
-    template_name = 'video_upload/successfulUpload.html'
+    template_name = 'video_upload/successful_upload.html'
     model = VideoModel
 
     @method_decorator(login_required)

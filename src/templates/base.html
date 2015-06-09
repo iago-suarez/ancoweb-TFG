@@ -88,9 +88,12 @@
     {% endblock %}
 
     {% if user.is_authenticated %}
+        {% block notifications_block %}
 
-        <!-- UploadNotifications fragment -->
-        {% notifications user %}
+            <!-- UploadNotifications fragment -->
+            {% notifications user %}
+
+        {% endblock notifications_block %}
 
     {% endif %}
 

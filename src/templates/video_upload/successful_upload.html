@@ -34,7 +34,9 @@
         <input class="btn btn-default" type="submit" value="Submit">
     </form>
 </div>
-
+    {% block notifications_block %}
+    <!-- At this page we don't display the notifications -->
+    {% endblock notifications_block %}
 {% endblock container %}
 {% block scripts %}
     <script src="{% static 'image-picker/image-picker.js' %}"></script>
