@@ -63,9 +63,9 @@ class VideoModel(models.Model):
                 name = os.path.splitext(
                     os.path.join(self.video.storage.location, self.video.name))[0] + ext
                 os.remove(name)
-            if self.image is not None:
+            if self.image:
                 os.remove(os.path.join(self.image.storage.location, self.image.name))
-            if self.detected_objs is not None:
+            if self.detected_objs:
                 os.remove(os.path.join(self.detected_objs.storage.location,
                                        self.detected_objs.name))
         return super(VideoModel, self).delete(using)

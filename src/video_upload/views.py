@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views import generic
 from django.contrib import messages
@@ -85,5 +86,16 @@ def notifications_as_json(request):
     notifications_qs = UploadProcess.objects.filter(owner=request.user)
     json_serializer.serialize(notifications_qs)
     return HttpResponse(json_serializer.getvalue())
+
+
+def mark_notification_as_deleted(request, pk):
+    notification = get_object_or_404(UploadProcess, pk=pk)
+    if notification.is_finished:
+        notification.video_model.delete()
+        notification.delete()
+    else:
+        notification.canceled = True
+        notification.save()
+    return HttpResponse("ok")
 
 

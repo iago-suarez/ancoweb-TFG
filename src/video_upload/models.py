@@ -16,6 +16,7 @@ class UploadProcess(models.Model):
     owner = models.ForeignKey(User)
     state_message = models.CharField(max_length=100)
     is_finished = models.BooleanField(default=False)
+    canceled = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         # Si no hay valores, asignamos unos por defecto
@@ -35,43 +36,14 @@ class UploadProcess(models.Model):
         self.exec_thread.start()
 
     def exec_states(self):
-        tasks.CovertVideo(self).exec()
-        tasks.AnalyzeVideo(self).exec()
-        tasks.GeneratingImagesState(self).exec()
-        tasks.ProcessFinishedStated(self).exec()
-
-    def delete(self, using=None):
-        # launch this in a new thread, because it can make it
-        # waiting to thread running video management
-        self.exec_thread = threading.Thread(
-            target=delete_upload,
-            args=(self, ),
-        )
-        self.exec_thread.start()
-
-
-def delete_upload(upload, using=None):
-    """
-    If the video still is being handled, then wait for the end to delete it,
-    and after that call to super(...).delete()
-    :param upload: The upload model to delete it
-    :param using:
-    :return:
-    """
-    if (not upload.is_finished) and hasattr(upload, 'exec_thread') \
-            and upload.exec_thread.is_alive():
-        # TODO ver porque el join no funciona correctamente y arreglarlo
-        upload.exec_thread.join()
-        upload.video_model.delete()
-
-    # Delete the generated images
-    images = VideoUtils.get_video_frames_paths(upload.video_model)
-    try:
-        for image in images:
-            path = os.path.join(str(settings.BASE_DIR), media_url_to_path(image))
-            os.remove(path)
-        # If the user temporal folder is empty ew remove it
-        os.rmdir(ImageUtils.image_tmp_folder(upload.video_model))
-    except OSError as ex:
-        pass
-    super(UploadProcess, upload).delete(using)
+        states = [tasks.CovertVideo,
+                  tasks.AnalyzeVideo,
+                  tasks.GeneratingImagesState,
+                  tasks.ProcessFinishedStated]
+        for state in states:
+            self.refresh_from_db()
+            if not self.canceled:
+                state(self).exec()
+            else:
+                self.video_model.delete()
+                self.delete()
