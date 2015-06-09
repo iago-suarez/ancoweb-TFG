@@ -171,3 +171,5 @@ TEMPLATE_LOADERS = (
 )
 
 RECOGNITIONSYS_BIN = './RecognitionSystem/recognitionsystem'
+
+USED_VIDEO_EXTENSIONS = ['.mp4', '.webm']

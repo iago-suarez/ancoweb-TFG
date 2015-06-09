@@ -8,7 +8,6 @@ IMAGES_FOLDER = 'images'
 XML_FOLDER = 'xml'
 TEMPORAL_FOLDER = 'tmp'
 IMAGE_DEFAULT_EXT = '.png'
-VIDEO_DEFAULT_EXT = '.mp4'
 DEF_FRAMES_NUM = 3
 
 
@@ -92,7 +91,8 @@ class VideoUtils:
                   "'/^frame=/ {print $2}'|tail -n 1" % video_path,
                   shell='TRUE', stdout=PIPE, stderr=STDOUT, universal_newlines=True)
         try:
-            return int(p.stdout.readline())
+            line = p.stdout.readline()
+            return int(line)
         except ValueError:
             raise IOError(p.stdout.readline())
 
@@ -117,7 +117,7 @@ class ImageUtils:
         return directory
 
     @staticmethod
-    def relocate_image(video_model, old_path):
+    def relocate_image(video_model, old_path, delete_others=True):
         """
         Move the file located on old_path to a new path in MEDIA_ROOT/images/userId/videoId.png
         :param video_model:
@@ -132,6 +132,14 @@ class ImageUtils:
             os.makedirs(directory)
         os.rename(old_path, new_path_root)
         video_model.image = new_path
+
+        # Delete the non used images
+        if delete_others:
+            old_directory = os.path.split(old_path)[0]
+            for file in os.listdir(old_directory):
+                if ('video' + str(video_model.id) + '_second') in file:
+                    os.remove(os.path.join(old_directory, file))
+
         return new_path_root
 
 

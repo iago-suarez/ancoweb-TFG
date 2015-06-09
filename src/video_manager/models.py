@@ -2,22 +2,46 @@ import os
 import threading
 from django.contrib.auth.models import User
 from django.db import models
+from ancoweb import settings
 from video_upload import utils
 from random import randint
 import video_upload
 
 
+def get_valid_filename(filename, bad_extensions=[], directory=""):
+    """
+    If the name filename exists with its extension or any of the bad_extensions
+    the function returns a new filename which will be valid, appending _ and
+    random numbers
+
+    :param filename: The input name of the file
+    :param bad_extensions: extensions tha are not allowed
+    :return: The valid filename
+    """
+    file, ext = os.path.splitext(filename)
+    # While exists a file with this name, we search other filename recursively
+    while True:
+        is_valid = True
+        my_bad_exts = bad_extensions[:]
+        my_bad_exts.append(ext)
+        for bad_ext in my_bad_exts:
+            if os.path.isfile(os.path.join(directory, file + bad_ext)):
+                is_valid = False
+                break
+        if is_valid:
+            return filename
+        else:
+            return get_valid_filename(file + "_" + str(randint(1, 10000)) + ext,
+                                      bad_extensions, directory)
+
+
 def video_file_path(self, filename):
     file, original_ext = os.path.splitext(filename)
-    while True:
-        upload_to = os.path.join(utils.VIDEOS_FOLDER, str(self.owner.id),
-                                 ("v" + str(randint(1, 1000)) + original_ext))
-        upload_to_no_ext = os.path.splitext(upload_to)[0]
-        # If the name does not exist we create the file
-        if not os.path.isfile(os.path.join(upload_to_no_ext, ".mp4")) and \
-                not os.path.isfile(os.path.join(upload_to_no_ext, ".webm")):
-            break
-    return upload_to
+    name = os.path.join(utils.VIDEOS_FOLDER, str(self.owner.id),
+                        ("v" + original_ext))
+    # Solo con name no es suficiente, ya que queremos guardar tanto en
+    # fichero original, como sus versiones en las demas extensiones
+    return get_valid_filename(name, settings.USED_VIDEO_EXTENSIONS, settings.MEDIA_ROOT)
 
 
 class VideoModel(models.Model):
@@ -31,6 +55,20 @@ class VideoModel(models.Model):
 
     def __str__(self):
         return self.title
+
+    def delete(self, using=None, delete_files=True):
+        if delete_files:
+            os.remove(os.path.join(self.video.storage.location, self.video.name))
+            for ext in settings.USED_VIDEO_EXTENSIONS:
+                name = os.path.splitext(
+                    os.path.join(self.video.storage.location, self.video.name))[0] + ext
+                os.remove(name)
+            if self.image is not None:
+                os.remove(os.path.join(self.image.storage.location, self.image.name))
+            if self.detected_objs is not None:
+                os.remove(os.path.join(self.detected_objs.storage.location,
+                                       self.detected_objs.name))
+        return super(VideoModel, self).delete(using)
 
 
 class AnalysisProcess(models.Model):

@@ -54,7 +54,7 @@ class DetailsView(generic.DetailView):
         return super(DetailsView, self).get_context_data(**kwargs)
 
 
-def analize_video(request, video_id):
+def reanalize_video(request, video_id):
     video_model = get_object_or_404(VideoModel, pk=video_id)
     if not AnalysisProcess.objects.filter(video_model=video_id):
         ap = AnalysisProcess.objects.create(video_model=video_model)

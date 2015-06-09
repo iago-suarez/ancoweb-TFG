@@ -1,14 +1,12 @@
+import os
+import io
 import unittest
 from django.contrib.auth.models import User
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core.urlresolvers import reverse
 from django.test import Client
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
+from ancoweb import settings
 from ancoweb.tests import SeleniumAncowebTest
-from video_manager.models import VideoModel
-from selenium.webdriver.support import expected_conditions as EC
+from video_manager.models import VideoModel, get_valid_filename
 
 
 class IndexTest(unittest.TestCase):
@@ -40,14 +38,34 @@ class IndexTest(unittest.TestCase):
         self.assertEqual(r.context['object_list'][0], self.v2)
         self.assertEqual(r.context['object_list'][1], self.v1)
 
+    def test_get_valid_filename(self):
+        # Test without bad_ext
+        video_filename = os.path.join(str(settings.BASE_DIR), str(settings.MEDIA_ROOT),
+                                      "tests_resources/v296.mpg")
+        self.assertNotEqual(video_filename, get_valid_filename(video_filename))
+
+        # Test with bad_ext
+        io.open(os.path.splitext(video_filename)[0] + "x.mp4", "a")
+        new_name = os.path.splitext(video_filename)[0] + "x.mpg"
+        self.assertEqual(new_name, get_valid_filename(new_name))
+        generated_name = get_valid_filename(new_name, [".mp4"])
+        self.assertNotEqual(new_name, generated_name)
+
+        # Test twice
+        io.open(generated_name, "a")
+        self.assertNotEqual(generated_name, get_valid_filename(generated_name, [".mp4"]))
+
+        # Delete generated files
+        os.remove(os.path.splitext(video_filename)[0] + "x.mp4")
+        os.remove(generated_name)
+
     def tearDown(self):
-        self.v1.delete()
-        self.v2.delete()
+        self.v1.delete(delete_files=False)
+        self.v2.delete(delete_files=False)
         self.john.delete()
 
 
 class VideoManagerSeleniumTest(SeleniumAncowebTest):
-
     def test_video_in_list(self):
         john = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
         john.save()
@@ -60,5 +78,5 @@ class VideoManagerSeleniumTest(SeleniumAncowebTest):
             "li.video-fragment div.col-xs-9 a").text
         self.assertEqual(title, v1.title)
 
-        v1.delete()
+        v1.delete(delete_files=False)
         john.delete()

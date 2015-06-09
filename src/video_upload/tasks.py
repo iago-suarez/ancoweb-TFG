@@ -96,7 +96,7 @@ class AnalyzeVideo(ProcessState):
         xml_relative_file = generate_xml_filename(self.process.video_model)
         xml_file = os.path.join(str(settings.BASE_DIR), settings.MEDIA_ROOT, xml_relative_file)
         mp4_name = os.path.splitext(self.process.video_model.video.name)[0]
-        mp4_name += ".mp4"
+        mp4_name += settings.USED_VIDEO_EXTENSIONS[0]
         video_file = os.path.join(settings.BASE_DIR,
                                   self.process.video_model.video.storage.location,
                                   mp4_name)
@@ -129,14 +129,19 @@ class CovertVideo(ProcessState):
 
     def exec(self):
 
-        def convert_video(input_file, output_files):
+        def convert_video(input_file, output_extensions):
             """
-            Covert input_file video to output_files, and update the
+            Covert input_file video to output_extensions, and update the
             progress of the upload_model object according to the process
             :param input_file:
-            :param output_files:
+            :param output_extensions:
             :return:
             """
+            output_files = []
+            # For each extension we generate the output file
+            for out_ext in output_extensions:
+                output_files.append(os.path.splitext(input_file)[0] + out_ext)
+
             frames_num = VideoUtils.get_number_frames(input_file)
             # calculate the number of files with the same extension as're not
             # consume processing time
@@ -174,4 +179,4 @@ class CovertVideo(ProcessState):
         original = os.path.join(self.process.video_model.video.storage.location,
                                 self.process.video_model.video.name)
         file, ext = os.path.splitext(original)
-        convert_video(original, [file + ".mp4", file + ".webm"])
+        convert_video(original, settings.USED_VIDEO_EXTENSIONS)

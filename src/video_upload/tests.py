@@ -1,7 +1,8 @@
+import io
 from django.test import TestCase
 from ancoweb.tests import SeleniumAncowebTest
 from video_upload.models import UploadProcess
-from video_upload.utils import TimeUtils, VideoUtils
+from video_upload.utils import TimeUtils, VideoUtils, ImageUtils
 import os
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -27,7 +28,7 @@ class TimeUtilsTestCase(TestCase):
         self.assertEqual(TimeUtils.print_sec(0), "00:00:00.000")
 
 
-class VideoUyilsTestCase(TestCase):
+class VideoUtilsTestCase(TestCase):
     def setUp(self):
         self.john = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
         self.john.save()
@@ -65,16 +66,47 @@ class VideoUyilsTestCase(TestCase):
         self.assertEqual(VideoUtils.select_seconds(42, 5), [7, 14, 21, 28, 35])
         self.assertEqual(VideoUtils.select_seconds(0, 3), [0, 0, 0])
 
+    def test_relocate_image(self):
+        # Creamos cinco imágenes tres a borrar y dos que no se borrarán
+        tmp = "media/tmp"
+        if not os.path.exists(tmp):
+            os.makedirs(tmp)
+        img1del = os.path.join(tmp, "video" + str(self.v1.id) + "_second12.png")
+        img2del = os.path.join(tmp, "video" + str(self.v1.id) + "_second31.png")
+        img3mov = os.path.join(tmp, "video" + str(self.v1.id) + "_second22.png")
+        img4not_del = os.path.join(tmp, "video15_second1.png")
+        img5not_del = os.path.join(tmp, "video14_second51.png")
+        io.open(img1del, "a")
+        io.open(img2del, "a")
+        io.open(img3mov, "a")
+        io.open(img4not_del, "a")
+        io.open(img5not_del, "a")
+
+        # Comprobamos
+        ImageUtils.relocate_image(self.v1, img3mov)
+        self.assertFalse(os.path.isfile(img1del))
+        self.assertFalse(os.path.isfile(img2del))
+        self.assertFalse(os.path.isfile(img3mov))
+        destination = os.path.join(settings.MEDIA_ROOT,
+                                   utils.IMAGES_FOLDER, str(self.v1.owner.id),
+                                   str(self.v1.id) + utils.IMAGE_DEFAULT_EXT)
+        self.assertTrue(os.path.isfile(destination))
+        self.assertTrue(os.path.isfile(img4not_del))
+        self.assertTrue(os.path.isfile(img5not_del))
+
+        # Borramos los ficheros para hacer el test repetible
+        os.remove(destination)
+        os.remove(img4not_del)
+        os.remove(img5not_del)
+
     def addCleanup(self, function, *args, **kwargs):
-        self.v1.delete()
-        self.v2.delete()
+        self.v1.delete(delete_files=False)
+        self.v2.delete(delete_files=False)
         self.john.delete()
 
 
 class VideoManagerSeleniumTest(SeleniumAncowebTest):
-
     def test_upload_video(self):
-
         video_title = "Funcional Tests"
 
         john = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
@@ -109,16 +141,17 @@ class VideoManagerSeleniumTest(SeleniumAncowebTest):
 
         # Comprobamos que nos ha redirigido a la página del vídeo
         wait.until(EC.presence_of_element_located((By.TAG_NAME, 'video')))
-        video_id = VideoModel.objects.get(title=video_title).id
-        assert str(video_id) in self.selenium.current_url
+        video = VideoModel.objects.get(title=video_title)
+        assert str(video.id) in self.selenium.current_url
         self.assertEqual(video_title, self.selenium.find_element_by_tag_name("h2").text)
 
-        #Comprobamos que se haya añadido al indice
+        # Comprobamos que se haya añadido al indice
         self.selenium.get(self.live_server_url + reverse('videos:index'))
         self.selenium.find_element_by_link_text(video_title)
 
-        #Comprobamos que no haya notificaciones
+        # Comprobamos que no haya notificaciones
         self.assertEqual(0, len(UploadProcess.objects.all()))
 
         # Logout
+        video.delete()
         self.logout_user(john)
