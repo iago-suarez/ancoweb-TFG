@@ -16,11 +16,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='UploadProcess',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
                 ('progress', models.IntegerField(default=0)),
                 ('title', models.CharField(max_length=100)),
                 ('state_message', models.CharField(max_length=100)),
                 ('is_finished', models.BooleanField(default=False)),
+                ('canceled', models.BooleanField(default=False)),
                 ('owner', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
                 ('video_model', models.ForeignKey(to='video_manager.VideoModel')),
             ],
