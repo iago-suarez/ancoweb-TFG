@@ -6,5 +6,5 @@ register = template.Library()
 
 @register.simple_tag(takes_context=True)
 def signin_form(context):
-    context['signin_form'] = forms.LoginForm()
+    context['signin_form'] = forms.CompactLoginForm()
     return ''

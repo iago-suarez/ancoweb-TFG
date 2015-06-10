@@ -18,17 +18,32 @@ class IndexTest(unittest.TestCase):
         self.john.save()
         self.v1 = VideoModel.objects.create(title="Primero", video="tests_resources/v296.mpg",
                                             detected_objs="tests_resources/wk1gt.xml",
-                                            description="Descripcion.", owner=self.john)
+                                            description="Descripcion.", owner=self.john,
+                                            image="tests_resources/test-img.jpg")
         self.v1.save()
 
         self.v2 = VideoModel.objects.create(title="Segundo", video="tests_resources/v296.mpg",
                                             detected_objs="tests_resources/wk1gt.xml",
-                                            description="Descripcion.", owner=self.john)
+                                            description="Descripcion.", owner=self.john,
+                                            image="tests_resources/test-img.jpg")
         self.v2.save()
 
-    def test_details(self):
+    def test_index(self):
+        # Create a video without image
+        v3 = VideoModel.objects.create(title="Segundo", video="tests_resources/v296.mpg",
+                                       detected_objs="tests_resources/wk1gt.xml",
+                                       description="Descripcion.", owner=self.john)
+        v3.save()
+        # Create a video without analisys
+        v4 = VideoModel.objects.create(title="Segundo", video="tests_resources/v296.mpg",
+                                       description="Descripcion.", owner=self.john,
+                                       image="tests_resources/test-img.jpg")
+        v4.save()
+        # Create a video without image and analisys
+        v5 = VideoModel.objects.create(title="Segundo", video="tests_resources/v296.mpg",
+                                       description="Descripcion.", owner=self.john)
+        v5.save()
         # Issue a GET request.
-
         url = reverse('videos:index')
         r = self.client.get(url)
         self.assertEqual(r.status_code, 200)
@@ -37,6 +52,19 @@ class IndexTest(unittest.TestCase):
         self.assertEqual(len(r.context['object_list']), 2)
         self.assertEqual(r.context['object_list'][0], self.v2)
         self.assertEqual(r.context['object_list'][1], self.v1)
+
+        v3.delete(delete_files=False)
+        v4.delete(delete_files=False)
+        v5.delete(delete_files=False)
+
+    def test_incomplete_video_index(self):
+        # Issue a GET request.
+        url = reverse('videos:index')
+        r = self.client.get(url)
+        self.assertEqual(r.status_code, 200)
+
+        # Check that the rendered context contains 5 customers.
+        self.assertEqual(len(r.context['object_list']), 2)
 
     def test_get_valid_filename(self):
         # Test without bad_ext
@@ -71,7 +99,9 @@ class VideoManagerSeleniumTest(SeleniumAncowebTest):
         john.save()
         v1 = VideoModel.objects.create(title="Primero", video="tests_resources/v296.mpg",
                                        detected_objs="tests_resources/wk1gt.xml",
-                                       description="Descripcion.", owner=john)
+                                       description="Descripcion.", owner=john,
+                                       image="tests_resources/test-img.jpg")
+
         v1.save()
         self.selenium.get(self.live_server_url + reverse('videos:index'))
         title = self.selenium.find_element_by_css_selector(

@@ -21,8 +21,9 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         qs = super(IndexView, self).get_queryset()
+        # Exclude incomplete uploads
+        qs = qs.order_by('creation_timestamp').exclude(image="").exclude(detected_objs="").reverse()
         # Filter if we are in a special search
-        qs = qs.order_by('creation_timestamp').reverse()
         name = self.request.GET.get('name')
         if name:
             return qs.filter(title__contains=name)
@@ -39,6 +40,12 @@ class IndexView(generic.ListView):
 class DetailsView(generic.DetailView):
     model = VideoModel
     template_name = 'videos/details.html'
+
+    def get_queryset(self):
+        qs = super(DetailsView, self).get_queryset()
+        # Exclude incomplete uploads
+        qs = qs.exclude(image="").exclude(detected_objs="")
+        return qs
 
     def get_context_data(self, **kwargs):
         # If any AnalysisProcess was created and if finished, we delete it

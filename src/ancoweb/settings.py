@@ -51,8 +51,6 @@ if "celery" in sys.argv[0]:
 
 INSTALLED_APPS = (
     'django_admin_bootstrapped',
-    'crispy_forms',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -61,7 +59,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'accounts',
     'video_manager',
-    'video_upload'
+    'video_upload',
+    'crispy_forms',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -173,3 +172,5 @@ TEMPLATE_LOADERS = (
 RECOGNITIONSYS_BIN = './RecognitionSystem/recognitionsystem'
 
 USED_VIDEO_EXTENSIONS = ['.mp4', '.webm']
+
+LOGIN_REDIRECT_URL = "/"
