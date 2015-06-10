@@ -12,6 +12,7 @@ from ancoweb import settings
 from video_manager.models import VideoModel
 from selenium.webdriver.support import expected_conditions as EC
 from video_upload import utils
+from django.test import Client
 
 
 class TimeUtilsTestCase(TestCase):
@@ -105,7 +106,46 @@ class VideoUtilsTestCase(TestCase):
         self.john.delete()
 
 
-class VideoManagerSeleniumTest(SeleniumAncowebTest):
+class VideoUploadsTest(TestCase):
+    def setUp(self):
+        # Every test needs a client.
+        self.client = Client()
+
+        self.john = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        self.john.save()
+        self.paco = User.objects.create_user('paco', 'paco@thebeatles.com', 'pacopassword')
+        self.paco.save()
+        self.v1 = VideoModel.objects.create(title="Primero", video="tests_resources/v296.mpg",
+                                            detected_objs="tests_resources/wk1gt.xml",
+                                            description="Descripcion.", owner=self.john)
+        self.v1.save()
+
+    def test_success_upload_permission_denied(self):
+        self.client.login(username='john', password='johnpassword')
+
+        url = '/video_upload/upload/' + str(self.v1.id) + '/success/'
+        r = self.client.get(url)
+        self.assertEqual(r.status_code, 200)
+
+        self.client.logout()
+
+        self.client.login(username='paco', password='pacopassword')
+
+        r = self.client.get(url)
+        self.assertEqual(r.status_code, 403)
+        self.client.logout()
+
+    def test_upload_required_login(self):
+        response = self.client.get(reverse('video_upload:upload'))
+        self.assertRedirects(response, reverse('accounts:login') + '?next=' + reverse('video_upload:upload'))
+
+    def tearDown(self):
+        self.v1.delete(delete_files=False)
+        self.paco.delete()
+        self.john.delete()
+
+
+class VideoUploadSeleniumTest(SeleniumAncowebTest):
     def test_upload_video(self):
         video_title = "Funcional Tests"
 

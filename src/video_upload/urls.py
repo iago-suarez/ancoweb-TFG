@@ -11,5 +11,5 @@ urlpatterns = [url(r'^$', views.UploadView.as_view(), name='upload'),
                url(r'^upload/(?P<pk>\d+)/success/$', views.SuccessfulUpload.as_view(),
                    name='success-upload'),
                url(r'^notificationsJson', views.notifications_as_json,
-                   name='not_fragment')
+                   name='json_notifications')
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -23,7 +23,7 @@
                 <p><strong>{% trans "Error:" %}</strong> {% trans "Please enter a correct username and password." %}</p>
             </div>
         {% endif %}
-        <form action="{% url 'accounts:login' %}" method="post" class="form-signin" role="form">{% csrf_token %}
+        <form action="" method="post" class="form-signin" role="form">{% csrf_token %}
             {% for field in form %}
                 {% include 'registration/form_field.html' %}
             {% endfor %}

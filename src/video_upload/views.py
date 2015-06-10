@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
@@ -59,16 +59,33 @@ class SuccessfulUpload(generic.DetailView):
     def dispatch(self, *args, **kwargs):
         return super(SuccessfulUpload, self).dispatch(*args, **kwargs)
 
+    def get_queryset(self):
+        qs = super(SuccessfulUpload, self).get_queryset()
+        # Exclude complete uploads
+        qs = qs.filter(image="")
+        return qs
+
     def get_context_data(self, **kwargs):
         context = super(SuccessfulUpload, self).get_context_data(**kwargs)
         context['image_urls'] = VideoUtils.get_video_frames_paths(self.object)
         return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        # If the user is not the owner we forbidden it
+        if self.object.owner != self.request.user:
+            return HttpResponseForbidden()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
         # Save the POSTed url like an image
         image_url = request.POST.get('main_image')
         old_path = utils.media_url_to_path(image_url)
         video_model = self.get_object()
+        # If the user is not the owner we forbidden it
+        if video_model.owner != self.request.user:
+            return HttpResponseForbidden()
         # Move the file to the final location
         ImageUtils.relocate_image(video_model, old_path)
         video_model.save()
