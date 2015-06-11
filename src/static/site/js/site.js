@@ -20,7 +20,7 @@ $(document).ready(function(){
         var not_id = $(this).next('.notificationId').attr('value');
         var $this = $(this);
         $.post( '/video_upload/notifications/delete/' + not_id + '/', function(data, status){
-            //Si todo ha ido bien borramos la notificacion
+            //Si ha ido bien borramos la notificacion
             $this.parent().fadeOut(500, function() { $(this).remove(); });
         }).error(function(data){
             alert(data.statusText.concat("\n\n", data.responseText))

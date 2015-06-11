@@ -11,7 +11,8 @@
 *.ist
 *.lot
 *.dvi
-src/media/videos/*
-src/media/images/*
+src/media/videos/
+src/media/images/
 src/media/tmp
+src/media/xml/
 src/db.sqlite3

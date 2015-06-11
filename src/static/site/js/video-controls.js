@@ -12,7 +12,7 @@ $(document).ready(function(){
             //Get analysis status from the iterable list
             analysis = analysis[0].fields
             if(analysis.is_finished){
-                $('#analyze-btn').parent().append('<a class="btn btn-success" href="'
+                $('#state_message').parent().append('<a class="btn btn-success" href="'
                     + window.location.href + '">Reload</a>');
                 $('#analyzing-pb').hide();
                 $('#state_message').text(analysis.state_message);
@@ -29,6 +29,8 @@ $(document).ready(function(){
         });
     }
 
+    refresh_analysis_progress()
+
     $('#analyze-btn').click(function(){
         //Cambiamos el boton por el de se está analizando + progressbar
         $('#analyze-btn').hide()
@@ -37,6 +39,7 @@ $(document).ready(function(){
         $.post("/videos/" + getVideoIdFromUrl() + "/makeanalyze/", function(){
             refresh_analysis_progress();
         });
+        return false;
     });
 
 });

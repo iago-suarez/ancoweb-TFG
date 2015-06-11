@@ -61,6 +61,7 @@ INSTALLED_APPS = (
     'video_manager',
     'video_upload',
     'crispy_forms',
+    'integration_tests',
 )
 
 MIDDLEWARE_CLASSES = (

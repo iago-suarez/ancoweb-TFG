@@ -30,9 +30,11 @@
                             </label>
                         </div>
                         <div class="text-center">
-                            <p id="state_message"></p>
+                            <p id="state_message">{% if ap %} {{ ap.state_message }} {% endif %}</p>
                             {% if not ap %}
-                                <button id="analyze-btn" type="button" class="btn btn-primary">Reload Analysis</button>
+                                {% if user != None and user == object.owner %}
+                                    <a id="analyze-btn" class="btn btn-primary" href="{% url 'videos:makeanalyze' object.id %}">Reload Analysis</a>
+                                {% endif %}
                             {% endif %}
 
                             <div id="analyzing-pb" class="progress" {% if not ap %} style="display :none" {% endif %}>

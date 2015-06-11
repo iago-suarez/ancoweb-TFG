@@ -1,9 +1,8 @@
-from django.contrib.auth.decorators import login_required
 from django.core import serializers
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
-from django.utils.decorators import method_decorator
 from django.views import generic
 from django.contrib import messages
 
@@ -17,10 +16,6 @@ from video_manager.models import VideoModel
 class UploadView(generic.TemplateView):
     template_name = 'video_upload/upload.html'
     upload_form_class = VideoModelForm
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(UploadView, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         if "upload_form" not in kwargs:
@@ -55,10 +50,6 @@ class SuccessfulUpload(generic.DetailView):
     template_name = 'video_upload/successful_upload.html'
     model = VideoModel
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(SuccessfulUpload, self).dispatch(*args, **kwargs)
-
     def get_queryset(self):
         qs = super(SuccessfulUpload, self).get_queryset()
         # Exclude complete uploads
@@ -70,22 +61,21 @@ class SuccessfulUpload(generic.DetailView):
         context['image_urls'] = VideoUtils.get_video_frames_paths(self.object)
         return context
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        # If the user is not the owner we forbidden it
-        if self.object.owner != self.request.user:
-            return HttpResponseForbidden()
-        context = self.get_context_data(object=self.object)
-        return self.render_to_response(context)
+    def get_object(self, queryset=None):
+        """
+        Returns the object the view is displaying if the user is his owner
+        """
+        obj = super(SuccessfulUpload, self).get_object(queryset)
+        # If the user is not the owner
+        if obj.owner != self.request.user:
+            raise PermissionDenied
+        return obj
 
     def post(self, request, *args, **kwargs):
         # Save the POSTed url like an image
         image_url = request.POST.get('main_image')
         old_path = utils.media_url_to_path(image_url)
         video_model = self.get_object()
-        # If the user is not the owner we forbidden it
-        if video_model.owner != self.request.user:
-            return HttpResponseForbidden()
         # Move the file to the final location
         ImageUtils.relocate_image(video_model, old_path)
         video_model.save()
@@ -96,7 +86,7 @@ class SuccessfulUpload(generic.DetailView):
         return HttpResponseRedirect(reverse('videos:details', args=(video_model.id,)))
 
 
-def notifications_as_json(request):
+def notifications_as_json(request, *args, **kwargs):
     JSONSerializer = serializers.get_serializer("json")
     json_serializer = JSONSerializer()
 
@@ -105,14 +95,18 @@ def notifications_as_json(request):
     return HttpResponse(json_serializer.getvalue())
 
 
-def mark_notification_as_deleted(request, pk):
+def mark_notification_as_deleted(request, pk, *args, **kwargs):
     notification = get_object_or_404(UploadProcess, pk=pk)
+
+    # If the user is not the owner
+    if notification.owner != request.user:
+        raise PermissionDenied
+
     if notification.is_finished:
         notification.video_model.delete()
         notification.delete()
     else:
         notification.canceled = True
         notification.save()
-    return HttpResponse("ok")
-
+    return HttpResponseRedirect(reverse('home'))
 

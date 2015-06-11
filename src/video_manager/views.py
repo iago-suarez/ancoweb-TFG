@@ -1,6 +1,7 @@
 from django.core import serializers
+from django.core.exceptions import PermissionDenied, SuspiciousOperation
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.views import generic
 
 from ancoweb import settings
@@ -50,25 +51,35 @@ class DetailsView(generic.DetailView):
     def get_context_data(self, **kwargs):
         # If any AnalysisProcess was created and if finished, we delete it
         try:
-            ap = AnalysisProcess.objects.get(video_model=kwargs["object"].id)
-            if ap.is_finished:
-                ap.delete()
-                ap = None
+            aps = AnalysisProcess.objects.filter(video_model=kwargs["object"].id)
+            #Delete all finished Analysis Process for this video
+            ap = None
+            for for_ap in aps:
+                if for_ap.is_finished:
+                    for_ap.delete()
+                else:
+                    ap = for_ap
         except AnalysisProcess.DoesNotExist:
             ap = None
 
         kwargs["ap"] = ap
+        kwargs["user"] = self.request.user
         return super(DetailsView, self).get_context_data(**kwargs)
 
 
 def reanalize_video(request, video_id):
     video_model = get_object_or_404(VideoModel, pk=video_id)
+
+    # If the user is not the owner
+    if video_model.owner != request.user:
+        raise PermissionDenied
+
     if not AnalysisProcess.objects.filter(video_model=video_id):
         ap = AnalysisProcess.objects.create(video_model=video_model)
         ap.process()
-        return get_video_analysis_json(request, video_id)
+        return redirect('videos:details', video_model.id)
     else:
-        raise Exception('The video is already being analyzed')
+        raise SuspiciousOperation('The video is already being analyzed')
 
 
 def get_video_analysis_json(request, video_id):

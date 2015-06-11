@@ -1,15 +1,15 @@
 import os
 import io
-import unittest
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import Client
 from ancoweb import settings
 from ancoweb.tests import SeleniumAncowebTest
 from video_manager.models import VideoModel, get_valid_filename
+from django.test import TestCase
 
 
-class IndexTest(unittest.TestCase):
+class VideoManagerTests(TestCase):
     def setUp(self):
         # Every test needs a client.
         self.client = Client()
@@ -48,7 +48,7 @@ class IndexTest(unittest.TestCase):
         r = self.client.get(url)
         self.assertEqual(r.status_code, 200)
 
-        # Check that the rendered context contains 5 customers.
+        # Check that the rendered context contains 2 customers in order.
         self.assertEqual(len(r.context['object_list']), 2)
         self.assertEqual(r.context['object_list'][0], self.v2)
         self.assertEqual(r.context['object_list'][1], self.v1)
@@ -57,15 +57,55 @@ class IndexTest(unittest.TestCase):
         v4.delete(delete_files=False)
         v5.delete(delete_files=False)
 
-    def test_incomplete_video_index(self):
-        # Issue a GET request.
-        url = reverse('videos:index')
+    def test_details(self):
+        # (integration) Mientras el fichero se está subiendo
+
+        # Cuando el vídeo ya está subido
+        r = self.client.get(reverse('videos:details', args=(self.v1.id,)))
+        self.assertContains(r, self.v1.title)
+        self.assertContains(r, self.v1.owner.username)
+        self.assertContains(r, self.v1.description)
+
+    def test_make_analyze(self):
+        # Nos logueamos con el dueño del video
+        url = '/videos/' + str(self.v1.id)+'/makeanalyze/'
+        self.client.login(username='john', password='johnpassword')
+
+        # Testeamos que funcione con usuario adecuado sin que se este analizando
         r = self.client.get(url)
-        self.assertEqual(r.status_code, 200)
+        self.assertRedirects(r, reverse('videos:details', args=(self.v1.id,)))
+        # r = self.client.get(reverse('videos:details', args=(self.v1.id,)))
+        # self.assertContains(r, 'Analyzing video')
 
-        # Check that the rendered context contains 5 customers.
-        self.assertEqual(len(r.context['object_list']), 2)
+        # Testeamos que no funcione con usuario adecuado cuando ya está analizando
+        r = self.client.get(url)
+        self.assertEqual(r.status_code, 400)
 
+        # Testeamos el Permission Denied con otro usuario
+        self.client.logout()
+        paco = User.objects.create_user('paco', 'paco@thebeatles.com', 'pacopassword')
+        paco.save()
+        self.client.login(username='paco', password='pacopassword')
+        r = self.client.get(url)
+        self.assertEqual(r.status_code, 403)
+
+        self.client.logout()
+        paco.delete()
+
+        # Testeamos sin usuario logueado -> login required
+        r = self.client.get(url)
+        self.assertRedirects(r, reverse('accounts:login') + '?next=' + url)
+
+        # (integration) test_make_analyze: Testeamos que no funcione cuando
+        # en vídeo todavía se está subiendo
+
+    def tearDown(self):
+        self.v1.delete(delete_files=False)
+        self.v2.delete(delete_files=False)
+        self.john.delete()
+
+
+class VideoModelTests(TestCase):
     def test_get_valid_filename(self):
         # Test without bad_ext
         video_filename = os.path.join(str(settings.BASE_DIR), str(settings.MEDIA_ROOT),
@@ -87,26 +127,24 @@ class IndexTest(unittest.TestCase):
         os.remove(os.path.splitext(video_filename)[0] + "x.mp4")
         os.remove(generated_name)
 
-    def tearDown(self):
-        self.v1.delete(delete_files=False)
-        self.v2.delete(delete_files=False)
-        self.john.delete()
 
+class VideoManagerSeleniumTests(SeleniumAncowebTest):
 
-class VideoManagerSeleniumTest(SeleniumAncowebTest):
-    def test_video_in_list(self):
-        john = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
-        john.save()
-        v1 = VideoModel.objects.create(title="Primero", video="tests_resources/v296.mpg",
-                                       detected_objs="tests_resources/wk1gt.xml",
-                                       description="Descripcion.", owner=john,
-                                       image="tests_resources/test-img.jpg")
+    def test_make_analyze(self):
+        # TODO Implementar y borrar el anterior otro test_make_analyze al hacerlo ya
+        # que causa un error de BD
 
-        v1.save()
-        self.selenium.get(self.live_server_url + reverse('videos:index'))
-        title = self.selenium.find_element_by_css_selector(
-            "li.video-fragment div.col-xs-9 a").text
-        self.assertEqual(title, v1.title)
+        # Nos logueamos con el dueño del video
 
-        v1.delete(delete_files=False)
-        john.delete()
+        # Testeamos que funcione con usuario adecuado sin que se este analizando
+
+        # Testeamos que no funcione con usuario adecuado cuando ya está analizando
+
+        # Testeamos el Permission Denied con otro usuario
+
+        # Testeamos sin usuario logueado -> login required
+
+        # (integration) test_make_analyze: Testeamos que no funcione cuando
+        # en vídeo todavía se está subiendo
+        pass
+

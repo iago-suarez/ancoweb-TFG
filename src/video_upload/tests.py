@@ -1,16 +1,12 @@
 import io
 from django.test import TestCase
-from ancoweb.tests import SeleniumAncowebTest
 from video_upload.models import UploadProcess
 from video_upload.utils import TimeUtils, VideoUtils, ImageUtils
 import os
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
 from ancoweb import settings
 from video_manager.models import VideoModel
-from selenium.webdriver.support import expected_conditions as EC
 from video_upload import utils
 from django.test import Client
 
@@ -106,7 +102,7 @@ class VideoUtilsTestCase(TestCase):
         self.john.delete()
 
 
-class VideoUploadsTest(TestCase):
+class VideoUploadTests(TestCase):
     def setUp(self):
         # Every test needs a client.
         self.client = Client()
@@ -120,78 +116,70 @@ class VideoUploadsTest(TestCase):
                                             description="Descripcion.", owner=self.john)
         self.v1.save()
 
-    def test_success_upload_permission_denied(self):
-        self.client.login(username='john', password='johnpassword')
+    def test_upload_required_login(self):
+        response = self.client.get(reverse('video_upload:upload'))
+        self.assertRedirects(response, reverse('accounts:login') +
+                             '?next=' + reverse('video_upload:upload'))
 
+    # def (integration) test_notification_delete_and_cancel_update
+
+    def upload_progress(self):
+        # Not implemented
+        pass
+
+    def test_success_upload(self):
+        # Testeamos que funcione con usuario adecuado
+        self.client.login(username='john', password='johnpassword')
         url = '/video_upload/upload/' + str(self.v1.id) + '/success/'
         r = self.client.get(url)
         self.assertEqual(r.status_code, 200)
-
         self.client.logout()
 
-        self.client.login(username='paco', password='pacopassword')
+        # Testeamos que sin loguear nos redirija al login
+        r = self.client.get(url)
+        self.assertRedirects(r, reverse('accounts:login') +
+                             '?next=' + url)
 
+        # Testeamos el Permission Denied
+        self.client.login(username='paco', password='pacopassword')
         r = self.client.get(url)
         self.assertEqual(r.status_code, 403)
+
+        # Testeamos el error 404 tras la subida de la foto
+        self.v1.image = "tests_resources/test-img.jpg"
+        self.v1.save()
+        r = self.client.get(url)
+        self.assertEqual(r.status_code, 404)
         self.client.logout()
 
-    def test_upload_required_login(self):
-        response = self.client.get(reverse('video_upload:upload'))
-        self.assertRedirects(response, reverse('accounts:login') + '?next=' + reverse('video_upload:upload'))
+    def test_not_fragment(self):
+        # Testeamos sin usuario logueado -> login required
+        url = reverse('video_upload:json_notifications')
+        r = self.client.get(url)
+        self.assertRedirects(r, reverse('accounts:login') + '?next=' + url)
+
+        # Testeamos con usuario logueado
+        self.client.login(username='john', password='johnpassword')
+        r = self.client.get(url)
+        self.assertJSONEqual(str(r.content, encoding='utf8'), [])
+
+        # Testeamos con notificaciones y usuario logueado
+        up = UploadProcess.objects.create(video_model=self.v1, progress=50,
+                                          title='Test upload process',
+                                          owner=self.john, state_message='Hello!')
+        r = self.client.get(url)
+        self.assertJSONEqual(str(r.content, encoding='utf8'),
+                             [{'fields': {'canceled': False,
+                                          'is_finished': False,
+                                          'owner': self.john.id,
+                                          'progress': 50,
+                                          'state_message': 'Hello!',
+                                          'title': 'Test upload process',
+                                          'video_model': self.v1.id},
+                               'model': 'video_upload.uploadprocess',
+                               'pk': up.id}])
 
     def tearDown(self):
         self.v1.delete(delete_files=False)
         self.paco.delete()
         self.john.delete()
-
-
-class VideoUploadSeleniumTest(SeleniumAncowebTest):
-    def test_upload_video(self):
-        video_title = "Funcional Tests"
-
-        john = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
-        john.save()
-        # Login
-        self.login_user(john, 'johnpassword')
-
-        # Upload Video
-        self.selenium.get(self.live_server_url)
-        upload_url = reverse('video_upload:upload')
-        self.selenium.find_element_by_css_selector('a.dropdown-toggle').click()
-        self.selenium.find_element_by_css_selector(
-            'a[href*="' + upload_url + '"]').click()
-        self.selenium.find_element_by_id('id_title').send_keys(video_title)
-        self.selenium.find_element_by_id('id_video').send_keys(
-            os.path.join(str(settings.BASE_DIR),
-                         str(settings.MEDIA_ROOT),
-                         "tests_resources/v296.mpg"))
-        self.selenium.find_element_by_id('id_description') \
-            .send_keys("Funcional Tests Description \n this is a quite "
-                       "important test because it'll test the video uploads")
-
-        self.selenium.find_element_by_id('form_submit_button').click()
-
-        wait = WebDriverWait(self.selenium, 100)
-        wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'a.video-finished-btn')))
-        self.selenium.find_element_by_css_selector('a.video-finished-btn').click()
-        video_images = self.selenium.find_elements_by_class_name('image_picker_image')
-        self.assertEqual(utils.DEF_FRAMES_NUM, len(video_images))
-        video_images[0].click()
-        self.selenium.find_element_by_css_selector('input[type="submit"]').click()
-
-        # Comprobamos que nos ha redirigido a la página del vídeo
-        wait.until(EC.presence_of_element_located((By.TAG_NAME, 'video')))
-        video = VideoModel.objects.get(title=video_title)
-        assert str(video.id) in self.selenium.current_url
-        self.assertEqual(video_title, self.selenium.find_element_by_tag_name("h2").text)
-
-        # Comprobamos que se haya añadido al indice
-        self.selenium.get(self.live_server_url + reverse('videos:index'))
-        self.selenium.find_element_by_link_text(video_title)
-
-        # Comprobamos que no haya notificaciones
-        self.assertEqual(0, len(UploadProcess.objects.all()))
-
-        # Logout
-        video.delete()
-        self.logout_user(john)
