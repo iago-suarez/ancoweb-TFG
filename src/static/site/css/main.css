@@ -122,7 +122,12 @@ body {
     padding: 15px;
     font-weight: bold;
     border-radius: 20px;
+    margin-left: 10px;
     float: right;
+}
+
+.top-5p{
+    margin-bottom: 5px;
 }
 
 #search-video-form {
