@@ -52,7 +52,7 @@ class DetailsView(generic.DetailView):
         # If any AnalysisProcess was created and if finished, we delete it
         try:
             aps = AnalysisProcess.objects.filter(video_model=kwargs["object"].id)
-            #Delete all finished Analysis Process for this video
+            # Delete all finished Analysis Process for this video
             ap = None
             for for_ap in aps:
                 if for_ap.is_finished:
@@ -68,7 +68,9 @@ class DetailsView(generic.DetailView):
 
 
 def reanalize_video(request, video_id):
-    video_model = get_object_or_404(VideoModel, pk=video_id)
+    # If the video isn't still uploading
+    video_model = get_object_or_404(VideoModel.objects.exclude(image="")
+                                    .exclude(detected_objs=""), pk=video_id)
 
     # If the user is not the owner
     if video_model.owner != request.user:
@@ -83,10 +85,14 @@ def reanalize_video(request, video_id):
 
 
 def get_video_analysis_json(request, video_id):
+    # If the video isn't still uploading
+    get_object_or_404(VideoModel.objects.exclude(image="")
+                                    .exclude(detected_objs=""), pk=video_id)
+    obj = get_object_or_404(AnalysisProcess, video_model=video_id)
+
     JSONSerializer = serializers.get_serializer("json")
     json_serializer = JSONSerializer()
 
-    obj = get_object_or_404(AnalysisProcess, video_model=video_id)
     json_serializer.serialize([obj, ])
     return HttpResponse(json_serializer.getvalue())
 
