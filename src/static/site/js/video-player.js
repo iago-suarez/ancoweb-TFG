@@ -15,6 +15,30 @@ $(document).ready(function(){
 
     var training_lbl = document.getElementById("training-lbl");
 
+
+function selectObjects(object_list){
+    $('#objects-list tr').each(function(){
+        //Para cada fila de la tabla
+        var i = 0;
+        var selected = false;
+        while ((i<object_list.length) && (!selected)){
+            obj = object_list[i];
+            selected = (obj.id === $($(this).find('th')[0]).text())
+            i++;
+        }
+        if (selected){
+            //Si está seleccionado
+            if (!$(this).hasClass('info')){
+                $(this).addClass('info')
+            }
+        }else{
+            if ($(this).hasClass('info')){
+                $(this).removeClass('info')
+            }
+        }
+    });
+}
+
     function paintFrame(){
 
         function paint_rect(context, xc, yc, w, h, color, lineWidth){
@@ -62,7 +86,27 @@ $(document).ready(function(){
 
             paint_rect(context, video_proportion * xc, video_proportion * yc,
                 video_proportion * w, video_proportion * h,  'blue', 2);
+
         });
+
+        //Marcamos los objetos que se están mostrando en la tabla
+        selectObjects($(frame).find('objectlist object'));
+    }
+
+    function generateObjectList(xml_objects){
+        var my_objects = {};
+        $(detected_objs).find('frame').each(function(){
+            fnum = $(this).attr('number');
+            $(this).find('object').each(function(){
+                obj_id = $(this).attr('id')
+                if (my_objects[obj_id] === undefined){
+                    my_objects[obj_id] = {id: obj_id, first_frame: fnum, last_frame: undefined}
+                }else{
+                    my_objects[obj_id].last_frame = fnum
+                }
+            });
+        });
+        return my_objects;
     }
 
     function load_xml_objects(){
@@ -70,6 +114,15 @@ $(document).ready(function(){
         var xml_url = $('#xml_detected_objs').attr('value');
         $.get(xml_url, function(data){
             detected_objs = data
+            objs = generateObjectList(detected_objs);
+            for( var x in objs){
+                obj= objs[x];
+                stage_time = parseInt(obj.last_frame) - parseInt(obj.first_frame);
+                $('#objects-list').append('<tr><th scope="row"><a href="/">' + obj.id + '</a></th><td>'
+                    + obj.first_frame + '</td><td>' + obj.last_frame + '</td><td>'+ stage_time + '</td></tr>\n');
+            }
+            $('table').tablesorter();
+            $('#first-moment-th').click();
             video.addEventListener("timeupdate", paintFrame, false);
         });
     }
