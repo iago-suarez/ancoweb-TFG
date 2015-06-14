@@ -7,7 +7,6 @@ from django.views import generic
 from ancoweb import settings
 from video_manager.models import VideoModel, AnalysisProcess
 
-
 VIDEOS_FOLDER = 'videos/'
 TEMPORAL_FOLDER = 'tmp/'
 DEF_FRAMES_NUM = 5
@@ -87,7 +86,7 @@ def reanalize_video(request, video_id):
 def get_video_analysis_json(request, video_id):
     # If the video isn't still uploading
     get_object_or_404(VideoModel.objects.exclude(image="")
-                                    .exclude(detected_objs=""), pk=video_id)
+                      .exclude(detected_objs=""), pk=video_id)
     obj = get_object_or_404(AnalysisProcess, video_model=video_id)
 
     JSONSerializer = serializers.get_serializer("json")
@@ -95,4 +94,3 @@ def get_video_analysis_json(request, video_id):
 
     json_serializer.serialize([obj, ])
     return HttpResponse(json_serializer.getvalue())
-

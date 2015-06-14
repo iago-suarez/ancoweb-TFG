@@ -1,8 +1,9 @@
 from django.test import TestCase
 from django.core.urlresolvers import resolve
-from accounts.views import HomeView
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+
+from accounts.views import HomeView
 from ancoweb.tests import SeleniumAncowebTest
 
 
@@ -25,7 +26,6 @@ class PageOpenTestCase(TestCase):
 
 
 class AccountsSeleniumTest(SeleniumAncowebTest):
-
     def test_home(self):
         self.selenium.get(self.live_server_url)
         title = self.selenium.find_element_by_tag_name("h1").text

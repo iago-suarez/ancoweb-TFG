@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
 # Build paths inside the project like this: BASE_DIR / "directory"
-import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent

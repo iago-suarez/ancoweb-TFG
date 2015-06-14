@@ -1,14 +1,16 @@
 import io
-from django.test import TestCase
-from video_upload.models import UploadProcess
-from video_upload.utils import TimeUtils, VideoUtils, ImageUtils
 import os
+
+from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.test import Client
+
+from video_upload.models import UploadProcess
+from video_upload.utils import TimeUtils, VideoUtils, ImageUtils
 from ancoweb import settings
 from video_manager.models import VideoModel
 from video_upload import utils
-from django.test import Client
 
 
 class TimeUtilsTestCase(TestCase):

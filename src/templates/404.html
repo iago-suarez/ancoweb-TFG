@@ -6,7 +6,7 @@
 {% block title %} Page not found {% endblock %}
 
 {% block navbar-left %}
-  {% include "_navbar.html" with active_link="about" %}
+{% include "_navbar.html" with active_link="about" %}
 {% endblock %}
 
 <!-- Benefits of the Django application -->
@@ -14,10 +14,12 @@
 
 <div class="container">
     <br/>
+
     <div class="jumbotron alert-danger">
         <h1>404 Page not found</h1>
         <br/>
-        <p><a class="btn btn-danger btn-lg"  href="{% url 'home' %}">Return to Home</a></a></p>
+
+        <p><a class="btn btn-danger btn-lg" href="{% url 'home' %}">Return to Home</a></a></p>
     </div>
 </div>
 {% endblock container %}

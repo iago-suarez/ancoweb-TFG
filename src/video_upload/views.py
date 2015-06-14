@@ -109,4 +109,3 @@ def mark_notification_as_deleted(request, pk, *args, **kwargs):
         notification.canceled = True
         notification.save()
     return HttpResponseRedirect(reverse('home'))
-

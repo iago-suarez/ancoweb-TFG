@@ -1,11 +1,9 @@
-import os
 import threading
+
 from django.contrib.auth.models import User
 from django.db import models
 
-from ancoweb import settings
 from video_upload import tasks
-from video_upload.utils import ImageUtils, VideoUtils, media_url_to_path
 from video_manager.models import VideoModel
 
 

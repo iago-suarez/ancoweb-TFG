@@ -8,10 +8,11 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib.auth import authenticate, REDIRECT_FIELD_NAME
 from django.contrib.auth import login, logout
 from django.contrib import messages
-from . import forms
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import FormView, TemplateView
+
+from . import forms
 
 
 class SignUp(generic.edit.FormMixin, generic.TemplateView):

@@ -5,7 +5,7 @@
 {% block title %}{{ block.super }}Home{% endblock %}
 
 {% block navbar-left %}
-  {% include "_navbar.html" with active_link="videos" %}
+{% include "_navbar.html" with active_link="videos" %}
 {% endblock %}
 
 {% block container %}
@@ -13,44 +13,46 @@
 <div class="container" id="video-list">
     <div class="row text-center">
         <div>
-        <form id="search-video-form" class="navbar-form navbar-left" role="search" action="" method="get">
+            <form id="search-video-form" class="navbar-form navbar-left" role="search" action="" method="get">
 
-            <div class="input-group">
-                <input class="form-control" type="text" name="name" id="id_name" placeholder="Search Videos"/>
+                <div class="input-group">
+                    <input class="form-control" type="text" name="name" id="id_name" placeholder="Search Videos"/>
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="submit">
                         <span class="glyphicon glyphicon-search"></span>
                     </button>
                 </span>
-            </div><!-- /input-group -->
-        </form>
+                </div>
+                <!-- /input-group -->
+            </form>
         </div>
     </div>
     <div class="row">
 
         {% if object_list %}
-            <ul>
+        <ul>
             {% for video in object_list %}
-                <li class="video-fragment">
-                    <div class="col-xs-3 text-center">
-                        <a href="{% url 'videos:details' video.id %}">
-                            <img class="defaultVideoIcon" src="
+            <li class="video-fragment">
+                <div class="col-xs-3 text-center">
+                    <a href="{% url 'videos:details' video.id %}">
+                        <img class="defaultVideoIcon" src="
                             {% if video.image.url != None %}
                                 {{ video.image.url }}
                             {% else %}
                                 {% static defaultVideoIcon %}
                             {% endif%}"/>
-                        </a>
-                    </div>
-                    <div class="col-xs-9">
-                        <a href="{% url 'videos:details' video.id  %}">{{ video }}</a>
-                        <p> {{ video.description }} </p>
-                    </div>
-                </li>
+                    </a>
+                </div>
+                <div class="col-xs-9">
+                    <a href="{% url 'videos:details' video.id  %}">{{ video }}</a>
+
+                    <p> {{ video.description }} </p>
+                </div>
+            </li>
             {% endfor %}
-            </ul>
+        </ul>
         {% else %}
-            <p>No videos are available.</p>
+        <p>No videos are available.</p>
         {% endif %}
 
     </div>

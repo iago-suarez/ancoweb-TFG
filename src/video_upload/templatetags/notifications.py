@@ -1,4 +1,5 @@
 from django import template
+
 from video_upload.models import UploadProcess
 
 register = template.Library()

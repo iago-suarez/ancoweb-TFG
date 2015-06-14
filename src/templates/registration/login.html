@@ -6,7 +6,7 @@
 {% block title %}Login{% endblock %}
 
 {% block navbar-left %}
-  {% include "_navbar.html" with active_link="home" %}
+{% include "_navbar.html" with active_link="home" %}
 {% endblock %}
 
 {% block navbar-right %}
@@ -18,24 +18,25 @@
 <div class="text-center container">
     <h2 class="form-signin-heading">Please sign in</h2>
     &nbsp;
-        {% if form.errors %}
-            <div class="alert alert-danger">
-                <p><strong>{% trans "Error:" %}</strong> {% trans "Please enter a correct username and password." %}</p>
-            </div>
-        {% endif %}
-        <form action="" method="post" class="form-signin" role="form">{% csrf_token %}
-            {% for field in form %}
-                {% include 'registration/form_field.html' %}
-            {% endfor %}
-            <div class="form-group">
-                <div>
-                  <a type="reset" class="btn btn-lg btn-default" href="{% url 'home' %}">{% trans 'Home' %}</a>
-                  &nbsp;<button type="submit" class="btn btn-lg btn-primary">{% trans 'Log in' %}</button>
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <p><strong>{% trans "Error:" %}</strong> {% trans "Please enter a correct username and password." %}</p>
+    </div>
+    {% endif %}
+    <form action="" method="post" class="form-signin" role="form">{% csrf_token %}
+        {% for field in form %}
+        {% include 'registration/form_field.html' %}
+        {% endfor %}
+        <div class="form-group">
+            <div>
+                <a type="reset" class="btn btn-lg btn-default" href="{% url 'home' %}">{% trans 'Home' %}</a>
+                &nbsp;
+                <button type="submit" class="btn btn-lg btn-primary">{% trans 'Log in' %}</button>
 
-                </div>
             </div>
-        </form>
-        <!--<p><a href="{% url 'accounts:password_reset' %}">{% trans "Reset my password" %}</a></p>-->
+        </div>
+    </form>
+    <!--<p><a href="{% url 'accounts:password_reset' %}">{% trans "Reset my password" %}</a></p>-->
 
 </div>
 

@@ -6,7 +6,6 @@ from django.core.urlresolvers import reverse
 
 
 class LoginForm(AuthenticationForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -18,7 +17,7 @@ class LoginForm(AuthenticationForm):
             Field('username', placeholder="Username", autofocus="", css_class='form-control'),
             Field('password', placeholder="Password", css_class='form-control'),
             Submit('sign_in', 'Sign in', css_class="btn btn-lg btn-primary btn-block"),
-            )
+        )
 
 
 class CompactLoginForm(LoginForm):
@@ -31,11 +30,10 @@ class CompactLoginForm(LoginForm):
             Field('username', placeholder="Username", autofocus=""),
             Field('password', placeholder="Password"),
             Submit('sign_in', 'Sign in', css_class="btn-sm btn-success"),
-            )
+        )
 
 
 class SignupForm(UserCreationForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -48,4 +46,4 @@ class SignupForm(UserCreationForm):
             Field('password1', placeholder="Password"),
             Field('password2', placeholder="Re-type Password"),
             Submit('sign_up', 'Sign up', css_class="btn-warning"),
-            )
+        )

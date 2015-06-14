@@ -4,7 +4,6 @@ from django import template
 from django.forms.widgets import Media
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
-
 from django.conf import settings
 
 PROGRESSBARUPLOAD_INCLUDE_JQUERY = getattr(settings, 'PROGRESSBARUPLOAD_INCLUDE_JQUERY', True)

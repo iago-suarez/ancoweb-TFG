@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+
 from django.core.cache import cache
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from django.http import HttpResponse
@@ -9,6 +10,7 @@ class video_uploadHandler(TemporaryFileUploadHandler):
     """
     Cache system for TemporaryFileUploadHandler
     """
+
     def __init__(self, *args, **kwargs):
         super(TemporaryFileUploadHandler, self).__init__(*args, **kwargs)
         self.progress_id = None

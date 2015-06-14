@@ -1,4 +1,5 @@
 from django import template
+
 from accounts import forms
 
 register = template.Library()

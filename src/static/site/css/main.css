@@ -1,18 +1,18 @@
 
 body {
-  padding-top: 50px;
+    padding-top: 50px;
 }
 
 .starter-template {
-  padding: 40px 15px;
-  text-align: center;
+    padding: 40px 15px;
+    text-align: center;
 }
 
 .footer {
-  padding-top: 40px;
-  padding-bottom: 40px;
-  margin-top: 40px;
-  border-top: 1px solid #eee;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin-top: 40px;
+    border-top: 1px solid #eee;
 }
 
 .alert {
@@ -29,8 +29,7 @@ body {
 
 /* Home page styling */
 .corporate-jumbo {
-    background: url("/static/site/img/banner.jpg") no-repeat center center;
-    background-attachment: fixed;
+    background: url("/static/site/img/banner.jpg") no-repeat fixed center center;
     -webkit-background-size: cover;
     background-size: cover;
     color: #f5f5f5;
@@ -42,7 +41,7 @@ body {
 
 .corporate-jumbo p, .corporate-jumbo h1 {
     color: #eee;
-    text-shadow: 0px 0px 2px black;
+    text-shadow: 0 0 2px black;
 }
 
 .corporate-jumbo p {
@@ -71,7 +70,7 @@ body {
 
 /* About page styling */
 #sec1 {
-    background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJklEQVQIW2NkAIILFy78NzAwYATRjCABZEGwAEwFiA1WBlIOUwkA72gTdDIYVO4AAAAASUVORK5CYII=) repeat;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJklEQVQIW2NkAIILFy78NzAwYATRjCABZEGwAEwFiA1WBlIOUwkA72gTdDIYVO4AAAAASUVORK5CYII=) repeat;
 }
 
 .text-page {
@@ -80,9 +79,9 @@ body {
 
 #map-outer {
     height: 440px;
-	padding: 40px 20px;
-	margin-bottom: 20px;
-	background-color:#FFF
+    padding: 40px 20px;
+    margin-bottom: 20px;
+    background-color: #FFF
 }
 
 #map-container {
@@ -90,34 +89,37 @@ body {
 }
 
 @media all and (max-width: 768px) {
-	#map-outer  { height: 650px }
+    #map-outer {
+        height: 650px
+    }
 }
 
 /******************* VIDEO *****************/
-#video-list{
+#video-list {
     margin-top: 15px;
 }
-.video-fragment{
+
+.video-fragment {
     list-style-type: none;
     display: inline-block;
     min-width: 100%;
     margin: 3px;
 }
 
-.video-fragment a{
+.video-fragment a {
     font-size: 24px;
 }
 
 .defaultVideoIcon {
-    max-width:70%;
-    max-height:70%;
+    max-width: 70%;
+    max-height: 70%;
 }
 
-#video-player{
+#video-player {
     max-width: 100%;
 }
 
-.owner-label{
+.owner-label {
     background-color: #d9edf7;
     padding: 15px;
     font-weight: bold;
@@ -126,7 +128,7 @@ body {
     float: right;
 }
 
-.top-5p{
+.top-5p {
     margin-bottom: 5px;
 }
 
@@ -134,17 +136,16 @@ body {
     width: 100%;
 }
 
-
-#search-video-form input{
+#search-video-form input {
     width: 100%;
 }
 
-.drawing-layer{
+.drawing-layer {
     position: absolute;
 }
 
-canvas{
-    pointer-events:none;
+canvas {
+    pointer-events: none;
 }
 
 #training-lbl {
@@ -161,18 +162,26 @@ canvas{
 }
 
 @-webkit-keyframes spin2 {
-    from { -webkit-transform: rotate(0deg);}
-    to { -webkit-transform: rotate(360deg);}
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
 @keyframes spin {
-    from { transform: scale(1) rotate(0deg);}
-    to { transform: scale(1) rotate(360deg);}
+    from {
+        transform: scale(1) rotate(0deg);
+    }
+    to {
+        transform: scale(1) rotate(360deg);
+    }
 }
 
 /*************** UPLOAD VIDEO ***********************/
 
-#upload-video{
+#upload-video {
     display: inline-block;
     margin-top: 20px;
 }
@@ -182,14 +191,14 @@ canvas{
 
 }
 
-div[class*="thumbnail"]{
+div[class*="thumbnail"] {
     margin: 0;
     padding: 0;
 }
 
 ul.thumbnails.image_picker_selector li {
-  margin: 0px 0px;
-  padding: 8px;
+    margin: 0 0;
+    padding: 8px;
 }
 
 /* Redefining bootstrap */
@@ -203,10 +212,10 @@ input [type="file"] {
     padding: 10px 20px;
 }
 
-#notifications-panel{
-    position:fixed;
+#notifications-panel {
+    position: fixed;
     z-index: 500;
-    right: 0px;
+    right: 0;
     top: 50px;
 }
 

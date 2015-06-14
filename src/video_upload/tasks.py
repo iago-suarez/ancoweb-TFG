@@ -1,10 +1,11 @@
 import os
 from random import randint
+from subprocess import Popen, PIPE, STDOUT
+import xml.etree.ElementTree as ET
+
 from ancoweb import settings
 from video_upload import utils
 from video_upload.utils import VideoUtils, TimeUtils, ImageUtils
-from subprocess import Popen, PIPE, STDOUT
-import xml.etree.ElementTree as ET
 
 
 class ProcessState(object):
@@ -114,8 +115,8 @@ class AnalyzeVideo(ProcessState):
             if line.startswith("<frame"):
                 frame_element = ET.fromstring(line)
                 nframe = int(frame_element.get("number"))
-                progress = 100 * (nframe/video_nframes)
-                #Aumentamos el progreso de 5% en 5% para no sobrecargar la BD
+                progress = 100 * (nframe / video_nframes)
+                # Aumentamos el progreso de 5% en 5% para no sobrecargar la BD
                 if progress > (self.process.progress + 5):
                     self.set_progress(round(progress))
 

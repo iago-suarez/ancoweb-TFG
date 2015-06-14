@@ -1,43 +1,45 @@
-function getVideoIdFromUrl(){
+function getVideoIdFromUrl() {
     return window.location.href.split('/')[4];
 }
 
-$(document).ready(function(){
-    $('#show-analysis-checkbox').click(function(){
+$(document).ready(function () {
+    $('#show-analysis-checkbox').click(function () {
         $('.drawing-layer').toggle();
     });
 
-    function refresh_analysis_progress(){
-        $.getJSON("/videos/" + getVideoIdFromUrl() + "/analyze/").done(function(analysis){
+    function refreshAnalysisProgress() {
+        $.getJSON("/videos/" + getVideoIdFromUrl() + "/analyze/").done(function (analysis) {
             //Get analysis status from the iterable list
-            analysis = analysis[0].fields
-            if(analysis.is_finished){
-                $('#state_message').parent().append('<a class="btn btn-success" href="'
+            analysis = analysis[0].fields;
+            var stateMsg = $('#state_message');
+            var analyzingPb = $('#analyzing-pb');
+            if (analysis.is_finished) {
+                $(stateMsg).parent().append('<a class="btn btn-success" href="'
                     + window.location.href + '">Reload</a>');
-                $('#analyzing-pb').hide();
-                $('#state_message').text(analysis.state_message);
+                $(analyzingPb).hide();
+                $(stateMsg).text(analysis.state_message);
                 return;
             }
 
             //Update the progressbar
-            $('#state_message').text(analysis.state_message);
-            $('#analyzing-pb').find('.progress-bar')
+            $(stateMsg).text(analysis.state_message);
+            $(analyzingPb).find('.progress-bar')
                 .attr('aria-valuenow', analysis.progress)
                 .css('width', analysis.progress + '%');
             $(document).find('#analyzing-pb span').text(analysis.progress + '% Complete');
-            window.setTimeout(refresh_analysis_progress, 300);
+            window.setTimeout(refreshAnalysisProgress, 300);
         });
     }
 
-    refresh_analysis_progress()
+    refreshAnalysisProgress();
 
-    $('#analyze-btn').click(function(){
-        //Cambiamos el boton por el de se está analizando + progressbar
-        $('#analyze-btn').hide()
+    $('#analyze-btn').click(function () {
+        // We change the button for the "Analyzing label and the progress bar
+        $('#analyze-btn').hide();
         $('#analyzing-pb').show();
-        // hacemos la llamada a makeanalysis
-        $.post("/videos/" + getVideoIdFromUrl() + "/makeanalyze/", function(){
-            refresh_analysis_progress();
+        // Make the call to makeanalysis
+        $.post("/videos/" + getVideoIdFromUrl() + "/makeanalyze/", function () {
+            refreshAnalysisProgress();
         });
         return false;
     });

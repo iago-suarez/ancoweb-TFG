@@ -13,4 +13,4 @@ urlpatterns = [url(r'^$', login_required(views.UploadView.as_view()), name='uplo
                    name='success-upload'),
                url(r'^notificationsJson', login_required(views.notifications_as_json),
                    name='json_notifications')
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

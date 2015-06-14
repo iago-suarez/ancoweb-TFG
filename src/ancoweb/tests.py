@@ -28,7 +28,7 @@ class SeleniumAncowebTest(StaticLiveServerTestCase):
 
     def logout_user(self, user):
         self.selenium.find_element_by_css_selector('a.dropdown-toggle').click()
-        css_selector = 'ul.dropdown-menu a[href*="' + reverse('accounts:logout')+'"]'
+        css_selector = 'ul.dropdown-menu a[href*="' + reverse('accounts:logout') + '"]'
         self.selenium.find_element_by_css_selector(css_selector).click()
 
         wait = WebDriverWait(self.selenium, 10)

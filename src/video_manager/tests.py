@@ -1,12 +1,14 @@
 import os
 import io
+
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import Client
+from django.test import TestCase
+
 from ancoweb import settings
 from ancoweb.tests import SeleniumAncowebTest
 from video_manager.models import VideoModel, get_valid_filename
-from django.test import TestCase
 
 
 class VideoManagerTests(TestCase):
@@ -68,7 +70,7 @@ class VideoManagerTests(TestCase):
 
     def test_make_analyze(self):
         # Nos logueamos con el dueño del video
-        url = '/videos/' + str(self.v1.id)+'/makeanalyze/'
+        url = '/videos/' + str(self.v1.id) + '/makeanalyze/'
         self.client.login(username='john', password='johnpassword')
 
         # Testeamos que funcione con usuario adecuado sin que se este analizando
@@ -129,7 +131,6 @@ class VideoModelTests(TestCase):
 
 
 class VideoManagerSeleniumTests(SeleniumAncowebTest):
-
     def test_make_analyze(self):
         # TODO Implementar y borrar el anterior otro test_make_analyze al hacerlo ya
         # que causa un error de BD
@@ -147,4 +148,3 @@ class VideoManagerSeleniumTests(SeleniumAncowebTest):
         # (integration) test_make_analyze: Testeamos que no funcione cuando
         # en vídeo todavía se está subiendo
         pass
-

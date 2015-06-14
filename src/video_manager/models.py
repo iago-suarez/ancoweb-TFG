@@ -1,10 +1,12 @@
 import os
 import threading
+from random import randint
+
 from django.contrib.auth.models import User
 from django.db import models
+
 from ancoweb import settings
 from video_upload import utils
-from random import randint
 import video_upload
 
 
