@@ -5,3 +5,4 @@ django-crispy-forms-ng>=2.0.0
 django-admin-bootstrapped>=2.5.0
 Pillow>=2.7.0
 selenium>=2.45.0
+django.js>=0.8.1
