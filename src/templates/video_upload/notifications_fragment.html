@@ -1,29 +1,29 @@
 <div id="notifications-panel" class="col-xs-6 col-sm-4 col-md-3">
     {% for notification in notification_list %}
-    <div class="notification alert alert-info">
-        {% csrf_token %}
-        <a class="glyphicon glyphicon-remove delete-notification"
-           href="{% url 'video_upload:notification_delete' notification.id %}"></a>
-        <span class="notificationId" id="{{ notification.id }}" hidden></span>
+        <div class="notification alert alert-info">
+            {% csrf_token %}
+            <a class="glyphicon glyphicon-remove delete-notification"
+               href="{% url 'video_upload:notification_delete' notification.id %}"></a>
+            <span class="notificationId" id="{{ notification.id }}" hidden></span>
 
-        <h3> {{ notification.title }}</h3>
-        {% if notification.is_finished == False %}
-        <div class="progress">
-            <div class="progress-bar progress-bar-striped active" role="progressbar"
-                 aria-valuenow="{{ notification.progress }}" aria-valuemin="0" aria-valuemax="100"
-                 style="width: {{ notification.progress }}%">
-                <span class="sr-only">{{ notification.progress }}% Complete</span>
-            </div>
-        </div>
-        {% endif %}
-        <p class="state_message"> {{notification.state_message }} </p>
+            <h3> {{ notification.title }}</h3>
+            {% if notification.is_finished == False %}
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar"
+                         aria-valuenow="{{ notification.progress }}" aria-valuemin="0" aria-valuemax="100"
+                         style="width: {{ notification.progress }}%">
+                        <span class="sr-only">{{ notification.progress }}% Complete</span>
+                    </div>
+                </div>
+            {% endif %}
+            <p class="state_message"> {{ notification.state_message }} </p>
 
-        {% if notification.is_finished %}
-        <div class="text-center">
-            <a class="btn btn-primary video-finished-btn"
-               href="{% url 'video_upload:success-upload' notification.video_model.id %}"> Finish </a>
+            {% if notification.is_finished %}
+                <div class="text-center">
+                    <a class="btn btn-primary video-finished-btn"
+                       href="{% url 'video_upload:success-upload' notification.video_model.id %}"> Finish </a>
+                </div>
+            {% endif %}
         </div>
-        {% endif %}
-    </div>
     {% endfor %}
 </div>

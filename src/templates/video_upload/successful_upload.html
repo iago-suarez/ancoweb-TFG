@@ -6,43 +6,43 @@
 {% block title %}{{ block.super }}Home{% endblock %}
 
 {% block styles %}
-<link href="{% static 'image-picker/image-picker.css' %}" rel="stylesheet">
+    <link href="{% static 'image-picker/image-picker.css' %}" rel="stylesheet">
 {% endblock styles %}
 
 {% block navbar-left %}
-{% include "_navbar.html" %}
+    {% include "_navbar.html" %}
 {% endblock %}
 
 {% block container %}
 
-<div class="container">
-    <div class="row text-center">
-        <h2>Your video {{ object.title}} was successfully update</h2>
+    <div class="container">
+        <div class="row text-center">
+            <h2>Your video {{ object.title }} was successfully update</h2>
 
-        <p>Please select one image to show it: </p>
-    </div>
-
-    <form action="" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="picker">
-            <select class="image-picker show-html" name="main_image" id="id_main_image">
-                {% for image in image_urls %}
-                <option data-img-src="{{ image }}" value="{{ image }}"></option>
-                {% endfor %}
-            </select>
+            <p>Please select one image to show it: </p>
         </div>
 
-        <input class="btn btn-default" type="submit" value="Submit">
-    </form>
-</div>
-{% block notifications_block %}
-<!-- At this page we don't display the notifications -->
-{% endblock notifications_block %}
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="picker">
+                <select class="image-picker show-html" name="main_image" id="id_main_image">
+                    {% for image in image_urls %}
+                        <option data-img-src="{{ image }}" value="{{ image }}"></option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <input class="btn btn-default" type="submit" value="Submit">
+        </form>
+    </div>
+    {% block notifications_block %}
+        <!-- At this page we don't display the notifications -->
+    {% endblock notifications_block %}
 {% endblock container %}
 {% block scripts %}
-<script src="{% static 'image-picker/image-picker.js' %}"></script>
-<script>
-    $("select").imagepicker();
-    $('li:has(div[class*="thumbnail"])').addClass('col-md-4').addClass('col-xs-6');
-</script>
+    <script src="{% static 'image-picker/image-picker.js' %}"></script>
+    <script>
+        $("select").imagepicker();
+        $('li:has(div[class*="thumbnail"])').addClass('col-md-4').addClass('col-xs-6');
+    </script>
 {% endblock scripts %}

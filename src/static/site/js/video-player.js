@@ -106,13 +106,13 @@ $(document).ready(function () {
      * @property {String} lastFrame
      * @constructor
      */
-    function TableObject (id, firstFrame, lastFrame) {
+    function TableObject(id, firstFrame, lastFrame) {
         this.id = id;
         this.firstFrame = firstFrame;
         this.lastFrame = lastFrame;
         this.stageTime = parseInt(lastFrame) - parseInt(firstFrame);
 
-        this.asTableRow = function(){
+        this.asTableRow = function () {
             return '<tr><th scope="row"><a href="/">' + this.id + '</a></th><td>'
                 + this.firstFrame + '</td><td>' + this.lastFrame + '</td><td>'
                 + this.stageTime + '</td></tr>\n';
@@ -152,7 +152,7 @@ $(document).ready(function () {
 
             //Generate the table of objects
             var tableObjects = getTableObjectsFromXml(detectedXmlObjs);
-            for(var i in tableObjects) {
+            for (var i in tableObjects) {
                 $('#objects-tbody').append(tableObjects[i].asTableRow());
             }
 
@@ -160,7 +160,7 @@ $(document).ready(function () {
             $('table').tablesorter();
             $('#first-moment-th').click();
 
-            video.addEventListener("timeupdate", function(){
+            video.addEventListener("timeupdate", function () {
                 var frameNumber = Math.round(this.currentTime * getVideoFps(this));
                 var frame = $($(detectedXmlObjs).find('frame[number=' + frameNumber + ']'));
                 var objects = $(frame).find('objectlist object');
@@ -236,7 +236,7 @@ $(document).ready(function () {
 
         var videoWidth = $(videoPlayer).width();
         var videoTop = $(videoPlayer).offset().top;
-        var videoLeft= $(videoPlayer).offset().left;
+        var videoLeft = $(videoPlayer).offset().left;
         var lblWidth = $(trainingLbl).width();
 
         var lblLeft = videoLeft + Math.round(videoWidth / 2) - Math.round(lblWidth / 2);

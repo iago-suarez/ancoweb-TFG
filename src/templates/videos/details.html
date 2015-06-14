@@ -6,105 +6,106 @@
 {% block title %}{{ block.super }}Home{% endblock %}
 
 {% block navbar-left %}
-{% include "_navbar.html" with active_link="videos" %}
+    {% include "_navbar.html" with active_link="videos" %}
 {% endblock %}
 
 {% block container %}
 
-<div class="container">
-    <div class="row text-center">
-        <h2> {{ object.title }} </h2>
+    <div class="container">
+        <div class="row text-center">
+            <h2> {{ object.title }} </h2>
 
-        <p id="training-lbl" class="btn-lg btn-warning">
-            Training Frames
-        </p>
+            <p id="training-lbl" class="btn-lg btn-warning">
+                Training Frames
+            </p>
 
-        <div class="col-sm-4 col-md-3">
-            <div class="panel panel-primary">
-                <div class="panel-heading"><strong>Controls</strong></div>
-                <div class="panel-body text-left">
-                    <div class="checkbox">
-                        <label>
-                            <input id="show-analysis-checkbox" type="checkbox" value="" checked>
-                            Show Analysis
-                        </label>
-                    </div>
-                    <div class="text-center">
-                        <p id="state_message">{% if ap %} {{ ap.state_message }} {% endif %}</p>
-                        {% if not ap %}
-                        {% if user != None and user == object.owner %}
-                        <a id="analyze-btn" class="btn btn-primary" href="{% url 'videos:makeanalyze' object.id %}">Reload
-                            Analysis</a>
-                        {% endif %}
-                        {% endif %}
-
-                        <div id="analyzing-pb" class="progress" {% if not ap %} style="display :none" {% endif %}>
-                            <div class="progress-bar progress-bar-striped active" role="progressbar"
-                                 aria-valuenow="{% if ap %} {{ ap.progress }} {% endif %}"
-                                 aria-valuemin="0" aria-valuemax="100"
-                                 style="width: {% if ap %}{{ ap.progress }}% {% endif %}">
-                                <span class="sr-only"> {{ ap.progress }}% Complete</span>
-                            </div>
+            <div class="col-sm-4 col-md-3">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><strong>Controls</strong></div>
+                    <div class="panel-body text-left">
+                        <div class="checkbox">
+                            <label>
+                                <input id="show-analysis-checkbox" type="checkbox" value="" checked>
+                                Show Analysis
+                            </label>
                         </div>
+                        <div class="text-center">
+                            <p id="state_message">{% if ap %} {{ ap.state_message }} {% endif %}</p>
+                            {% if not ap %}
+                                {% if user != None and user == object.owner %}
+                                    <a id="analyze-btn" class="btn btn-primary"
+                                       href="{% url 'videos:makeanalyze' object.id %}">Reload
+                                        Analysis</a>
+                                {% endif %}
+                            {% endif %}
 
+                            <div id="analyzing-pb" class="progress" {% if not ap %} style="display :none" {% endif %}>
+                                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                     aria-valuenow="{% if ap %} {{ ap.progress }} {% endif %}"
+                                     aria-valuemin="0" aria-valuemax="100"
+                                     style="width: {% if ap %}{{ ap.progress }}% {% endif %}">
+                                    <span class="sr-only"> {{ ap.progress }}% Complete</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-8 col-md-6">
+
+                <video id="video-player" controls>
+                    {% videosources object %}
+                    Your browser does not support the video tag.
+                </video>
+                <canvas id="objects-canvas" class="drawing-layer"></canvas>
+                <span id="xml_detected_objs" hidden> {{ object.detected_objs.url }} </span>
+            </div>
+
+            <div class="col-sm-12 col-md-3">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><strong>Video Info</strong></div>
+                    <div class="panel-body text-left">
+                        <p> Creation Date: {{ object.creation_timestamp }} </p>
+                        <h4 class="owner-label"> {{ object.owner }} </h4>
+
+                        <p>{{ object.description }}</p>
+                        <a class="btn btn-default top-5p" href="{{ object.video.url }}">
+                            <strong>Donwload video</strong> </a>
+                        <a class="btn btn-default top-5p" href="{{ object.detected_objs.url }}"
+                           target="_blank"> <strong>Donwload xml</strong> </a>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-sm-8 col-md-6">
-
-            <video id="video-player" controls>
-                {% videosources object %}
-                Your browser does not support the video tag.
-            </video>
-            <canvas id="objects-canvas" class="drawing-layer"></canvas>
-            <span id="xml_detected_objs" hidden> {{ object.detected_objs.url }} </span>
-        </div>
-
-        <div class="col-sm-12 col-md-3">
-            <div class="panel panel-primary">
-                <div class="panel-heading"><strong>Video Info</strong></div>
+        <div class="row text-center">
+            <div class="panel panel-success">
+                <div class="panel-heading"><strong>Detected Objects</strong></div>
                 <div class="panel-body text-left">
-                    <p> Creation Date: {{ object.creation_timestamp }} </p>
-                    <h4 class="owner-label"> {{ object.owner }} </h4>
+                    <table class="table table-condensed tablesorter">
+                        <thead>
+                        <tr>
+                            <th>Identifier</th>
+                            <th id="first-moment-th">First Frame</th>
+                            <th>Last Frame</th>
+                            <th>Stage Frames</th>
+                        </tr>
+                        </thead>
+                        <tbody id="objects-tbody">
 
-                    <p>{{ object.description}}</p>
-                    <a class="btn btn-default top-5p" href="{{object.video.url}}">
-                        <strong>Donwload video</strong> </a>
-                    <a class="btn btn-default top-5p" href="{{object.detected_objs.url}}"
-                       target="_blank"> <strong>Donwload xml</strong> </a>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row text-center">
-        <div class="panel panel-success">
-            <div class="panel-heading"><strong>Detected Objects</strong></div>
-            <div class="panel-body text-left">
-                <table class="table table-condensed tablesorter">
-                    <thead>
-                    <tr>
-                        <th>Identifier</th>
-                        <th id="first-moment-th">First Frame</th>
-                        <th>Last Frame</th>
-                        <th>Stage Frames</th>
-                    </tr>
-                    </thead>
-                    <tbody id="objects-tbody">
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
 
 {% endblock container %}
 
 {% block scripts %}
-<script src="{% static 'site/js/video-player.js'%}"></script>
-<script src="{% static 'site/js/video-controls.js'%}"></script>
-<script src="{% static 'tablesorter/jquery.tablesorter.min.js'%}"></script>
+    <script src="{% static 'site/js/video-player.js' %}"></script>
+    <script src="{% static 'site/js/video-controls.js' %}"></script>
+    <script src="{% static 'tablesorter/jquery.tablesorter.min.js' %}"></script>
 
 {% endblock %}
