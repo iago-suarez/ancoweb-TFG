@@ -58,8 +58,8 @@
                 {% videosources object %}
                 Your browser does not support the video tag.
             </video>
-            <canvas id="objects" class="drawing-layer"></canvas>
-            <span id="xml_detected_objs" value="{{ object.detected_objs.url }}"/>
+            <canvas id="objects-canvas" class="drawing-layer"></canvas>
+            <span id="xml_detected_objs" hidden> {{ object.detected_objs.url }} </span>
         </div>
 
         <div class="col-sm-12 col-md-3">
@@ -91,7 +91,7 @@
                         <th>Stage Frames</th>
                     </tr>
                     </thead>
-                    <tbody id="objects-list">
+                    <tbody id="objects-tbody">
 
                     </tbody>
                 </table>

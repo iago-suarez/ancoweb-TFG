@@ -6,7 +6,7 @@ from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from django.http import HttpResponse
 
 
-class video_uploadHandler(TemporaryFileUploadHandler):
+class VideoUploadHandler(TemporaryFileUploadHandler):
     """
     Cache system for TemporaryFileUploadHandler
     """
@@ -16,7 +16,7 @@ class video_uploadHandler(TemporaryFileUploadHandler):
         self.progress_id = None
         self.cache_key = None
 
-    def handle_raw_input(self, input_data, META, content_length, boundary, encoding=None):
+    def handle_raw_input(self, input_data, meta, content_length, boundary, encoding=None):
         self.content_length = content_length
         if 'X-Progress-ID' in self.request.GET:
             self.progress_id = self.request.GET['X-Progress-ID']
@@ -50,6 +50,7 @@ def upload_progress(request):
 
     Return the upload progress and total length values
     """
+    progress_id = None
     if 'X-Progress-ID' in request.GET:
         progress_id = request.GET['X-Progress-ID']
     elif 'X-Progress-ID' in request.META:

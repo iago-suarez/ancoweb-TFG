@@ -6,12 +6,13 @@ function setProgress(progressBar, progress) {
 
 // Update progress bar
 function updateProgressInfo() {
-    $.getJSON(upload_progress_url, {'X-Progress-ID': uuid}, function (data, status) {
+    $.getJSON(upload_progress_url, {'X-Progress-ID': uuid}, function (data) {
         //console.log(data);
         if (data) {
-            $('#progressBar').removeAttr('hidden');  // show progress bar if there are datas
+            var progressBar = $('#progressBar');
+            $(progressBar).removeAttr('hidden');  // show progress bar if there are datas
             var progress = parseInt(data.uploaded, 10) / parseInt(data.length, 10) * 100;
-            setProgress($('#progressBar'), progress)
+            setProgress(progressBar, progress)
         }
         else {
             $('#progressBar').attr('hidden', '');  // hide progress bar if no datas

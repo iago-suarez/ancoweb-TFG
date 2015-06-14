@@ -122,7 +122,7 @@ MESSAGE_TAGS = {
 # Progressbar settings
 
 FILE_UPLOAD_HANDLERS = (
-    "video_upload.handlers.video_uploadHandler",
+    "video_upload.handlers.VideoUploadHandler",
     "django.core.files.uploadhandler.MemoryFileUploadHandler",
     "django.core.files.uploadhandler.TemporaryFileUploadHandler",
 )

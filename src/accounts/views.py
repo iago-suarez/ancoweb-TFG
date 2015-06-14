@@ -18,7 +18,7 @@ from . import forms
 class SignUp(generic.edit.FormMixin, generic.TemplateView):
     signup_form_class = forms.SignupForm
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         form = self.signup_form_class(**self.get_form_kwargs())
         if not form.is_valid():
             messages.add_message(request,

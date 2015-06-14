@@ -10,7 +10,7 @@ from video_upload import utils
 import video_upload
 
 
-def get_valid_filename(filename, bad_extensions=[], directory=""):
+def get_valid_filename(filename, bad_extensions=None, directory=""):
     """
     If the name filename exists with its extension or any of the bad_extensions
     the function returns a new filename which will be valid, appending _ and
@@ -20,6 +20,8 @@ def get_valid_filename(filename, bad_extensions=[], directory=""):
     :param bad_extensions: extensions tha are not allowed
     :return: The valid filename
     """
+    if not bad_extensions:
+        bad_extensions = []
     file, ext = os.path.splitext(filename)
     # While exists a file with this name, we search other filename recursively
     while True:

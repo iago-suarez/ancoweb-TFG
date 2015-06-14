@@ -25,7 +25,7 @@ class VideoUtils:
         """
         input_path = os.path.join(video_instance.video.storage.location, video_instance.video.name)
         call('ffmpeg -n -i %s -ss %s -vframes 1 %s' %
-             (input_path, time, output_file), shell='TRUE')
+             (input_path, time, output_file), shell=True)
 
     @staticmethod
     def get_video_seconds(video_instance):
@@ -38,7 +38,7 @@ class VideoUtils:
         shell_result = Popen('ffmpeg -i %s 2>&1 | grep Duration' %
                              os.path.join(video_instance.video.storage.location,
                                           video_instance.video.name),
-                             shell='TRUE', stdout=PIPE, stderr=STDOUT, universal_newlines=True)
+                             shell=True, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
 
         line = str(shell_result.stdout.readline())
 
@@ -92,7 +92,7 @@ class VideoUtils:
         p = Popen("ffmpeg -i %s -vcodec copy -f rawvideo "
                   "-y /dev/null 2>&1 | tr ^M '\n' | awk "
                   "'/^frame=/ {print $2}'|tail -n 1" % video_path,
-                  shell='TRUE', stdout=PIPE, stderr=STDOUT, universal_newlines=True)
+                  shell=True, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
         try:
             line = p.stdout.readline()
             return int(line)
@@ -102,7 +102,7 @@ class VideoUtils:
     @staticmethod
     def get_fps(video_path):
         p = Popen("ffmpeg -i %s 2>&1| grep fps" % video_path,
-                  shell='TRUE', stdout=PIPE, stderr=STDOUT, universal_newlines=True)
+                  shell=True, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
         line = p.stdout.readline()
         # De toda la linea de información buscamos los fps y los devolvemos
         for video_property in line.split(','):

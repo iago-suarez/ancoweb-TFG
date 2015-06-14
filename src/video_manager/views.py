@@ -89,8 +89,8 @@ def get_video_analysis_json(request, video_id):
                       .exclude(detected_objs=""), pk=video_id)
     obj = get_object_or_404(AnalysisProcess, video_model=video_id)
 
-    JSONSerializer = serializers.get_serializer("json")
-    json_serializer = JSONSerializer()
+    serializer = serializers.get_serializer("json")
+    json_serializer = serializer()
 
     json_serializer.serialize([obj, ])
     return HttpResponse(json_serializer.getvalue())

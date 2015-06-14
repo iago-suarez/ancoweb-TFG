@@ -23,27 +23,23 @@ class UploadView(generic.TemplateView):
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        if 'upload_form' in request.POST:
-            form = self.upload_form_class(request.POST, request.FILES)
-            if form.is_valid():
-                # If the video form is OK
-                instance = form.save(commit=False)
-                instance.owner = request.user
-                instance.save()
-                notification = UploadProcess.objects.create(video_model=instance)
-                notification.process()
+        form = self.upload_form_class(request.POST, request.FILES)
+        if form.is_valid():
+            # If the video form is OK
+            instance = form.save(commit=False)
+            instance.owner = request.user
+            instance.save()
+            notification = UploadProcess.objects.create(video_model=instance)
+            notification.process()
 
-                return HttpResponseRedirect(reverse('home'))
-            else:
-                # If the video form has errors
-                messages.add_message(request,
-                                     messages.ERROR,
-                                     "You have errors in your form, please check it!")
-                return super().get(request,
-                                   upload_form=form)
+            return HttpResponseRedirect(reverse('home'))
         else:
-            # POST is not from video form
-            super().post(self, request, *args, **kwargs)
+            # If the video form has errors
+            messages.add_message(request,
+                                 messages.ERROR,
+                                 "You have errors in your form, please check it!")
+            return super().get(request,
+                               upload_form=form)
 
 
 class SuccessfulUpload(generic.DetailView):
@@ -86,16 +82,16 @@ class SuccessfulUpload(generic.DetailView):
         return HttpResponseRedirect(reverse('videos:details', args=(video_model.id,)))
 
 
-def notifications_as_json(request, *args, **kwargs):
-    JSONSerializer = serializers.get_serializer("json")
-    json_serializer = JSONSerializer()
+def notifications_as_json(request):
+    json_serializer = serializers.get_serializer("json")
+    serializer = json_serializer()
 
     notifications_qs = UploadProcess.objects.filter(owner=request.user)
-    json_serializer.serialize(notifications_qs)
-    return HttpResponse(json_serializer.getvalue())
+    serializer.serialize(notifications_qs)
+    return HttpResponse(serializer.getvalue())
 
 
-def mark_notification_as_deleted(request, pk, *args, **kwargs):
+def mark_notification_as_deleted(request, pk):
     notification = get_object_or_404(UploadProcess, pk=pk)
 
     # If the user is not the owner

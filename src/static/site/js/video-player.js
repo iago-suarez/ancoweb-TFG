@@ -3,22 +3,20 @@ $(document).ready(function () {
 
     const trainingFrames = 35;
 
-    var detectedObjs;
-    var videoFps;
-
     //Used to resize the video if we are in full screen
     var fullScreenOn = false;
     var videoProportion = 1;
     var canvasLeftPadding = 0;
     var canvasTopPadding = 0;
 
-    var trainingLbl = document.getElementById("training-lbl");
-
     /**
-     * Given a list of items to select, the function remarks them in the table.
+     *  Given a list of items to select, the function remarks them in the table.
+     *
+     * @param {object} objectList The list of items
+     * @param tBody The table body where the head is: Identifier, First Frame, Last Frame, Stage Frames
      */
-    function selectObjects(objectList) {
-        $('#objects-list').find('tr').each(function () {
+    function selectObjects(objectList, tBody) {
+        $(tBody).find('tr').each(function () {
             // For each table row
             var i = 0;
             var selected = false;
@@ -42,11 +40,26 @@ $(document).ready(function () {
     }
 
     /**
-     * This functions selects a frame into the detected objects and paints all
-     * objects for this frame.
+     * Paints the objects into the canvas element if the frameNumber > trainingFrames, otherwise
+     * it paints the trainingLbl
+     *
+     * @param canvas
+     * @param frameNumber
+     * @param objects
+     * @param trainingLbl
+     * @returns {number}
      */
-    function paintFrame() {
-
+    function paintFrame(canvas, frameNumber, objects, trainingLbl) {
+        /**
+         * Paint a rect in the canvas context in color and with lineWidth pixels in border.
+         * @param context The canvas context
+         * @param {Number} xc The coordinate of the x in pixels
+         * @param {Number} yc The coordinate of the y in pixels
+         * @param {Number} w The width
+         * @param {Number} h The height
+         * @param color The Color
+         * @param {Number} lineWidth
+         */
         function paintRect(context, xc, yc, w, h, color, lineWidth) {
             context.beginPath();
             // left, top, width, height
@@ -58,16 +71,8 @@ $(document).ready(function () {
             context.stroke();
         }
 
-        var video = document.getElementById('video-player');
-        var canvas = document.getElementById('objects');
         var context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
-
-        if (videoFps === undefined) {
-            videoFps = getVideoFps(video)
-        }
-
-        var frameNumber = Math.round(video.currentTime * videoFps);
 
         //If the system is training display the label
         if (frameNumber < trainingFrames) {
@@ -82,9 +87,7 @@ $(document).ready(function () {
             $(trainingLbl).hide();
         }
 
-        //For each element in the frame paint your box
-        var frame = $($(detectedObjs).find('frame[number=' + frameNumber + ']'));
-        $(frame).find('objectlist object').each(function () {
+        $(objects).each(function () {
 
             var h = parseInt($(this).find('box').attr('h'));
             var w = parseInt($(this).find('box').attr('h'));
@@ -93,24 +96,43 @@ $(document).ready(function () {
 
             paintRect(context, videoProportion * xc, videoProportion * yc,
                 videoProportion * w, videoProportion * h, 'blue', 2);
-
         });
-
-        //We mark the objects that are being shown in the table
-        selectObjects($(frame).find('objectlist object'));
     }
 
     /**
-     * Generates the Table Elements parsing the xml file.
+     * @class Represents a detected object in the table
+     * @property {String} id
+     * @property {String} firstFrame
+     * @property {String} lastFrame
+     * @constructor
      */
-    function generateObjectTable(xmlObjects) {
+    function TableObject (id, firstFrame, lastFrame) {
+        this.id = id;
+        this.firstFrame = firstFrame;
+        this.lastFrame = lastFrame;
+        this.stageTime = parseInt(lastFrame) - parseInt(firstFrame);
+
+        this.asTableRow = function(){
+            return '<tr><th scope="row"><a href="/">' + this.id + '</a></th><td>'
+                + this.firstFrame + '</td><td>' + this.lastFrame + '</td><td>'
+                + this.stageTime + '</td></tr>\n';
+        }
+    }
+
+    /**
+     * Generates the Table Objects parsing the xml file.
+     *
+     * @param xmlObjects
+     * @returns {{TableObject}}
+     */
+    function getTableObjectsFromXml(xmlObjects) {
         var myObjects = {};
         $(xmlObjects).find('frame').each(function () {
             var fnum = $(this).attr('number');
             $(this).find('object').each(function () {
                 var objId = $(this).attr('id');
                 if (myObjects[objId] === undefined) {
-                    myObjects[objId] = {id: objId, firstFrame: fnum, lastFrame: fnum + 1}
+                    myObjects[objId] = new TableObject(objId, fnum, fnum + 1);
                 } else {
                     myObjects[objId].lastFrame = fnum
                 }
@@ -124,20 +146,32 @@ $(document).ready(function () {
      */
     function loadXmlObjects() {
         var video = document.getElementById('video-player');
-        var xmlUrl = $('#xml_detected_objs').attr('value');
-        $.get(xmlUrl, function (data) {
-            detectedObjs = data;
-            var objs = generateObjectTable(detectedObjs);
-            var obj, stageTime;
-            for (var x in objs) {
-                obj = objs[x];
-                stageTime = parseInt(obj.lastFrame) - parseInt(obj.firstFrame);
-                $('#objects-list').append('<tr><th scope="row"><a href="/">' + obj.id + '</a></th><td>'
-                    + obj.firstFrame + '</td><td>' + obj.lastFrame + '</td><td>' + stageTime + '</td></tr>\n');
+        var xmlUrl = $('#xml_detected_objs').text();
+        $.get(xmlUrl, function (detectedXmlObjs) {
+            // This is the heart of the beast
+
+            //Generate the table of objects
+            var tableObjects = getTableObjectsFromXml(detectedXmlObjs);
+            for(var i in tableObjects) {
+                $('#objects-tbody').append(tableObjects[i].asTableRow());
             }
+
+            //Sort the table
             $('table').tablesorter();
             $('#first-moment-th').click();
-            video.addEventListener("timeupdate", paintFrame, false);
+
+            video.addEventListener("timeupdate", function(){
+                var frameNumber = Math.round(this.currentTime * getVideoFps(this));
+                var frame = $($(detectedXmlObjs).find('frame[number=' + frameNumber + ']'));
+                var objects = $(frame).find('objectlist object');
+
+                // Paint the objects in the canvas element
+                paintFrame(document.getElementById('objects-canvas'), frameNumber, objects,
+                    document.getElementById("training-lbl"));
+
+                //We mark the objects that are being shown in the table
+                selectObjects(objects, $('#objects-tbody'));
+            }, false);
         });
     }
 
@@ -145,14 +179,20 @@ $(document).ready(function () {
 
     /**
      * Return the number of Frames per second in the HTML5 Video element
+     *
+     * @param video
+     * @returns {Number}
      */
     function getVideoFps(video) {
         var ext = video.currentSrc.split('.').pop();
         var fps = $(video).children('source[src$="' + ext + '"]').attr('fps');
-        return fps;
+        return parseInt(fps);
     }
 
-    /** Adjust Canvas Element including fullScreen mode **/
+    /**
+     * Adjust Canvas Element including fullScreen mode
+     * @param video
+     */
     function adjustCanvasExtended(video) {
         // If we are in full screen mode
         var videoHeight = video.videoHeight;

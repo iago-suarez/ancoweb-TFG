@@ -1,7 +1,7 @@
 import os
 from random import randint
 from subprocess import Popen, PIPE, STDOUT
-import xml.etree.ElementTree as ET
+from xml.etree import ElementTree
 
 from ancoweb import settings
 from video_upload import utils
@@ -105,7 +105,7 @@ class AnalyzeVideo(ProcessState):
         command = settings.RECOGNITIONSYS_BIN + " -i " + video_file + " -o " + xml_file + " --standar"
         video_nframes = utils.VideoUtils.get_number_frames(video_file)
 
-        p = Popen(command, shell='TRUE', stdout=PIPE, stderr=STDOUT, universal_newlines=True)
+        p = Popen(command, shell=True, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
         while True:
             line = p.stdout.readline()
             if line == "":
@@ -113,7 +113,7 @@ class AnalyzeVideo(ProcessState):
 
             # If the output is a frame xml object, we update the progress
             if line.startswith("<frame"):
-                frame_element = ET.fromstring(line)
+                frame_element = ElementTree.fromstring(line)
                 nframe = int(frame_element.get("number"))
                 progress = 100 * (nframe / video_nframes)
                 # Aumentamos el progreso de 5% en 5% para no sobrecargar la BD
@@ -159,7 +159,7 @@ class CovertVideo(ProcessState):
                 p = Popen(
                     'ffmpeg -n -stats -i %s %s | grep "frame" 2>&1' %
                     (input_file, output_files[i]),
-                    shell='TRUE', stdout=PIPE, stderr=STDOUT,
+                    shell=True, stdout=PIPE, stderr=STDOUT,
                     universal_newlines=True)
                 # If the file will not be converted, the value of the
                 # variable i must decrease by 1 when calculating progress
@@ -179,5 +179,4 @@ class CovertVideo(ProcessState):
 
         original = os.path.join(self.process.video_model.video.storage.location,
                                 self.process.video_model.video.name)
-        file, ext = os.path.splitext(original)
         convert_video(original, settings.USED_VIDEO_EXTENSIONS)

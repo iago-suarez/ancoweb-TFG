@@ -4,7 +4,7 @@
         {% csrf_token %}
         <a class="glyphicon glyphicon-remove delete-notification"
            href="{% url 'video_upload:notification_delete' notification.id %}"></a>
-        <span class="notificationId" value="{{ notification.id }}" hidden></span>
+        <span class="notificationId" id="{{ notification.id }}" hidden></span>
 
         <h3> {{ notification.title }}</h3>
         {% if notification.is_finished == False %}

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions
 
 from ancoweb.tests import SeleniumAncowebTest
 from video_upload.models import UploadProcess
@@ -41,7 +41,7 @@ class VideoUploadSeleniumTests(SeleniumAncowebTest):
         self.selenium.find_element_by_id('form_submit_button').click()
 
         wait = WebDriverWait(self.selenium, 100)
-        wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'a.video-finished-btn')))
+        wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, 'a.video-finished-btn')))
         self.selenium.find_element_by_css_selector('a.video-finished-btn').click()
         video_images = self.selenium.find_elements_by_class_name('image_picker_image')
         self.assertEqual(utils.DEF_FRAMES_NUM, len(video_images))
@@ -49,7 +49,7 @@ class VideoUploadSeleniumTests(SeleniumAncowebTest):
         self.selenium.find_element_by_css_selector('input[type="submit"]').click()
 
         # Comprobamos que nos ha redirigido a la página del vídeo
-        wait.until(EC.presence_of_element_located((By.TAG_NAME, 'video')))
+        wait.until(expected_conditions.presence_of_element_located((By.TAG_NAME, 'video')))
         video = VideoModel.objects.get(title=video_title)
         assert str(video.id) in self.selenium.current_url
         self.assertEqual(video_title, self.selenium.find_element_by_tag_name("h2").text)
