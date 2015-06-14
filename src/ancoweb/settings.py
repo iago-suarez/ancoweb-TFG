@@ -62,6 +62,7 @@ INSTALLED_APPS = (
     'video_upload',
     'crispy_forms',
     'integration_tests',
+    'djangojs',
 )
 
 MIDDLEWARE_CLASSES = (

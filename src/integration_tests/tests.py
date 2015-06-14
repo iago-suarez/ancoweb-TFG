@@ -1,3 +1,4 @@
+from djangojs.runners import QUnitSuite, JsTemplateTestCase
 from ancoweb.tests import SeleniumAncowebTest
 from video_upload.models import UploadProcess
 import os
@@ -105,3 +106,13 @@ class VideoManagerSeleniumTests(SeleniumAncowebTest):
         # TODO Implementar
         # Testeamos que no funcione cuando el vídeo todavía se está subiendo
         pass
+
+
+class QUnitVideoPlayerTests(QUnitSuite, JsTemplateTestCase):
+    django_js = True
+    jquery = True
+    template_name = 'integration_tests/test-qunit.html'
+    js_files = (
+        'site/tests/video-player.js',
+        'site/tests/video-player.tests.js',
+    )

@@ -1,3 +1,10 @@
-from django.shortcuts import render
+from djangojs.views import QUnitView
 
-# Create your views here.
+
+class MyQUnitView(QUnitView):
+    django_js = True
+    template_name = 'integration_tests/test-qunit.html'
+    js_files = (
+        'site/tests/video-player.js',
+        'site/tests/video-player.tests.js',
+    )

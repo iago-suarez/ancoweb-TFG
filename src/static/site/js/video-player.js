@@ -15,30 +15,36 @@ $(document).ready(function(){
 
     var training_lbl = document.getElementById("training-lbl");
 
-
-function selectObjects(object_list){
-    $('#objects-list tr').each(function(){
-        //Para cada fila de la tabla
-        var i = 0;
-        var selected = false;
-        while ((i<object_list.length) && (!selected)){
-            obj = object_list[i];
-            selected = (obj.id === $($(this).find('th')[0]).text())
-            i++;
-        }
-        if (selected){
-            //Si está seleccionado
-            if (!$(this).hasClass('info')){
-                $(this).addClass('info')
+    /**
+    * Given a list of items to select, the function remarks them in the table.
+    */
+    function selectObjects(object_list){
+        $('#objects-list tr').each(function(){
+            //Para cada fila de la tabla
+            var i = 0;
+            var selected = false;
+            while ((i<object_list.length) && (!selected)){
+                obj = object_list[i];
+                selected = (obj.id === $($(this).find('th')[0]).text())
+                i++;
             }
-        }else{
-            if ($(this).hasClass('info')){
-                $(this).removeClass('info')
+            if (selected){
+                //Si está seleccionado
+                if (!$(this).hasClass('info')){
+                    $(this).addClass('info')
+                }
+            }else{
+                if ($(this).hasClass('info')){
+                    $(this).removeClass('info')
+                }
             }
-        }
-    });
-}
+        });
+    }
 
+    /**
+    * This functions selects a frame into the detected objects and paints all
+    * objects for this frame.
+    */
     function paintFrame(){
 
         function paint_rect(context, xc, yc, w, h, color, lineWidth){
@@ -93,14 +99,17 @@ function selectObjects(object_list){
         selectObjects($(frame).find('objectlist object'));
     }
 
-    function generateObjectList(xml_objects){
+    /**
+    * Generates the Table Elements parsing the xml file.
+    */
+    function generateObjectTable(xml_objects){
         var my_objects = {};
         $(detected_objs).find('frame').each(function(){
             fnum = $(this).attr('number');
             $(this).find('object').each(function(){
                 obj_id = $(this).attr('id')
                 if (my_objects[obj_id] === undefined){
-                    my_objects[obj_id] = {id: obj_id, first_frame: fnum, last_frame: undefined}
+                    my_objects[obj_id] = {id: obj_id, first_frame: fnum, last_frame: fnum+1}
                 }else{
                     my_objects[obj_id].last_frame = fnum
                 }
@@ -109,12 +118,15 @@ function selectObjects(object_list){
         return my_objects;
     }
 
+    /**
+    * Load the detected objects in the video via AJAX.
+    */
     function load_xml_objects(){
         var video = document.getElementById('video-player');
         var xml_url = $('#xml_detected_objs').attr('value');
         $.get(xml_url, function(data){
             detected_objs = data
-            objs = generateObjectList(detected_objs);
+            objs = generateObjectTable(detected_objs);
             for( var x in objs){
                 obj= objs[x];
                 stage_time = parseInt(obj.last_frame) - parseInt(obj.first_frame);
@@ -128,6 +140,9 @@ function selectObjects(object_list){
     }
     load_xml_objects();
 
+    /**
+    * Return the number of Frames per second in the HTML5 Video element
+    */
     function get_video_fps(video){
         var ext = video.currentSrc.split('.').pop();
         var fps = $(video).children('source[src$="'  + ext + '"]').attr('fps');
@@ -167,6 +182,9 @@ function selectObjects(object_list){
         adjustTrainingLbl(document.getElementById('training-lbl'));
     }
 
+    /**
+    * Adjust the "Training Frames" label over the video element
+    */
     function adjustTrainingLbl(training_lbl){
 
         video_width = $('#video-player').width();
