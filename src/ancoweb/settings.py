@@ -80,11 +80,15 @@ WSGI_APPLICATION = 'ancoweb.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-
 DATABASES = {
-    # Raises ImproperlyConfigured exception if DATABASE_URL not in
-    # os.environ
-    'default': env.db(),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': str(BASE_DIR / 'db.sqlite3'),
+        'TEST_NAME': str(BASE_DIR / 'tests.sqlite3'),
+        'TEST': {
+            'NAME': str(BASE_DIR / 'tests.sqlite3')
+        }
+    }
 }
 
 # Internationalization

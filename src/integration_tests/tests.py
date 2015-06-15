@@ -112,9 +112,9 @@ class VideoManagerSeleniumTests(SeleniumAncowebTest):
 
 class QUnitVideoPlayerTests(QUnitSuite, JsTemplateTestCase):
     django_js = True
-    jquery = True
     template_name = 'integration_tests/test-qunit.html'
     js_files = (
-        'site/tests/video-player.js',
+        'site/js/jquery-1.10.2.min.js',
+        'site/js/video-player.js',
         'site/tests/video-player.tests.js',
     )

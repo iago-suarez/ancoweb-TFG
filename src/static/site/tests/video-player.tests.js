@@ -9,64 +9,157 @@ QUnit.test("Trivial Test", function (assert) {
     assert.ok(1 == "1", "Passed!");
 });
 
-QUnit.test("selectObjects Test", function (assert) {
-    /**
-     * Given a list of items to select, the function remarks them in the table.
-     */
-        //function selectObjects(object_list)
-    assert.ok(1 == "1", "Passed!");
-});
+//QUnit.test("selectObjects Test", function (assert) {
+// selectObjects(objectList, tBody);
+// Given a list of items to select, the function remarks them in the table.
 
-QUnit.test("paint_rect Test", function (assert) {
-    assert.ok(1 == "1", "Passed!");
-    //function paint_rect(context, xc, yc, w, h, color, lineWidth)
+//var tbl=document.createElement('table');
+//tbl.appendChild(document.createElement('tbody'));
+//// Create an empty <tr> element and add it to the 1st position of the table:
+//var row = table.insertRow(0);
+//
+//// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+//var cell1 = row.insertCell(0);
+//var cell2 = row.insertCell(1);
+//
+//// Add some text to the new cells:
+//cell1.innerHTML = "NEW CELL1";
+//
+//var tableInput = $('<tbody id="objects-tbody"></tbody>')[0];
+//var inputObjects = [];
+//
+////Bough empty
+//selectObjects(tableInput, inputObjects);
+//assert.deepEqual(tableInput, $('<tbody id="objects-tbody"></tbody>')[0]);
+//
+////Empty table
+//inputObjects = $('<object id="96004219">' +
+//    '<box h="45" w="47" xc="25" yc="154"/>' +
+//    '</object>' +
+//    '<object id="105198103">' +
+//    '<box h="29" w="45" xc="235" yc="194"/>' +
+//    '</object>' +
+//    '<object id="132072179">' +
+//    '<box h="31" w="31" xc="73" yc="234"/>' +
+//    '</object>')[0];
+//
+//selectObjects(inputObjects, tableInput);
+//assert.deepEqual(tableInput, $('<tbody id="objects-tbody"></tbody>')[0]);
 
-});
+////Table without selected elements, some in the object list.
+//var tableInput2 = $('<tbody id="objects-tbody">' +
+//    '<tr><th scope="row"><a href="/">105198103</a></th><td>42</td><td>187</td><td>379</td></tr>' +
+//    '<tr><th scope="row"><a href="/">96004219</a></th><td>102</td><td>225</td><td>919</td></tr>' +
+//    '<tr><th scope="row"><a href="/">254161123</a></th><td>233</td><td>472</td><td>2098</td></tr>' +
+//    '<tr><th scope="row"><a href="/">183051012</a></th><td>486</td><td>619</td><td>4375</td></tr>' +
+//    '<tr><th scope="row"><a href="/">132072179</a></th><td>78</td><td>480</td><td>703</td></tr>' +
+//    '<tr><th scope="row"><a href="/">224016249</a></th><td>486</td><td>490</td><td>4375</td></tr>' +
+//    '</tbody>')[0];
+//
+//var tableResult2 = $('<tbody id="objects-tbody">' +
+//    '<tr class="info"><th scope="row"><a href="/">105198103</a></th><td>42</td><td>187</td><td>379</td></tr>' +
+//    '<tr class="info"><th scope="row"><a href="/">96004219</a></th><td>102</td><td>225</td><td>919</td></tr>' +
+//    '<tr><th scope="row"><a href="/">254161123</a></th><td>233</td><td>472</td><td>2098</td></tr>' +
+//    '<tr><th scope="row"><a href="/">183051012</a></th><td>486</td><td>619</td><td>4375</td></tr>' +
+//    '<tr class="info"><th scope="row"><a href="/">132072179</a></th><td>78</td><td>480</td><td>703</td></tr>' +
+//    '<tr><th scope="row"><a href="/">224016249</a></th><td>486</td><td>490</td><td>4375</td></tr>' +
+//    '</tbody>')[0];
+//selectObjects(inputObjects, tableInput);
+//assert.deepEqual(tableInput2, tableResult2);
 
-QUnit.test("paintFrame Test", function (assert) {
-    assert.ok(1 == "1", "Passed!");
-    /**
-     * This functions selects a frame into the detected objects and paints all
-     * objects for this frame.
-     */
-    //function paintFrame()
-});
-
-QUnit.test("generateObjectTable Test", function (assert) {
-    assert.ok(1 == "1", "Passed!");
-    /**
-     * Generates the Table Elements parsing the xml file.
-     */
-    //function generateObjectTable(xml_objects)
-});
-
-QUnit.test("load_xml_objects Test", function (assert) {
-    assert.ok(1 == "1", "Passed!");
-    /**
-     * Load the detected objects in the video via AJAX.
-     */
-    //function load_xml_objects()
-});
-
-QUnit.test("get_video_fps Test", function (assert) {
-    assert.ok(1 == "1", "Passed!");
-    /**
-     * Return the number of Frames per second in the HTML5 Video element
-     */
-    //function get_video_fps(video)
-});
-
-QUnit.test("adjustCanvasExtended Test", function (assert) {
-    assert.ok(1 == "1", "Passed!");
-    /** Adjust Canvas Element including fullScreen mode **/
-    //function adjustCanvasExtended(video
-});
-
-QUnit.test("Trivial Test", function (assert) {
-    assert.ok(1 == "1", "Passed!");
-    /**
-     * Adjust the "Training Frames" label over the video element
-     */
-    //function adjustTrainingLbl(training_lbl)
-});
-
+////Table with some selected elements, some in the object list.
+//tableInput= $('<tbody id="objects-tbody">' +
+//    '<tr class="info"><th scope="row"><a href="/">105198103</a></th><td>42</td><td>187</td><td>379</td></tr>' +
+//    '<tr><th scope="row"><a href="/">96004219</a></th><td>102</td><td>225</td><td>919</td></tr>' +
+//    '<tr class="info"><th scope="row"><a href="/">254161123</a></th><td>233</td><td>472</td><td>2098</td></tr>' +
+//    '<tr><th scope="row"><a href="/">183051012</a></th><td>486</td><td>619</td><td>4375</td></tr>' +
+//    '<tr><th scope="row"><a href="/">132072179</a></th><td>78</td><td>480</td><td>703</td></tr>' +
+//    '<tr class="info"><th scope="row"><a href="/">224016249</a></th><td>486</td><td>490</td><td>4375</td></tr>' +
+//    '</tbody>');
+//selectObjects(inputObjects, tableInput);
+//assert.deepEqual(tableInput, tableResult);
+//
+//});
+//
+//QUnit.test("paintFrame Test", function (assert) {
+//    /**
+//    * Paints the objects into the canvas element if the frameNumber > trainingFrames, otherwise
+//    * it paints the trainingLbl
+//    *
+//    * @param canvas
+//    * @param frameNumber
+//    * @param objects
+//    * @param trainingLbl
+//    * @returns {number}
+//    */
+//    paintFrame(canvas, frameNumber, objects, trainingLbl)
+//
+//});
+//
+//QUnit.test("paintFrame.paintRect Test", function (assert) {
+//    /**
+//    * Paint a rect in the canvas context in color and with lineWidth pixels in border.
+//    * @param context The canvas context
+//    * @param {Number} xc The coordinate of the x in pixels
+//    * @param {Number} yc The coordinate of the y in pixels
+//    * @param {Number} w The width
+//    * @param {Number} h The height
+//    * @param color The Color
+//    * @param {Number} lineWidth
+//    */
+//    paintFrame.paintRect(context, xc, yc, w, h, color, lineWidth)
+//
+//});
+//
+//QUnit.test("TableObject Test", function (assert) {
+//    /**
+//    * @class Represents a detected object in the table
+//    * @property {String} id
+//    * @property {String} firstFrame
+//    * @property {String} lastFrame
+//    * @constructor
+//    */
+//    TableObject(id, firstFrame, lastFrame)
+//});
+//
+//QUnit.test("getTableObjectsFromXml Test", function (assert) {
+//    /**
+//    * Generates the Table Objects parsing the xml file.
+//    *
+//    * @param xmlObjects
+//    * @returns {{TableObject}}
+//    */
+//    getTableObjectsFromXml(xmlObjects)
+//
+//});
+//
+//QUnit.test("loadXmlObjects Test", function (assert) {
+//    /**
+//    * Load the detected objects in the video via AJAX.
+//    */
+//    loadXmlObjects()
+//});
+//
+//QUnit.test("getVideoFps Test", function (assert) {
+//    /**
+//    * Return the number of Frames per second in the HTML5 Video element
+//    *
+//    * @param video
+//    * @returns {Number}
+//    */
+//    getVideoFps(video)
+//});
+//
+//QUnit.test("adjustCanvasExtended Test", function (assert) {
+//    /**
+//    * Adjust Canvas Element including fullScreen mode
+//    * @param video
+//    */
+//    adjustCanvasExtended(video)
+//});
+//QUnit.test("adjustTrainingLbl Test", function (assert) {
+//    /**
+//    * Adjust the "Training Frames" label over the video element
+//    */
+//    adjustTrainingLbl(trainingLbl)
+//});
