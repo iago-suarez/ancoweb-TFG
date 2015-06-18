@@ -1,14 +1,18 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core.urlresolvers import reverse
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
+from pyvirtualdisplay import Display
+from selenium import webdriver
 
 
 class SeleniumAncowebTest(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
+        # This two lines can be commented if you want to see the browser
+        display = Display(visible=0, size=(1024, 768))
+        display.start()
         cls.selenium = webdriver.Firefox()
         super(SeleniumAncowebTest, cls).setUpClass()
 

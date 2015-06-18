@@ -7,9 +7,9 @@ Ancoweb is a Web application for the analysis of human behavior built with [Pyth
 This project has the following basic apps:
 
 * accounts - Manage Accounst System
-
-## Installation
-
+* video_manager - Manage Videos
+* video_upload - Manage Video Uploads and video analysis
+*integration_tests - Make the integrations test
 
 ### Download
 
@@ -22,20 +22,34 @@ To download the source code:
 To set up a development environment quickly, first install Python 3.4. It
 comes with virtualenv built-in. So create a virtual env by:
 
-> In ubuntu 14.04(tested) is neccesary:
-> sudo pip install --upgrade virtualenv
-> virtualenv-3.4 ancoweb
-> . ancoweb/bin/activate
+In ubuntu 14.04(tested) is necessary:
+
+    $ sudo pip install --upgrade virtualenv
+    $ virtualenv-3.4 ancoweb
+    $ . ancoweb/bin/activate
+
+In linux in general, it is best:
 
     $ python3.4 -m venv ancoweb
     $ . ancoweb/bin/activate
 
-> Sometimes, binaries like pip get installed inside `local/bin/`. So append
-> this line to `ancoweb/bin/activate`:
->
+Sometimes, binaries like pip get installed inside `local/bin/`. So append
+this line to `ancoweb/bin/activate`:
+
 > `PATH="$VIRTUAL_ENV/local/bin:$PATH"`
 
-Now the pip commands should work smoothly. Install all dependencies:
+## Installation
+
+Install the necessary packages, here's an example for ubuntu 14.04:
+    sudo apt-add-repository ppa:mc3man/trusty-media
+    sudo apt-get update
+    sudo apt-get install -y ffmpeg phantomjs python3-pip firefox
+
+Make python 3.4 default python version:
+
+    echo -e "python='/usr/bin/python3.4' \nalias pip='/usr/bin/pip3'" > ~/.bash_aliases
+
+Now restart the terminal and the pip commands should work smoothly. Install all dependencies:
 
     pip install -r dev-requirements.txt
 
