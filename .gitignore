@@ -16,3 +16,4 @@ src/media/images/
 src/media/tmp
 src/media/xml/
 src/db.sqlite3
+src/RecognitionSystem/recognitionsystem
