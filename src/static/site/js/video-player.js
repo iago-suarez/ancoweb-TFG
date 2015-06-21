@@ -49,11 +49,11 @@ function idToRgb(id) {
     else bStr = b.toString(16);
 
     //Select the most similar light color
-    var max = max(r, g, b);
-    if (max === r) {
+    var maxVal = max(r, g, b);
+    if (maxVal === r) {
         return '#' + 'ff' + gStr + bStr;
     } else {
-        if (max === g) {
+        if (maxVal === g) {
             return '#' + rStr + 'ff' + bStr;
         } else {
             return '#' + rStr + gStr + 'ff';
@@ -138,6 +138,7 @@ function paintRect(context, xc, yc, w, h, color, lineWidth) {
  *
  * @param canvas
  * @param frameObjects
+ * @param useColors
  */
 function paintFrameObjects(canvas, frameObjects, useColors) {
 
@@ -167,6 +168,7 @@ function paintFrameObjects(canvas, frameObjects, useColors) {
  * @param canvas
  * @param frameNumber
  * @param xmlResult
+ * @param useColors
  * @returns {number}
  */
 function paintFrameTrajectories(canvas, frameNumber, xmlResult, useColors) {

@@ -9,6 +9,29 @@ QUnit.test("Trivial Test", function (assert) {
     assert.ok(1 == "1", "Passed!");
 });
 
+QUnit.test("idToRgb Test", function (assert) {
+    //Return the corresponding rgb light color to the object with id
+    //idToRgb(id);
+
+    //Max value 255255255 -> #ffffff -> #ffffff
+    assert.equal(idToRgb(255255255), "#ffffff", "Passed!");
+    //Min value 0 -> #000000 -> #ff0000
+    assert.equal(idToRgb(0), "#ff0000", "Passed!");
+    //Other value 56235004 = 56*1000000 + 235*1000 + 4 -> 38EB04 -> 38FF04
+    assert.equal(idToRgb(56235004), "#38ff04", "Passed!");
+
+});
+QUnit.test("idToRgba Test", function (assert) {
+    //Return the corresponding rgba light color to the object with id
+    //idToRgba(id, a);
+
+    assert.equal(idToRgba(255255255, "ee"), "#ffffffee", "Passed!");
+    assert.equal(idToRgba(0, "12"), "#ff000012", "Passed!");
+    //Other value 56235004 = 56*1000000 + 235*1000 + 4 -> 38EB04 -> 38FF04
+    assert.equal(idToRgba(56235004, "00"), "#38ff0400", "Passed!");
+
+});
+
 //QUnit.test("selectObjects Test", function (assert) {
 // selectObjects(objectList, tBody);
 // Given a list of items to select, the function remarks them in the table.
