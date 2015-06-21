@@ -32,6 +32,18 @@ QUnit.test("idToRgba Test", function (assert) {
 
 });
 
+QUnit.test("frameToSecondsStr Test", function (assert) {
+    //Convert the frame number to time string
+    //frameToSecondsStr(nFrame, fps)
+
+    assert.equal(frameToSecondsStr(0, 25), "00:00", "Passed!");
+    assert.equal(frameToSecondsStr(100, 25), "00:04", "Passed!");
+    assert.equal(frameToSecondsStr(1020, 25), "00:40", "Passed!");
+    assert.equal(frameToSecondsStr(4454, 34), "02:11", "Passed!");
+
+});
+
+
 //QUnit.test("selectObjects Test", function (assert) {
 // selectObjects(objectList, tBody);
 // Given a list of items to select, the function remarks them in the table.

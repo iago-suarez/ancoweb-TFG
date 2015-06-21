@@ -228,6 +228,29 @@ function paintTrainingMsgIfNecessary(canvas, frameNumber, trainingLbl) {
 }
 
 /**
+ * Return the number of Frames per second in the HTML5 Video element
+ *
+ * @param video
+ * @returns {Number}
+ */
+function getVideoFps(video) {
+    var ext = video.currentSrc.split('.').pop();
+    var fps = $(video).children('source[src$="' + ext + '"]').attr('fps');
+    return parseInt(fps);
+}
+
+/**
+ * Convert the frame number to time string
+ * @param nFrame
+ * @param fps
+ * @returns {string}
+ */
+function frameToSecondsStr(nFrame, fps) {
+    var sec = nFrame / fps;
+    return ("0" + Math.trunc(sec / 60)).slice(-2) + ':' +
+        ("0" + Math.trunc(sec % 60)).slice(-2);
+}
+/**
  * @class Represents a detected object in the table
  * @property {String} id
  * @property {String} firstFrame
@@ -240,9 +263,12 @@ function TableObject(id, firstFrame, lastFrame) {
     this.lastFrame = lastFrame;
 
     this.asTableRow = function () {
+        var fps = getVideoFps(document.getElementById('video-player'));
+
         return '<tr><th scope="row"><a href="/">' + this.id + '</a></th><td>'
-            + this.firstFrame + '</td><td>' + this.lastFrame + '</td><td>'
-            + (this.lastFrame - this.firstFrame) + '</td></tr>\n';
+            + frameToSecondsStr(this.firstFrame, fps) + '</td><td>'
+            + frameToSecondsStr(this.lastFrame, fps) + '</td><td>'
+            + frameToSecondsStr(this.lastFrame - this.firstFrame, fps) + '</td></tr>\n';
     }
 }
 
@@ -306,18 +332,6 @@ function loadXmlResult(video) {
 
         }, false);
     });
-}
-
-/**
- * Return the number of Frames per second in the HTML5 Video element
- *
- * @param video
- * @returns {Number}
- */
-function getVideoFps(video) {
-    var ext = video.currentSrc.split('.').pop();
-    var fps = $(video).children('source[src$="' + ext + '"]').attr('fps');
-    return parseInt(fps);
 }
 
 /**
