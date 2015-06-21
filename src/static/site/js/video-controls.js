@@ -5,6 +5,25 @@ function getVideoIdFromUrl() {
 $(document).ready(function () {
     $('#show-analysis-checkbox').click(function () {
         $('.drawing-layer').toggle();
+        $('#detected-objs-table').toggle();
+    });
+
+    $('#colors-checkbox').click(function () {
+        if (this.hasAttribute('checked')) {
+            //Don't use different colors
+            $(this).removeAttr('checked');
+            $('tr.selected').each(function () {
+                $(this).addClass('info');
+                $(this).css('background-color', "");
+            });
+        } else {
+            //Use different colors
+            $(this).attr('checked', 'checked');
+            $('tr.selected').each(function () {
+                $(this).removeClass('info');
+                $(this).css('background-color', idToRgb($(this).find('a').text()));
+            });
+        }
     });
 
     function refreshAnalysisProgress() {

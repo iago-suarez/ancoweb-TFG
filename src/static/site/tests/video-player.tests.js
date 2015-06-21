@@ -57,11 +57,11 @@ QUnit.test("Trivial Test", function (assert) {
 //    '</tbody>')[0];
 //
 //var tableResult2 = $('<tbody id="objects-tbody">' +
-//    '<tr class="info"><th scope="row"><a href="/">105198103</a></th><td>42</td><td>187</td><td>379</td></tr>' +
-//    '<tr class="info"><th scope="row"><a href="/">96004219</a></th><td>102</td><td>225</td><td>919</td></tr>' +
+//    '<tr class="selected"><th scope="row"><a href="/">105198103</a></th><td>42</td><td>187</td><td>379</td></tr>' +
+//    '<tr class="selected"><th scope="row"><a href="/">96004219</a></th><td>102</td><td>225</td><td>919</td></tr>' +
 //    '<tr><th scope="row"><a href="/">254161123</a></th><td>233</td><td>472</td><td>2098</td></tr>' +
 //    '<tr><th scope="row"><a href="/">183051012</a></th><td>486</td><td>619</td><td>4375</td></tr>' +
-//    '<tr class="info"><th scope="row"><a href="/">132072179</a></th><td>78</td><td>480</td><td>703</td></tr>' +
+//    '<tr class="selected"><th scope="row"><a href="/">132072179</a></th><td>78</td><td>480</td><td>703</td></tr>' +
 //    '<tr><th scope="row"><a href="/">224016249</a></th><td>486</td><td>490</td><td>4375</td></tr>' +
 //    '</tbody>')[0];
 //selectObjects(inputObjects, tableInput);
@@ -69,19 +69,19 @@ QUnit.test("Trivial Test", function (assert) {
 
 ////Table with some selected elements, some in the object list.
 //tableInput= $('<tbody id="objects-tbody">' +
-//    '<tr class="info"><th scope="row"><a href="/">105198103</a></th><td>42</td><td>187</td><td>379</td></tr>' +
+//    '<tr class="selected"><th scope="row"><a href="/">105198103</a></th><td>42</td><td>187</td><td>379</td></tr>' +
 //    '<tr><th scope="row"><a href="/">96004219</a></th><td>102</td><td>225</td><td>919</td></tr>' +
-//    '<tr class="info"><th scope="row"><a href="/">254161123</a></th><td>233</td><td>472</td><td>2098</td></tr>' +
+//    '<tr class="selected"><th scope="row"><a href="/">254161123</a></th><td>233</td><td>472</td><td>2098</td></tr>' +
 //    '<tr><th scope="row"><a href="/">183051012</a></th><td>486</td><td>619</td><td>4375</td></tr>' +
 //    '<tr><th scope="row"><a href="/">132072179</a></th><td>78</td><td>480</td><td>703</td></tr>' +
-//    '<tr class="info"><th scope="row"><a href="/">224016249</a></th><td>486</td><td>490</td><td>4375</td></tr>' +
+//    '<tr class="selected"><th scope="row"><a href="/">224016249</a></th><td>486</td><td>490</td><td>4375</td></tr>' +
 //    '</tbody>');
 //selectObjects(inputObjects, tableInput);
 //assert.deepEqual(tableInput, tableResult);
 //
 //});
 //
-//QUnit.test("paintFrame Test", function (assert) {
+//QUnit.test("paintFrameObjects Test", function (assert) {
 //    /**
 //    * Paints the objects into the canvas element if the frameNumber > trainingFrames, otherwise
 //    * it paints the trainingLbl
@@ -92,11 +92,11 @@ QUnit.test("Trivial Test", function (assert) {
 //    * @param trainingLbl
 //    * @returns {number}
 //    */
-//    paintFrame(canvas, frameNumber, objects, trainingLbl)
+//    paintFrameObjects(canvas, frameNumber, objects, trainingLbl)
 //
 //});
 //
-//QUnit.test("paintFrame.paintRect Test", function (assert) {
+//QUnit.test("paintFrameObjects.paintRect Test", function (assert) {
 //    /**
 //    * Paint a rect in the canvas context in color and with lineWidth pixels in border.
 //    * @param context The canvas context
@@ -107,7 +107,7 @@ QUnit.test("Trivial Test", function (assert) {
 //    * @param color The Color
 //    * @param {Number} lineWidth
 //    */
-//    paintFrame.paintRect(context, xc, yc, w, h, color, lineWidth)
+//    paintFrameObjects.paintRect(context, xc, yc, w, h, color, lineWidth)
 //
 //});
 //
@@ -133,11 +133,11 @@ QUnit.test("Trivial Test", function (assert) {
 //
 //});
 //
-//QUnit.test("loadXmlObjects Test", function (assert) {
+//QUnit.test("loadXmlResult Test", function (assert) {
 //    /**
 //    * Load the detected objects in the video via AJAX.
 //    */
-//    loadXmlObjects()
+//    loadXmlResult()
 //});
 //
 //QUnit.test("getVideoFps Test", function (assert) {

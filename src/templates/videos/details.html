@@ -29,6 +29,12 @@
                                 Show Analysis
                             </label>
                         </div>
+                        <div class="checkbox">
+                            <label>
+                                <input id="colors-checkbox" type="checkbox" value="" checked>
+                                Use different colors
+                            </label>
+                        </div>
                         <div class="text-center">
                             <p id="state_message">{% if ap %} {{ ap.state_message }} {% endif %}</p>
                             {% if not ap %}
@@ -59,7 +65,9 @@
                     {% videosources object %}
                     Your browser does not support the video tag.
                 </video>
+                <canvas id="training-canvas" class="drawing-layer"></canvas>
                 <canvas id="objects-canvas" class="drawing-layer"></canvas>
+                <canvas id="trajectories-canvas" class="drawing-layer"></canvas>
                 <span id="xml_detected_objs" hidden> {{ object.detected_objs.url }} </span>
             </div>
 
@@ -79,7 +87,7 @@
                 </div>
             </div>
         </div>
-        <div class="row text-center">
+        <div id="detected-objs-table" class="row text-center">
             <div class="panel panel-success">
                 <div class="panel-heading"><strong>Detected Objects</strong></div>
                 <div class="panel-body text-left">

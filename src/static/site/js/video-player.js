@@ -9,12 +9,76 @@ var canvasLeftPadding = 0;
 var canvasTopPadding = 0;
 
 /**
+ * Return the corresponding rgb light color to the object with id
+ * @param id a number between 0 and 1000000
+ * @returns {string}
+ */
+function idToRgb(id) {
+
+    function max(r, g, b) {
+        if (r > g) {
+            if (r > b) {
+                return r;
+            } else {
+                return b;
+            }
+        } else {
+            if (g > b) {
+                return g;
+            } else {
+                return b;
+            }
+        }
+    }
+
+    var r = Math.round(id / 1000000);
+    var g = Math.round((id % 1000000) / 1000);
+    var b = Math.round(id % 1000);
+
+    // Transform the numbers in 2 digits hexademilas strigns
+    var rStr;
+    if (r < 16) rStr = '0' + r.toString(16);
+    else rStr = r.toString(16);
+
+    var gStr;
+    if (g < 16) gStr = '0' + g.toString(16);
+    else gStr = g.toString(16);
+
+    var bStr;
+    if (b < 16) bStr = '0' + b.toString(16);
+    else bStr = b.toString(16);
+
+    //Select the most similar light color
+    var max = max(r, g, b);
+    if (max === r) {
+        return '#' + 'ff' + gStr + bStr;
+    } else {
+        if (max === g) {
+            return '#' + rStr + 'ff' + bStr;
+        } else {
+            return '#' + rStr + gStr + 'ff';
+        }
+    }
+}
+
+/**
+ * Return the corresponding rgba light color to the object with id
+ * @param id
+ * @param a a number between 0 and 256 that represents the transparency
+ * @returns {string}
+ */
+function idToRgba(id, a) {
+    return idToRgb(id) + a.toString(16);
+}
+
+/**
  *  Given a list of items to select, the function remarks them in the table.
  *
  * @param {object} objectList The list of items
  * @param tBody The table body where the head is: Identifier, First Frame, Last Frame, Stage Frames
+ * @param useColors Boolean value indicating whether the objects are painted in different colors
  */
-function selectObjects(objectList, tBody) {
+function selectObjects(objectList, tBody, useColors) {
     $(tBody).find('tr').each(function () {
         // For each table row
         var i = 0;
@@ -27,48 +91,122 @@ function selectObjects(objectList, tBody) {
         }
         if (selected) {
             //If it's selected
-            if (!$(this).hasClass('info')) {
-                $(this).addClass('info')
+            if (!$(this).hasClass('selected')) {
+                $(this).addClass('selected');
+                if (useColors) {
+                    $(this).css('background-color', idToRgb(obj.id));
+                } else {
+                    $(this).addClass('info');
+                }
             }
         } else {
-            if ($(this).hasClass('info')) {
-                $(this).removeClass('info')
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+                if (useColors) {
+                    $(this).css('background-color', "");
+                } else {
+                    $(this).removeClass('info');
+                }
             }
         }
     });
 }
 
 /**
- * Paints the objects into the canvas element if the frameNumber > trainingFrames, otherwise
- * it paints the trainingLbl
+ * Paint a rect in the canvas context in color and with lineWidth pixels in border.
+ * @param context The canvas context
+ * @param {Number} xc The coordinate of the x in pixels
+ * @param {Number} yc The coordinate of the y in pixels
+ * @param {Number} w The width
+ * @param {Number} h The height
+ * @param color The Color
+ * @param {Number} lineWidth
+ */
+function paintRect(context, xc, yc, w, h, color, lineWidth) {
+    context.beginPath();
+    // left, top, width, height
+    context.rect(xc, yc, w, h);
+    context.fillStyle = "rgba(0, 0, 0, 0)";
+    context.fill();
+    context.lineWidth = lineWidth;
+    context.strokeStyle = color;
+    context.stroke();
+}
+
+/**
+ *  Paints the objects into the canvas element
+ *
+ * @param canvas
+ * @param frameObjects
+ */
+function paintFrameObjects(canvas, frameObjects, useColors) {
+
+    var context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    $(frameObjects).each(function () {
+
+        var h = parseInt($(this).find('box').attr('h'));
+        var w = parseInt($(this).find('box').attr('h'));
+        var xc = parseInt($(this).find('box').attr('xc'));
+        var yc = parseInt($(this).find('box').attr('yc'));
+        //Select the color
+        if (useColors) {
+            paintRect(context, videoProportion * xc, videoProportion * yc,
+                videoProportion * w, videoProportion * h, idToRgb(this.id), 2);
+        } else {
+            paintRect(context, videoProportion * xc, videoProportion * yc,
+                videoProportion * w, videoProportion * h, 'blue', 2);
+        }
+    });
+}
+
+/**
+ * Paints the trajectories into the canvas element if the frameNumber > trainingFrames,
+ * otherwise it paints the trainingLbl
+ * @param canvas
+ * @param frameNumber
+ * @param xmlResult
+ * @returns {number}
+ */
+function paintFrameTrajectories(canvas, frameNumber, xmlResult, useColors) {
+    var context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    $('tr.selected a').each(function () {
+        var id = parseInt($(this).text());
+        var trajPoints = $(xmlResult).find('trajectory#' + id + ' point');
+        context.beginPath();
+        context.moveTo(videoProportion * parseInt($(trajPoints[0]).attr('x')),
+            videoProportion * parseInt($(trajPoints[0]).attr('y')));
+        context.lineWidth = 3;
+        //Select the color
+        if (useColors) {
+            context.strokeStyle = idToRgb(id);
+        } else {
+            context.strokeStyle = '#ff0000';
+        }
+        var i = 1;
+        var f = 0;
+        while ((i < trajPoints.length) && f <= frameNumber) {
+            context.lineTo(videoProportion * parseInt($(trajPoints[i]).attr('x')),
+                videoProportion * parseInt($(trajPoints[i]).attr('y')));
+            i++;
+            f = $(trajPoints[i]).attr('frame');
+        }
+        context.stroke();
+    });
+}
+
+/**
+ * Paint the training label if it's necessary
  *
  * @param canvas
  * @param frameNumber
- * @param objects
  * @param trainingLbl
  * @returns {number}
  */
-function paintFrame(canvas, frameNumber, objects, trainingLbl) {
-    /**
-     * Paint a rect in the canvas context in color and with lineWidth pixels in border.
-     * @param context The canvas context
-     * @param {Number} xc The coordinate of the x in pixels
-     * @param {Number} yc The coordinate of the y in pixels
-     * @param {Number} w The width
-     * @param {Number} h The height
-     * @param color The Color
-     * @param {Number} lineWidth
-     */
-    function paintRect(context, xc, yc, w, h, color, lineWidth) {
-        context.beginPath();
-        // left, top, width, height
-        context.rect(xc, yc, w, h);
-        context.fillStyle = "rgba(0, 0, 0, 0)";
-        context.fill();
-        context.lineWidth = lineWidth;
-        context.strokeStyle = color;
-        context.stroke();
-    }
+function paintTrainingMsgIfNecessary(canvas, frameNumber, trainingLbl) {
 
     var context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -85,17 +223,6 @@ function paintFrame(canvas, frameNumber, objects, trainingLbl) {
         //If the system isn't training hide the label
         $(trainingLbl).hide();
     }
-
-    $(objects).each(function () {
-
-        var h = parseInt($(this).find('box').attr('h'));
-        var w = parseInt($(this).find('box').attr('h'));
-        var xc = parseInt($(this).find('box').attr('xc'));
-        var yc = parseInt($(this).find('box').attr('yc'));
-
-        paintRect(context, videoProportion * xc, videoProportion * yc,
-            videoProportion * w, videoProportion * h, 'blue', 2);
-    });
 }
 
 /**
@@ -109,12 +236,11 @@ function TableObject(id, firstFrame, lastFrame) {
     this.id = id;
     this.firstFrame = firstFrame;
     this.lastFrame = lastFrame;
-    this.stageTime = parseInt(lastFrame) - parseInt(firstFrame);
 
     this.asTableRow = function () {
         return '<tr><th scope="row"><a href="/">' + this.id + '</a></th><td>'
             + this.firstFrame + '</td><td>' + this.lastFrame + '</td><td>'
-            + this.stageTime + '</td></tr>\n';
+            + (this.lastFrame - this.firstFrame) + '</td></tr>\n';
     }
 }
 
@@ -131,9 +257,9 @@ function getTableObjectsFromXml(xmlObjects) {
         $(this).find('object').each(function () {
             var objId = $(this).attr('id');
             if (myObjects[objId] === undefined) {
-                myObjects[objId] = new TableObject(objId, fnum, fnum + 1);
+                myObjects[objId] = new TableObject(objId, parseInt(fnum), parseInt(fnum) + 1);
             } else {
-                myObjects[objId].lastFrame = fnum
+                myObjects[objId].lastFrame = parseInt(fnum);
             }
         });
     });
@@ -144,13 +270,13 @@ function getTableObjectsFromXml(xmlObjects) {
  * Load the detected objects in the video via AJAX.
  * @param video
  */
-function loadXmlObjects(video) {
+function loadXmlResult(video) {
     var xmlUrl = $('#xml_detected_objs').text();
-    $.get(xmlUrl, function (detectedXmlObjs) {
+    $.get(xmlUrl, function (xmlResult) {
         // This is the heart of the beast
 
         //Generate the table of objects
-        var tableObjects = getTableObjectsFromXml(detectedXmlObjs);
+        var tableObjects = getTableObjectsFromXml(xmlResult);
         for (var i in tableObjects) {
             $('#objects-tbody').append(tableObjects[i].asTableRow());
         }
@@ -161,15 +287,21 @@ function loadXmlObjects(video) {
 
         video.addEventListener("timeupdate", function () {
             var frameNumber = Math.round(this.currentTime * getVideoFps(this));
-            var frame = $($(detectedXmlObjs).find('frame[number=' + frameNumber + ']'));
-            var objects = $(frame).find('objectlist object');
+            var frameObjects = $(xmlResult).find('frame[number=' + frameNumber + '] objectlist object');
+            var useColors = document.getElementById('colors-checkbox').hasAttribute('checked');
+            // We mark the objects that are being shown in the table
+            selectObjects(frameObjects, $('#objects-tbody'), useColors);
 
             // Paint the objects in the canvas element
-            paintFrame(document.getElementById('objects-canvas'), frameNumber, objects,
+            paintFrameObjects(document.getElementById('objects-canvas'), frameObjects, useColors);
+
+            // Paint the trajectories in the canvas element
+            paintFrameTrajectories(document.getElementById('trajectories-canvas'), frameNumber, xmlResult, useColors);
+
+            // Paint the training label if it's necessary
+            paintTrainingMsgIfNecessary(document.getElementById('training-canvas'), frameNumber,
                 document.getElementById("training-lbl"));
 
-            //We mark the objects that are being shown in the table
-            selectObjects(objects, $('#objects-tbody'));
         }, false);
     });
 }
@@ -249,7 +381,7 @@ $(document).ready(function () {
         return;
     }
 
-    loadXmlObjects(video);
+    loadXmlResult(video);
 
     $(video).resize(function () {
         adjustCanvasExtended(this);

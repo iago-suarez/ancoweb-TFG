@@ -102,7 +102,7 @@ class AnalyzeVideo(ProcessState):
                                   self.process.video_model.video.storage.location,
                                   mp4_name)
 
-        command = settings.RECOGNITIONSYS_BIN + " -i " + video_file + " -o " + xml_file + " --standar"
+        command = settings.RECOGNITIONSYS_BIN + " -i " + video_file + " -o " + xml_file + " --standar" + " -f 5"
         video_nframes = utils.VideoUtils.get_number_frames(video_file)
 
         p = Popen(command, shell=True, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
