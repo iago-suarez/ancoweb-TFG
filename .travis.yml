@@ -7,8 +7,9 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install curl
   - curl -o ~/ffmpeg.tar.x2 http://johnvansickle.com/ffmpeg/releases/ffmpeg-release-64bit-static.tar.xz
-  - tar xf ~/ffmpeg.tar.x2 && cd && rm -rf ffmpeg-*-static/{manpages,presets,readme.txt}
+  - tar xf ~/ffmpeg.tar.x2 && cd && rm -rf ~/ffmpeg-*-static/{manpages,presets,readme.txt}
   - mkdir ~/bin
+  - ls -la
   - cp ~/ffmpeg-*-static/* ~/bin
   - chmod 700 ~/bin/{ffmpeg,ffprobe,ffmpeg-10bit,qt-faststart}
   - cd && rm -rf ffmpeg{.tar.gz,-*-static}
