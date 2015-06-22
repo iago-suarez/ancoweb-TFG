@@ -9,7 +9,7 @@ This project has the following basic apps:
 * accounts - Manage Accounst System
 * video_manager - Manage Videos
 * video_upload - Manage Video Uploads and video analysis
-*integration_tests - Make the integrations test
+* integration_tests - Make the integrations test
 
 ### Download
 
@@ -41,13 +41,13 @@ this line to `ancoweb/bin/activate`:
 ## Installation
 
 Install the necessary packages, here's an example for ubuntu 14.04:
-    sudo apt-add-repository ppa:mc3man/trusty-media
-    sudo apt-get update
-    sudo apt-get install -y ffmpeg phantomjs python3-pip firefox
+>   sudo apt-add-repository ppa:mc3man/trusty-media
+>   sudo apt-get update
+>   sudo apt-get install -y ffmpeg phantomjs python3-pip firefox
 
 Make python 3.4 default python version:
 
-    echo -e "python='/usr/bin/python3.4' \nalias pip='/usr/bin/pip3'" > ~/.bash_aliases
+>   echo -e "python='/usr/bin/python3.4' \nalias pip='/usr/bin/pip3'" > ~/.bash_aliases
 
 Now restart the terminal and the pip commands should work smoothly. Install all dependencies:
 
