@@ -4,7 +4,8 @@ python:
 # command to install dependencies
 before_install:
 # Install ffmpeg
-  - wget -qO ~/ffmpeg.tar.bz2 wget www.ffmpeg.org/releases/ffmpeg-2.7.1.tar.bz2
+  - sudo apt-get install curl
+  - curl -o ~/ffmpeg.tar.bz2 wget http://johnvansickle.com/ffmpeg/releases/ffmpeg-release-64bit-static.tar.xz
   - tar xf ~/ffmpeg.tar.gz && cd && rm -rf ffmpeg-*-static/{manpages,presets,readme.txt}
   - mkdir ~/bin
   - cp ~/ffmpeg-*-static/* ~/bin
