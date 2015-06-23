@@ -247,8 +247,8 @@ function getVideoFps(video) {
  */
 function frameToSecondsStr(nFrame, fps) {
     var sec = nFrame / fps;
-    return ("0" + Math.trunc(sec / 60)).slice(-2) + ':' +
-        ("0" + Math.trunc(sec % 60)).slice(-2);
+    return ("0" + Math.floor(sec / 60)).slice(-2) + ':' +
+        ("0" + Math.floor(sec % 60)).slice(-2);
 }
 /**
  * @class Represents a detected object in the table

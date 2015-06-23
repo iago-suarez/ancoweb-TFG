@@ -26,9 +26,28 @@ install:
   - pip install -r requirements.txt
   - pip install coveralls
 before_script:
+# Install opencv
+  - git clone https://github.com/Itseez/opencv.git
+  - cd opencv
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make -j4
+  - sudo make -j4 install
+  - mvn install:install-file -Dfile=/usr/local/share/OpenCV/java/opencv-300.jar -DgroupId=opencv -DartifactId=opencv -Dversion=3.0.0 -Dpackaging=jar
+  - cd ../..
+# Install the Recognition System
+  - echo $RecognitionSystemPrivKey > ~/.ssh/recg
+  - echo $RecognitionSystemPubKey > ~/.ssh/recg.pub
   - cd src
-# command to run tests
+  - git clone git@github.com:iago-suarez/RecognitionSystem.git
+  - cd RecognitionSystem/
+  - make CONF=Debug
+  - cp dist/Debug/GNU-Linux-x86/recognitionsystem .
+  - cd ..
+
 script:
+# command to run tests
   - python manage.py migrate
   - python manage.py test -v 2
   - coverage run --source='.' manage.py test

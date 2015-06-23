@@ -1,9 +1,3 @@
-//QUnit.test("First Double Basics", function( assert ) {
-//    assert.equal(double(5), 10);
-//    assert.equal(double(8), 16);
-//    assert.equal(double(0), 0);
-//    assert.equal(double(10), 20);
-//  });
 
 QUnit.test("Trivial Test", function (assert) {
     assert.ok(1 == "1", "Passed!");
@@ -41,6 +35,34 @@ QUnit.test("frameToSecondsStr Test", function (assert) {
     assert.equal(frameToSecondsStr(1020, 25), "00:40", "Passed!");
     assert.equal(frameToSecondsStr(4454, 34), "02:11", "Passed!");
 
+});
+
+module('Example module', {
+  setup: function() {
+    var canvas, context,
+        fixtureEl = document.getElementById('qunit-fixture');
+    fixtureEl.innerHTML = '<canvas width="5" height="5"></canvas>';
+
+    canvas = fixtureEl.firstChild;
+    try {
+      context = canvas.getContext('2d');
+    }
+    catch(e) {
+      // probably no canvas support, just exit
+      return;
+    }
+
+    this.canvas = canvas;
+    this.context = context;
+  }
+});
+
+test('Example unit test', function(assert) {
+    this.context.fillStyle = 'rgba(0, 0, 0, 0)';
+    this.context.fillRect(0, 0, 5, 5);
+
+    assert.pixelEqual(this.canvas, 0, 0, 0, 0, 0, 0);
+    assert.notPixelEqual(this.canvas, 0, 0, 1, 1, 1, 0);
 });
 
 

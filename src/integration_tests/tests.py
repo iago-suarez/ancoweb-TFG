@@ -117,4 +117,5 @@ class QUnitVideoPlayerTests(QUnitSuite, JsTemplateTestCase):
         'site/js/jquery-1.10.2.min.js',
         'site/js/video-player.js',
         'site/tests/video-player.tests.js',
+        'site/tests/qunit-assert-canvas.js',
     )
