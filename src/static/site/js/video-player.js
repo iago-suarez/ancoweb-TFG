@@ -8,6 +8,8 @@ var videoProportion = 1;
 var canvasLeftPadding = 0;
 var canvasTopPadding = 0;
 
+var detections = {};
+
 /**
  * Return the corresponding rgb light color to the object with id
  * @param id a number between 0 and 1000000
@@ -74,42 +76,35 @@ function idToRgba(id, a) {
 /**
  *  Given a list of items to select, the function remarks them in the table.
  *
- * @param {object} objectList The list of items
+ * @param detections The full detections map
+ * @param {object} objectList The list of items to select
  * @param tBody The table body where the head is: Identifier, First Frame, Last Frame, Stage Frames
  * @param useColors Boolean value indicating whether the objects are painted in different colors
  */
-function selectObjects(objectList, tBody, useColors) {
-    $(tBody).find('tr').each(function () {
-        // For each table row
-        var i = 0;
+function selectObjects(detections, objectList, tBody, currentObjsDiv, useColors) {
+
+    for (var i in detections) {
+        var j = 0;
         var selected = false;
         var obj;
-        while ((i < objectList.length) && (!selected)) {
-            obj = objectList[i];
-            selected = (obj.id === $($(this).find('th')[0]).text());
-            i++;
+        while ((j < objectList.length) && (!selected)) {
+            obj = objectList[j];
+            selected = (obj.id === detections[i].id);
+            j++;
         }
-        if (selected) {
-            //If it's selected
-            if (!$(this).hasClass('selected')) {
-                $(this).addClass('selected');
-                if (useColors) {
-                    $(this).css('background-color', idToRgb(obj.id));
-                } else {
-                    $(this).addClass('info');
-                }
+        //If it's necessary update the row state
+        if (detections[i].selected != selected) {
+            if (!detections[i].selected) {
+                //if he has appeared for the first time we add it
+                $(currentObjsDiv).append(detections[i].asCurrentDetection(useColors));
+            } else {
+                $(currentObjsDiv).find('div:contains(' + detections[i].id + ')').remove();
             }
-        } else {
-            if ($(this).hasClass('selected')) {
-                $(this).removeClass('selected');
-                if (useColors) {
-                    $(this).css('background-color', "");
-                } else {
-                    $(this).removeClass('info');
-                }
-            }
+            detections[i].selected = selected;
+            $(tBody).find('tr:contains(' + detections[i].id + ')')
+                .replaceWith(detections[i].asTableRow(useColors));
         }
-    });
+    }
 }
 
 /**
@@ -257,26 +252,66 @@ function frameToSecondsStr(nFrame, fps) {
  * @property {String} lastFrame
  * @constructor
  */
-function TableObject(id, firstFrame, lastFrame) {
+function Detection(id, firstFrame, lastFrame) {
     this.id = id;
     this.firstFrame = firstFrame;
     this.lastFrame = lastFrame;
+    this.color = idToRgb(id);
+    this.selected = false;
 
-    this.asTableRow = function () {
-        var fps = getVideoFps(document.getElementById('video-player'));
+    // It is calculated only once when the object is created to optimize
+    this._fps = getVideoFps(document.getElementById('video-player'));
+    this._fixedTableRowStr = '><th scope="row"><a href="/">' + this.id + '</a></th><td>'
+        + frameToSecondsStr(this.firstFrame, this._fps) + '</td><td>'
+        + frameToSecondsStr(this.lastFrame, this._fps) + '</td><td>'
+        + frameToSecondsStr(this.lastFrame - this.firstFrame, this._fps) + '</td></tr>\n';
 
-        return '<tr><th scope="row"><a href="/">' + this.id + '</a></th><td>'
-            + frameToSecondsStr(this.firstFrame, fps) + '</td><td>'
-            + frameToSecondsStr(this.lastFrame, fps) + '</td><td>'
-            + frameToSecondsStr(this.lastFrame - this.firstFrame, fps) + '</td></tr>\n';
-    }
+    this.setCanvas = function (canvas) {
+        this.canvasCurrentImg = canvas;
+    };
+
+    /**
+     * Return the detection as a table row
+     *
+     * @param useColors
+     * @returns {string}
+     */
+    this.asTableRow = function (useColors) {
+
+        var result = '<tr';
+        if (this.selected) {
+            if (useColors) {
+                result += ' class="selected" style="background-color: ' + this.color + ';"';
+            } else {
+                result += ' class="selected info" ';
+            }
+        }
+        result += this._fixedTableRowStr;
+        return result;
+    };
+
+    /**
+     * Return the current detection view if it's selected
+     * @returns {*}
+     */
+    this.asCurrentDetection = function (useColors) {
+        var result = '<div class="img-thumbnail text-right current-detection"';
+        if (useColors) {
+            result += 'style="background-color: ' + this.color + '" ';
+        } else {
+            // class info color
+            result += 'style="background-color: #d9edf7' + '" ';
+        }
+        return result + ' ><span class="myCaret"></span><span hidden>' + this.id + '</span>' +
+            '<div class="current-content"> <p>Hola Paco</p> <p>Hola Manolo</p> </div></div>';
+    };
 }
 
 /**
  * Generates the Table Objects parsing the xml file.
  *
  * @param xmlObjects
- * @returns {{TableObject}}
+ * @returns {{Detection}}
  */
 function getTableObjectsFromXml(xmlObjects) {
     var myObjects = {};
@@ -285,7 +320,7 @@ function getTableObjectsFromXml(xmlObjects) {
         $(this).find('object').each(function () {
             var objId = $(this).attr('id');
             if (myObjects[objId] === undefined) {
-                myObjects[objId] = new TableObject(objId, parseInt(fnum), parseInt(fnum) + 1);
+                myObjects[objId] = new Detection(objId, parseInt(fnum), parseInt(fnum) + 1);
             } else {
                 myObjects[objId].lastFrame = parseInt(fnum);
             }
@@ -304,9 +339,9 @@ function loadXmlResult(video) {
         // This is the heart of the beast
 
         //Generate the table of objects
-        var tableObjects = getTableObjectsFromXml(xmlResult);
-        for (var i in tableObjects) {
-            $('#objects-tbody').append(tableObjects[i].asTableRow());
+        detections = getTableObjectsFromXml(xmlResult);
+        for (var i in detections) {
+            $('#objects-tbody').append(detections[i].asTableRow(true));
         }
 
         //Sort the table
@@ -318,7 +353,7 @@ function loadXmlResult(video) {
             var frameObjects = $(xmlResult).find('frame[number=' + frameNumber + '] objectlist object');
             var useColors = document.getElementById('colors-checkbox').hasAttribute('checked');
             // We mark the objects that are being shown in the table
-            selectObjects(frameObjects, $('#objects-tbody'), useColors);
+            selectObjects(detections, frameObjects, $('#objects-tbody'), $('#current-detected-objs'), useColors);
 
             // Paint the objects in the canvas element
             paintFrameObjects(document.getElementById('objects-canvas'), frameObjects, useColors);

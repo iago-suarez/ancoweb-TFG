@@ -5,24 +5,34 @@ function getVideoIdFromUrl() {
 $(document).ready(function () {
     $('#show-analysis-checkbox').click(function () {
         $('.drawing-layer').toggle();
+    });
+
+    $('#show-all-detections').click(function () {
         $('#detected-objs-table').toggle();
+        $('#current-detected-objs').toggle();
+    });
+
+    $('.current-detection').click(function () {
+        $(this).find('.current-content').fadeIn();
     });
 
     $('#colors-checkbox').click(function () {
         if (this.hasAttribute('checked')) {
             //Don't use different colors
             $(this).removeAttr('checked');
-            $('tr.selected').each(function () {
-                $(this).addClass('info');
-                $(this).css('background-color', "");
-            });
         } else {
             //Use different colors
             $(this).attr('checked', 'checked');
-            $('tr.selected').each(function () {
-                $(this).removeClass('info');
-                $(this).css('background-color', idToRgb($(this).find('a').text()));
-            });
+        }
+        for (var i in detections) {
+            // For each detection change its color
+            var det = detections[i];
+            $('#detected-objs-table').find('tr:contains(' + det.id + ')')
+                .replaceWith(det.asTableRow(this.hasAttribute('checked')));
+            if (det.selected) {
+                $('#current-detected-objs').find('div:contains(' + det.id + ')')
+                    .replaceWith(det.asCurrentDetection(this.hasAttribute('checked')));
+            }
         }
     });
 

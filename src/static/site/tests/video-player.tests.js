@@ -37,11 +37,11 @@ QUnit.test("frameToSecondsStr Test", function (assert) {
 
 });
 
-module('Example module', {
+module('Trajectories Tests', {
   setup: function() {
     var canvas, context,
         fixtureEl = document.getElementById('qunit-fixture');
-    fixtureEl.innerHTML = '<canvas width="5" height="5"></canvas>';
+      fixtureEl.innerHTML = '<canvas width="800" height="480"></canvas>';
 
     canvas = fixtureEl.firstChild;
     try {
@@ -168,7 +168,7 @@ test('Example unit test', function(assert) {
 //
 //});
 //
-//QUnit.test("TableObject Test", function (assert) {
+//QUnit.test("Detection Test", function (assert) {
 //    /**
 //    * @class Represents a detected object in the table
 //    * @property {String} id
@@ -176,7 +176,7 @@ test('Example unit test', function(assert) {
 //    * @property {String} lastFrame
 //    * @constructor
 //    */
-//    TableObject(id, firstFrame, lastFrame)
+//    Detection(id, firstFrame, lastFrame)
 //});
 //
 //QUnit.test("getTableObjectsFromXml Test", function (assert) {
@@ -184,7 +184,7 @@ test('Example unit test', function(assert) {
 //    * Generates the Table Objects parsing the xml file.
 //    *
 //    * @param xmlObjects
-//    * @returns {{TableObject}}
+//    * @returns {{Detection}}
 //    */
 //    getTableObjectsFromXml(xmlObjects)
 //

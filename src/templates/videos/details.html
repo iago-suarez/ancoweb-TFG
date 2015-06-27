@@ -35,6 +35,12 @@
                                 Use different colors
                             </label>
                         </div>
+                        <div class="checkbox">
+                            <label>
+                                <input id="show-all-detections" type="checkbox" value="">
+                                Show all detections
+                            </label>
+                        </div>
                         <div class="text-center">
                             <p id="state_message">{% if ap %} {{ ap.state_message }} {% endif %}</p>
                             {% if not ap %}
@@ -87,11 +93,13 @@
                 </div>
             </div>
         </div>
-        <div id="detected-objs-table" class="row text-center">
+
+        <div class="row text-center">
             <div class="panel panel-success">
                 <div class="panel-heading"><strong>Detected Objects</strong></div>
                 <div class="panel-body text-left">
-                    <table class="table table-condensed tablesorter">
+                    <div id="current-detected-objs"></div>
+                    <table id="detected-objs-table" class="table table-condensed tablesorter">
                         <thead>
                         <tr>
                             <th>Identifier</th>

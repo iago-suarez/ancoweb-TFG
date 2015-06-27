@@ -1,7 +1,4 @@
 
-body {
-    padding-top: 50px;
-}
 
 .starter-template {
     padding: 40px 15px;
@@ -21,6 +18,10 @@ body {
 
 .help-block {
     display: none;
+}
+
+.navbar {
+    margin-bottom: 0;
 }
 
 .navbar-form {
@@ -94,6 +95,25 @@ body {
     }
 }
 
+/*************** UPLOAD VIDEO ***********************/
+
+#upload-video {
+    display: inline-block;
+    margin-top: 20px;
+}
+
+#upload-video p textarea {
+    display: block;
+
+}
+
+ul.thumbnails.image_picker_selector li {
+    margin: 0 0;
+    padding: 8px;
+}
+
+
+
 /******************* VIDEO *****************/
 #video-list {
     margin-top: 15px;
@@ -152,7 +172,33 @@ canvas {
     position: absolute;
     display: none;
     z-index: 50;
+}
 
+#detected-objs-table {
+    display: none;
+}
+
+.current-detection {
+    height: 60px;
+    width: 60px;
+    margin: 0px 10px;
+}
+
+.current-content {
+    display: none;
+}
+
+.myCaret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-right: 6px;
+    vertical-align: middle;
+    border-top: 10px solid #000;
+    border-top-color: #fff;
+    border-right: 10px solid transparent;
+    border-bottom: 0 dotted;
+    border-left: 10px solid transparent;
 }
 
 /* EXPIRAL ROTATORIA */
@@ -177,28 +223,6 @@ canvas {
     to {
         transform: scale(1) rotate(360deg);
     }
-}
-
-/*************** UPLOAD VIDEO ***********************/
-
-#upload-video {
-    display: inline-block;
-    margin-top: 20px;
-}
-
-#upload-video p textarea {
-    display: block;
-
-}
-
-div[class*="thumbnail"] {
-    margin: 0;
-    padding: 0;
-}
-
-ul.thumbnails.image_picker_selector li {
-    margin: 0 0;
-    padding: 8px;
 }
 
 /* Redefining bootstrap */
