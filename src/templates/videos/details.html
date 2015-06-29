@@ -55,7 +55,7 @@
                                 <div class="progress-bar progress-bar-striped active" role="progressbar"
                                      aria-valuenow="{% if ap %} {{ ap.progress }} {% endif %}"
                                      aria-valuemin="0" aria-valuemax="100"
-                                     style="width: {% if ap %}{{ ap.progress }}% {% endif %}">
+                                     style="width: {% if ap %}{{ ap.progress }}% {% else %}0 {% endif %}">
                                     <span class="sr-only"> {{ ap.progress }}% Complete</span>
                                 </div>
                             </div>

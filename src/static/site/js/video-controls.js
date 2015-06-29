@@ -12,10 +12,6 @@ $(document).ready(function () {
         $('#current-detected-objs').toggle();
     });
 
-    $('.current-detection').parent().click(function () {
-        handleCurrentDetectionClick(this);
-    });
-
     $('#colors-checkbox').click(function () {
         if (this.hasAttribute('checked')) {
             //Don't use different colors
@@ -30,7 +26,7 @@ $(document).ready(function () {
             $('#detected-objs-table').find('tr:contains(' + det.id + ')')
                 .replaceWith(det.asTableRow(this.hasAttribute('checked')));
             if (det.selected) {
-                $('#current-detected-objs').find('div:contains(' + det.id + ')')
+                $('#current-detected-objs').find('button:contains(' + det.id + ')')
                     .replaceWith(det.asCurrentDetection(this.hasAttribute('checked')));
             }
         }

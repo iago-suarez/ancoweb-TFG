@@ -73,21 +73,6 @@ function idToRgba(id, a) {
     return idToRgb(id) + a.toString(16);
 }
 
-
-function currentDetectionClick(domDetection) {
-    var detection = detections[$(domDetection).find('.detection-id').text()];
-    var useColor = document.getElementById('colors-checkbox').hasAttribute('checked');
-    $(domDetection).replaceWith(detection.asCurrentExtendedDetection(useColor));
-    return false;
-}
-
-function activeCurrentDetectionClick(domDetection) {
-    var detection = detections[$(domDetection).find('.detection-id').text()];
-    var useColor = document.getElementById('colors-checkbox').hasAttribute('checked');
-    $(domDetection).replaceWith(detection.asCurrentDetection(useColor));
-    return false;
-}
-
 /**
  *  Given a list of items to select, the function remarks them in the table.
  *
@@ -113,9 +98,13 @@ function selectObjects(detections, objectList, tBody, currentObjsDiv, useColors)
             if (!detections[i].selected) {
                 //if he has appeared for the first time we add it
                 $(currentObjsDiv).append(detections[i].asCurrentDetection(useColors));
+                $('[data-toggle="popover"]').popover({
+                    html: true,
+                    template: detections[i].asPopoverTemplate(useColors)
+                });
 
             } else {
-                $(currentObjsDiv).find('div:contains(' + detections[i].id + ')').parent().remove();
+                $(currentObjsDiv).find('span:contains(' + detections[i].id + ')').parent().remove();
             }
             detections[i].selected = selected;
             $(tBody).find('tr:contains(' + detections[i].id + ')')
@@ -288,6 +277,16 @@ function Detection(id, firstFrame, lastFrame) {
         this.canvasCurrentImg = canvas;
     };
 
+    this.getBgColorStyle = function (useColors) {
+
+        if (useColors) {
+            return 'background-color: ' + this.color;
+        } else {
+            // class info color
+            return 'background-color: #d9edf7';
+        }
+    };
+
     /**
      * Return the detection as a table row
      *
@@ -298,14 +297,23 @@ function Detection(id, firstFrame, lastFrame) {
 
         var result = '<tr';
         if (this.selected) {
-            if (useColors) {
-                result += ' class="selected" style="background-color: ' + this.color + ';"';
-            } else {
-                result += ' class="selected info" ';
-            }
+            result += ' class="selected" style="' + this.getBgColorStyle(useColors) + ';"';
         }
         result += this._fixedTableRowStr;
         return result;
+    };
+
+    /**
+     * Return the colored base of the pop over view
+     *
+     * @param useColors
+     * @returns {string}
+     */
+    this.asPopoverTemplate = function (useColors) {
+        return '<div class="popover" role="tooltip"><div class="arrow"></div>' +
+            '<strong><h3 class="popover-title" style=" ' +
+            this.getBgColorStyle(useColors) + '" ></h3></strong>' +
+            '<div class="popover-content"></div></div>';
     };
 
     /**
@@ -313,40 +321,26 @@ function Detection(id, firstFrame, lastFrame) {
      * @returns {*}
      */
     this.asCurrentDetection = function (useColors) {
-        var result = '<a href="#" onclick="return currentDetectionClick(this);"><div class="img-thumbnail text-right current-detection-small"';
+        var result = '<button data-container="body"' +
+            'class="btn btn-default img-thumbnail text-right current-detection-small"' +
+            'style=" border: 10px solid ';
         if (useColors) {
-            result += 'style="background-color: ' + this.color + '" ';
+            result += this.color + ';" ';
         } else {
-            // class info color
-            result += 'style="background-color: #d9edf7' + '" ';
+            result += '#d9edf7;" ';
         }
-        return result + ' ><span class="myCaret"></span><span class="detection-id" hidden>' + this.id + '</span>' +
-            '</div></a>';
-    };
-
-    /**
-     * Return the current detection view if it's selected
-     * @returns {*}
-     */
-    this.asCurrentExtendedDetection = function (useColors) {
-        var result = '<div class="col-sm-12 ">' + // col-md-3
-            '<div class="panel panel-default current-detection-large">' +
-            '<a href="#" onclick="return activeCurrentDetectionClick($(this).parent().parent());">' +
-            '<div class="panel-heading" ';
-        if (useColors) {
-            result += ' style="background-color: ' + this.color + '" ';
-        } else {
-            // class info color
-            result += ' style="background-color: #d9edf7' + '" ';
-        }
-        result += '><strong> Detection ' + this.id + '</strong><span class="myCaret"></div></a>' +
-            '<div class="panel-body">' +
+        result += 'data-toggle="popover" data-placement="bottom" ' +
+            'title="Detection ' + this.id + '" ' +
+            'data-content=\'' +
+                //popover content
             '<span class="detection-id" hidden>' + this.id + '</span>' +
             '</p><p><strong>First Frame: </strong>\t' + frameToSecondsStr(this.firstFrame, this._fps) +
             '</p><p><strong>Last Frame: </strong>\t' + frameToSecondsStr(this.lastFrame, this._fps) +
-            '</p><p><strong>Stage Frames: </strong>\t' + frameToSecondsStr(this.lastFrame - this.firstFrame, this._fps) +
-            '</p></div>' +
-            '</div></div>';
+            '</p><p><strong>Stage Frames: </strong>\t' +
+            frameToSecondsStr(this.lastFrame - this.firstFrame, this._fps) + '</p>\'>   ' +
+
+            '<span class="myCaret"></span><span class="detection-id" hidden>' + this.id + '</span>' +
+            '</button>';
         return result;
     };
 }
