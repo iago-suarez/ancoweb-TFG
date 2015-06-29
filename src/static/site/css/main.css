@@ -178,14 +178,18 @@ canvas {
     display: none;
 }
 
-.current-detection {
+.current-detection-small {
     height: 60px;
     width: 60px;
-    margin: 0px 10px;
+    margin: 10px;
 }
 
-.current-content {
-    display: none;
+.current-detection-large .panel-heading {
+    color: white;
+}
+
+.current-detection-large .panel-heading strong {
+    display: inline-block;
 }
 
 .myCaret {
@@ -196,9 +200,9 @@ canvas {
     vertical-align: middle;
     border-top: 10px solid #000;
     border-top-color: #fff;
-    border-right: 10px solid transparent;
+    border-right: 7px solid transparent;
     border-bottom: 0 dotted;
-    border-left: 10px solid transparent;
+    border-left: 7px solid transparent;
 }
 
 /* EXPIRAL ROTATORIA */

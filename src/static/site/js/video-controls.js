@@ -12,8 +12,8 @@ $(document).ready(function () {
         $('#current-detected-objs').toggle();
     });
 
-    $('.current-detection').click(function () {
-        $(this).find('.current-content').fadeIn();
+    $('.current-detection').parent().click(function () {
+        handleCurrentDetectionClick(this);
     });
 
     $('#colors-checkbox').click(function () {

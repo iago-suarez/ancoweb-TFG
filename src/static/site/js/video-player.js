@@ -73,12 +73,28 @@ function idToRgba(id, a) {
     return idToRgb(id) + a.toString(16);
 }
 
+
+function currentDetectionClick(domDetection) {
+    var detection = detections[$(domDetection).find('.detection-id').text()];
+    var useColor = document.getElementById('colors-checkbox').hasAttribute('checked');
+    $(domDetection).replaceWith(detection.asCurrentExtendedDetection(useColor));
+    return false;
+}
+
+function activeCurrentDetectionClick(domDetection) {
+    var detection = detections[$(domDetection).find('.detection-id').text()];
+    var useColor = document.getElementById('colors-checkbox').hasAttribute('checked');
+    $(domDetection).replaceWith(detection.asCurrentDetection(useColor));
+    return false;
+}
+
 /**
  *  Given a list of items to select, the function remarks them in the table.
  *
  * @param detections The full detections map
  * @param {object} objectList The list of items to select
  * @param tBody The table body where the head is: Identifier, First Frame, Last Frame, Stage Frames
+ * @param currentObjsDiv
  * @param useColors Boolean value indicating whether the objects are painted in different colors
  */
 function selectObjects(detections, objectList, tBody, currentObjsDiv, useColors) {
@@ -97,8 +113,9 @@ function selectObjects(detections, objectList, tBody, currentObjsDiv, useColors)
             if (!detections[i].selected) {
                 //if he has appeared for the first time we add it
                 $(currentObjsDiv).append(detections[i].asCurrentDetection(useColors));
+
             } else {
-                $(currentObjsDiv).find('div:contains(' + detections[i].id + ')').remove();
+                $(currentObjsDiv).find('div:contains(' + detections[i].id + ')').parent().remove();
             }
             detections[i].selected = selected;
             $(tBody).find('tr:contains(' + detections[i].id + ')')
@@ -245,6 +262,7 @@ function frameToSecondsStr(nFrame, fps) {
     return ("0" + Math.floor(sec / 60)).slice(-2) + ':' +
         ("0" + Math.floor(sec % 60)).slice(-2);
 }
+
 /**
  * @class Represents a detected object in the table
  * @property {String} id
@@ -261,7 +279,7 @@ function Detection(id, firstFrame, lastFrame) {
 
     // It is calculated only once when the object is created to optimize
     this._fps = getVideoFps(document.getElementById('video-player'));
-    this._fixedTableRowStr = '><th scope="row"><a href="/">' + this.id + '</a></th><td>'
+    this._fixedTableRowStr = '><th scope="row"><a href="#">' + this.id + '</a></th><td>'
         + frameToSecondsStr(this.firstFrame, this._fps) + '</td><td>'
         + frameToSecondsStr(this.lastFrame, this._fps) + '</td><td>'
         + frameToSecondsStr(this.lastFrame - this.firstFrame, this._fps) + '</td></tr>\n';
@@ -295,15 +313,41 @@ function Detection(id, firstFrame, lastFrame) {
      * @returns {*}
      */
     this.asCurrentDetection = function (useColors) {
-        var result = '<div class="img-thumbnail text-right current-detection"';
+        var result = '<a href="#" onclick="return currentDetectionClick(this);"><div class="img-thumbnail text-right current-detection-small"';
         if (useColors) {
             result += 'style="background-color: ' + this.color + '" ';
         } else {
             // class info color
             result += 'style="background-color: #d9edf7' + '" ';
         }
-        return result + ' ><span class="myCaret"></span><span hidden>' + this.id + '</span>' +
-            '<div class="current-content"> <p>Hola Paco</p> <p>Hola Manolo</p> </div></div>';
+        return result + ' ><span class="myCaret"></span><span class="detection-id" hidden>' + this.id + '</span>' +
+            '</div></a>';
+    };
+
+    /**
+     * Return the current detection view if it's selected
+     * @returns {*}
+     */
+    this.asCurrentExtendedDetection = function (useColors) {
+        var result = '<div class="col-sm-12 ">' + // col-md-3
+            '<div class="panel panel-default current-detection-large">' +
+            '<a href="#" onclick="return activeCurrentDetectionClick($(this).parent().parent());">' +
+            '<div class="panel-heading" ';
+        if (useColors) {
+            result += ' style="background-color: ' + this.color + '" ';
+        } else {
+            // class info color
+            result += ' style="background-color: #d9edf7' + '" ';
+        }
+        result += '><strong> Detection ' + this.id + '</strong><span class="myCaret"></div></a>' +
+            '<div class="panel-body">' +
+            '<span class="detection-id" hidden>' + this.id + '</span>' +
+            '</p><p><strong>First Frame: </strong>\t' + frameToSecondsStr(this.firstFrame, this._fps) +
+            '</p><p><strong>Last Frame: </strong>\t' + frameToSecondsStr(this.lastFrame, this._fps) +
+            '</p><p><strong>Stage Frames: </strong>\t' + frameToSecondsStr(this.lastFrame - this.firstFrame, this._fps) +
+            '</p></div>' +
+            '</div></div>';
+        return result;
     };
 }
 
