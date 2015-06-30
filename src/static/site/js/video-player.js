@@ -74,41 +74,66 @@ function idToRgba(id, a) {
 }
 
 /**
+ * Generate a Canvas element from the video element
+ * @param video
+ * @param w
+ * @param h
+ * @param cx
+ * @param cy
+ * @returns {string}
+ */
+function capture(video, w, h, cx, cy) {
+    var canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage(video, -cx, -cy);
+    return canvas.toDataURL();
+}
+
+/**
  *  Given a list of items to select, the function remarks them in the table.
  *
  * @param detections The full detections map
- * @param {object} objectList The list of items to select
+ * @param {object} detectionsToSelect The list of items to select
  * @param tBody The table body where the head is: Identifier, First Frame, Last Frame, Stage Frames
  * @param currentObjsDiv
  * @param useColors Boolean value indicating whether the objects are painted in different colors
+ * @param video
  */
-function selectObjects(detections, objectList, tBody, currentObjsDiv, useColors) {
+function selectObjects(detections, detectionsToSelect, tBody, currentObjsDiv, useColors, video) {
 
     for (var i in detections) {
         var j = 0;
         var selected = false;
         var obj;
-        while ((j < objectList.length) && (!selected)) {
-            obj = objectList[j];
-            selected = (obj.id === detections[i].id);
+        var det = detections[i];
+        while ((j < detectionsToSelect.length) && (!selected)) {
+            obj = detectionsToSelect[j];
+            selected = (obj.id === det.id);
             j++;
         }
         //If it's necessary update the row state
-        if (detections[i].selected != selected) {
-            if (!detections[i].selected) {
+        if (det.selected != selected) {
+            if (!det.selected) {
                 //if he has appeared for the first time we add it
-                $(currentObjsDiv).append(detections[i].asCurrentDetection(useColors));
+
+                //Get the detection position, and set the image of this position
+                var detBox = $(detectionsToSelect).find('object[id=' + det.id + '] box')[0];
+                det.setImgFromVideoBox(video, detBox);
+
+                $(currentObjsDiv).append(det.asCurrentDetection(useColors));
                 $('[data-toggle="popover"]').popover({
                     html: true,
-                    template: detections[i].asPopoverTemplate(useColors)
+                    template: det.asPopoverTemplate(useColors)
                 });
-
             } else {
-                $(currentObjsDiv).find('span:contains(' + detections[i].id + ')').parent().remove();
+                $(currentObjsDiv).find('span:contains(' + det.id + ')').parent().remove();
+                $('.popover:contains("' + det.id + '")').remove();
             }
-            detections[i].selected = selected;
-            $(tBody).find('tr:contains(' + detections[i].id + ')')
-                .replaceWith(detections[i].asTableRow(useColors));
+            det.selected = selected;
+            $(tBody).find('tr:contains(' + det.id + ')')
+                .replaceWith(det.asTableRow(useColors));
         }
     }
 }
@@ -273,8 +298,28 @@ function Detection(id, firstFrame, lastFrame) {
         + frameToSecondsStr(this.lastFrame, this._fps) + '</td><td>'
         + frameToSecondsStr(this.lastFrame - this.firstFrame, this._fps) + '</td></tr>\n';
 
-    this.setCanvas = function (canvas) {
-        this.canvasCurrentImg = canvas;
+    this.setImg = function (imgUrl) {
+        this.currentImg = imgUrl;
+    };
+
+    /**
+     * Sets the image extracting it from the video box
+     * @param video
+     * @param box
+     */
+    this.setImgFromVideoBox = function (video, box) {
+        const factor = 1.5;
+
+        //We frame a rectangle that take twice the space centering it at the same point
+        var w = parseInt($(box).attr('w'));
+        var h = parseInt($(box).attr('h'));
+        var xc = parseInt($(box).attr('xc'));
+        var yc = parseInt($(box).attr('yc'));
+        this.currentImg = capture(video,
+            Math.round(w * factor),
+            Math.round(h * factor),
+            Math.max(0, Math.round(xc - (w * factor - w) / 2)),
+            Math.max(0, Math.round(yc - (h * factor - h) / 2)));
     };
 
     this.getBgColorStyle = function (useColors) {
@@ -304,6 +349,36 @@ function Detection(id, firstFrame, lastFrame) {
     };
 
     /**
+     * Return the current detection view if it's selected
+     * @returns {*}
+     */
+    this.asCurrentDetection = function (useColors) {
+        var result = '<button data-container="body"' +
+            'class="btn btn-default current-detection-small"' +
+            'style=" border: 10px solid ';
+        if (useColors) {
+            result += this.color + '; ';
+        } else {
+            result += '#d9edf7; ';
+        }
+        result += 'background-image: url(\'' + this.currentImg + '\'); "' +
+            'data-toggle="popover" data-placement="bottom" ' +
+            'title="Detection ' + this.id + '" ' +
+            'data-content=\'' +
+                //popover content
+            '<span class="detection-id" hidden>' + this.id + '</span>' +
+            '</p><p><strong>First Frame: </strong>\t' + frameToSecondsStr(this.firstFrame, this._fps) +
+            '</p><p><strong>Last Frame: </strong>\t' + frameToSecondsStr(this.lastFrame, this._fps) +
+            '</p><p><strong>Stage Frames: </strong>\t' +
+            frameToSecondsStr(this.lastFrame - this.firstFrame, this._fps) + '</p>\'>   ' +
+
+            '<div class="myCaret" style="margin-top: 10px;"><span></span></div>' +
+            '<span class="detection-id" hidden>' + this.id + '</span>' +
+            '</button>';
+        return result;
+    };
+
+    /**
      * Return the colored base of the pop over view
      *
      * @param useColors
@@ -314,34 +389,6 @@ function Detection(id, firstFrame, lastFrame) {
             '<strong><h3 class="popover-title" style=" ' +
             this.getBgColorStyle(useColors) + '" ></h3></strong>' +
             '<div class="popover-content"></div></div>';
-    };
-
-    /**
-     * Return the current detection view if it's selected
-     * @returns {*}
-     */
-    this.asCurrentDetection = function (useColors) {
-        var result = '<button data-container="body"' +
-            'class="btn btn-default img-thumbnail text-right current-detection-small"' +
-            'style=" border: 10px solid ';
-        if (useColors) {
-            result += this.color + ';" ';
-        } else {
-            result += '#d9edf7;" ';
-        }
-        result += 'data-toggle="popover" data-placement="bottom" ' +
-            'title="Detection ' + this.id + '" ' +
-            'data-content=\'' +
-                //popover content
-            '<span class="detection-id" hidden>' + this.id + '</span>' +
-            '</p><p><strong>First Frame: </strong>\t' + frameToSecondsStr(this.firstFrame, this._fps) +
-            '</p><p><strong>Last Frame: </strong>\t' + frameToSecondsStr(this.lastFrame, this._fps) +
-            '</p><p><strong>Stage Frames: </strong>\t' +
-            frameToSecondsStr(this.lastFrame - this.firstFrame, this._fps) + '</p>\'>   ' +
-
-            '<span class="myCaret"></span><span class="detection-id" hidden>' + this.id + '</span>' +
-            '</button>';
-        return result;
     };
 }
 
@@ -391,7 +438,8 @@ function loadXmlResult(video) {
             var frameObjects = $(xmlResult).find('frame[number=' + frameNumber + '] objectlist object');
             var useColors = document.getElementById('colors-checkbox').hasAttribute('checked');
             // We mark the objects that are being shown in the table
-            selectObjects(detections, frameObjects, $('#objects-tbody'), $('#current-detected-objs'), useColors);
+            selectObjects(detections, frameObjects, $('#objects-tbody'), $('#current-detected-objs'),
+                useColors, this);
 
             // Paint the objects in the canvas element
             paintFrameObjects(document.getElementById('objects-canvas'), frameObjects, useColors);

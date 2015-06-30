@@ -179,17 +179,11 @@ canvas {
 }
 
 .current-detection-small {
-    height: 60px;
-    width: 60px;
     margin: 10px;
-}
-
-.current-detection-large .panel-heading {
-    color: white;
-}
-
-.current-detection-large .panel-heading strong {
-    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: 100px 100px;
+    width: 100px;
+    height: 100px;
 }
 
 .popover-title {
@@ -198,12 +192,13 @@ canvas {
 }
 
 .myCaret {
+    margin-top: 10px;
+    text-align: right;
+}
+
+.myCaret span {
     display: inline-block;
-    position: absolute;
-    width: 0;
-    height: 0;
-    margin-right: 0px;
-    margin-top: -5px;
+    margin-top: -60px;
     vertical-align: middle;
     border-top: 10px solid #000;
     border-top-color: #fff;
