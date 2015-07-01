@@ -32,18 +32,22 @@ function Detection(id, firstFrame, lastFrame) {
      * @param box
      */
     this.setImgFromVideoBox = function (video, box) {
-        const factor = 1.5;
+        const factor = 2;
 
         //We frame a rectangle that take twice the space centering it at the same point
         var w = parseInt($(box).attr('w'));
         var h = parseInt($(box).attr('h'));
         var xc = parseInt($(box).attr('xc'));
         var yc = parseInt($(box).attr('yc'));
-        this.currentImg = capture(video,
-            Math.round(w * factor),
-            Math.round(h * factor),
-            Math.max(0, Math.round(xc - (w * factor - w) / 2)),
-            Math.max(0, Math.round(yc - (h * factor - h) / 2)));
+
+        // A square is selected, the square will have the dimensions:
+        // longest side * (factor - degree of difference between height and width)
+        var increase = (factor - 1) / Math.max(h / w, w / h);
+        var side = Math.round(Math.max(h, w) * (1 + increase));
+
+        this.currentImg = capture(video, side, side,
+            Math.round(xc - ((side - w) / 2)),
+            Math.round(yc - ((side - h) / 2)));
     };
 
     /**
