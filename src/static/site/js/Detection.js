@@ -8,12 +8,13 @@
  * @property {String} lastFrame
  * @constructor
  */
-function Detection(id, firstFrame, lastFrame) {
+function Detection(id, firstFrame, lastFrame, xmlTrajectory) {
     this.id = id;
     this.firstFrame = firstFrame;
     this.lastFrame = lastFrame;
     this.color = idToRgb(id);
     this.selected = false;
+    this.xmlTrajectory = xmlTrajectory;
 
     // It is calculated only once when the object is created to optimize
     this._fps = getVideoFps(document.getElementById('video-player'));
@@ -21,10 +22,6 @@ function Detection(id, firstFrame, lastFrame) {
         + frameToSecondsStr(this.firstFrame, this._fps) + '</td><td>'
         + frameToSecondsStr(this.lastFrame, this._fps) + '</td><td>'
         + frameToSecondsStr(this.lastFrame - this.firstFrame, this._fps) + '</td></tr>\n';
-
-    this.setImg = function (imgUrl) {
-        this.currentImg = imgUrl;
-    };
 
     /**
      * Sets the image extracting it from the video box

@@ -196,33 +196,34 @@ function paintFrameObjects(canvas, frameObjects, useColors) {
  * @param useColors
  * @returns {number}
  */
-function paintFrameTrajectories(canvas, frameNumber, xmlResult, useColors) {
+function paintFrameTrajectories(canvas, frameNumber, detections, useColors) {
     var context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    $('tr.selected a').each(function () {
-        var id = parseInt($(this).text());
-        var trajPoints = $(xmlResult).find('trajectory#' + id + ' point');
-        context.beginPath();
-        context.moveTo(videoProportion * parseInt($(trajPoints[0]).attr('x')),
-            videoProportion * parseInt($(trajPoints[0]).attr('y')));
-        context.lineWidth = 3;
-        //Select the color
-        if (useColors) {
-            context.strokeStyle = idToRgb(id);
-        } else {
-            context.strokeStyle = '#ff0000';
+    for (var id in detections) {
+        if (detections[id].selected) {
+            var trajPoints = $(detections[id].xmlTrajectory).find('point');
+            context.beginPath();
+            context.moveTo(videoProportion * parseInt($(trajPoints[0]).attr('x')),
+                videoProportion * parseInt($(trajPoints[0]).attr('y')));
+            context.lineWidth = 3;
+            //Select the color
+            if (useColors) {
+                context.strokeStyle = idToRgb(id);
+            } else {
+                context.strokeStyle = '#ff0000';
+            }
+            var i = 1;
+            var f = 0;
+            while ((i < trajPoints.length) && f <= frameNumber) {
+                context.lineTo(videoProportion * parseInt($(trajPoints[i]).attr('x')),
+                    videoProportion * parseInt($(trajPoints[i]).attr('y')));
+                i++;
+                f = $(trajPoints[i]).attr('frame');
+            }
+            context.stroke();
         }
-        var i = 1;
-        var f = 0;
-        while ((i < trajPoints.length) && f <= frameNumber) {
-            context.lineTo(videoProportion * parseInt($(trajPoints[i]).attr('x')),
-                videoProportion * parseInt($(trajPoints[i]).attr('y')));
-            i++;
-            f = $(trajPoints[i]).attr('frame');
-        }
-        context.stroke();
-    });
+    }
 }
 
 /**
@@ -279,17 +280,18 @@ function frameToSecondsStr(nFrame, fps) {
 /**
  * Generates the Table Objects parsing the xml file.
  *
- * @param xmlObjects
+ * @param xmlResult
  * @returns {{Detection}}
  */
-function getTableObjectsFromXml(xmlObjects) {
+function getTableObjectsFromXml(xmlResult) {
     var myObjects = {};
-    $(xmlObjects).find('frame').each(function () {
+    $(xmlResult).find('frame').each(function () {
         var fnum = $(this).attr('number');
         $(this).find('object').each(function () {
             var objId = $(this).attr('id');
             if (myObjects[objId] === undefined) {
-                myObjects[objId] = new Detection(objId, parseInt(fnum), parseInt(fnum) + 1);
+                var trajectory = $(xmlResult).find('trajectory#' + objId)[0];
+                myObjects[objId] = new Detection(objId, parseInt(fnum), parseInt(fnum) + 1, trajectory);
             } else {
                 myObjects[objId].lastFrame = parseInt(fnum);
             }
@@ -329,7 +331,7 @@ function loadXmlResult(video) {
             paintFrameObjects(document.getElementById('objects-canvas'), frameObjects, useColors);
 
             // Paint the trajectories in the canvas element
-            paintFrameTrajectories(document.getElementById('trajectories-canvas'), frameNumber, xmlResult, useColors);
+            paintFrameTrajectories(document.getElementById('trajectories-canvas'), frameNumber, detections, useColors);
 
             // Paint the training label if it's necessary
             paintTrainingMsgIfNecessary(document.getElementById('training-canvas'), frameNumber,
