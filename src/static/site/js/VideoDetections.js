@@ -1,0 +1,111 @@
+/**
+ * Created by iago on 8/07/15.
+ */
+
+/**
+ *
+ * @param videoElement
+ * @class
+ * @constructor
+ * @param xmlTrajectories
+ * @param xmlDetections
+ */
+function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
+    this.videoElement = videoElement;
+    this.observers = [];
+    this.useColors = true;
+    this.fps = this.getVideoFps(videoElement);
+    this.detections = this.getDetectionsFromXml(this, xmlDetections, xmlTrajectories);
+    this.xmlDetectionsByFrame = xmlDetections;
+    xmlTrajectories = null;
+
+    this.addObserver = function (observer) {
+        this.observers.push(observer);
+    };
+
+    this.getCurrentFrame = function () {
+        return Math.round(this.videoElement.currentTime * this.fps);
+    };
+
+    this.getCurrentFrameXmlObjects = function () {
+        return $(this.xmlDetectionsByFrame)
+            .find('frame[number=' + this.getCurrentFrame() + '] objectlist object');
+    };
+
+    this.getCurrentTime = function () {
+        return this.videoElement.currentTime;
+    };
+
+    this.updateState = function () {
+
+        //Gets the current frame objects
+        var detectionsToSelect = this.getCurrentFrameXmlObjects();
+
+        for (var id in this.detections) {
+            var j = 0;
+            var selected = false;
+            var obj;
+            var det = this.detections[id];
+            while ((j < detectionsToSelect.length) && (!selected)) {
+                obj = detectionsToSelect[j];
+                selected = (obj.id === det.id);
+                j++;
+            }
+            //If it's necessary update the row state
+            if (det.selected != selected) {
+                if (!det.selected) {
+                    //if he has appeared for the first time we add it
+                    //Get the detection position, and set the image of this position
+                    var detBox = $(detectionsToSelect).find('object[id=' + det.id + '] box')[0];
+                    det.setImgFromVideoBox(this.videoElement, detBox);
+                }
+                det.selected = selected;
+            }
+        }
+        this.notify();
+    };
+
+    this.notify = function () {
+        this.observers.forEach(function (observer) {
+            observer.update();
+        });
+    };
+}
+
+/**
+ * Return the number of Frames per second in the HTML5 Video element
+ *
+ * @param video
+ * @returns {Number}
+ */
+VideoDetections.prototype.getVideoFps = function (video) {
+    var ext = video.currentSrc.split('.').pop();
+    var fps = $(video).children('source[src$="' + ext + '"]').attr('fps');
+    return parseInt(fps);
+};
+
+
+/**
+ * Generates the Table Objects parsing the xml file.
+ *
+ * @returns {{Detection}}
+ * @param videoDetections
+ * @param xmlDetections
+ * @param xmlTrajectories
+ */
+VideoDetections.prototype.getDetectionsFromXml = function (videoDetections, xmlDetections, xmlTrajectories) {
+    var myObjects = {};
+    $(xmlDetections).find('frame').each(function () {
+        var fNumber = $(this).attr('number');
+        $(this).find('object').each(function () {
+            var objId = $(this).attr('id');
+            if (myObjects[objId] === undefined) {
+                var trajectory = $(xmlTrajectories).find('trajectory#' + objId)[0];
+                myObjects[objId] = new Detection(videoDetections, objId, parseInt(fNumber), parseInt(fNumber) + 1, trajectory);
+            } else {
+                myObjects[objId].lastFrame = parseInt(fNumber);
+            }
+        });
+    });
+    return myObjects;
+};

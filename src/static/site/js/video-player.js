@@ -8,8 +8,6 @@ var videoProportion = 1;
 var canvasLeftPadding = 0;
 var canvasTopPadding = 0;
 
-var detections = {};
-
 /**
  * Return the corresponding rgb light color to the object with id
  * @param id a number between 0 and 1000000
@@ -92,52 +90,6 @@ function capture(video, w, h, cx, cy) {
 }
 
 /**
- *  Given a list of items to select, the function remarks them in the table.
- *
- * @param detections The full detections map
- * @param {object} detectionsToSelect The list of items to select
- * @param tBody The table body where the head is: Identifier, First Frame, Last Frame, Stage Frames
- * @param currentObjsDiv
- * @param useColors Boolean value indicating whether the objects are painted in different colors
- * @param video
- */
-function selectObjects(detections, detectionsToSelect, tBody, currentObjsDiv, useColors, video) {
-
-    for (var i in detections) {
-        var j = 0;
-        var selected = false;
-        var obj;
-        var det = detections[i];
-        while ((j < detectionsToSelect.length) && (!selected)) {
-            obj = detectionsToSelect[j];
-            selected = (obj.id === det.id);
-            j++;
-        }
-        //If it's necessary update the row state
-        if (det.selected != selected) {
-            if (!det.selected) {
-                //if he has appeared for the first time we add it
-
-                //Get the detection position, and set the image of this position
-                var detBox = $(detectionsToSelect).find('object[id=' + det.id + '] box')[0];
-                det.setImgFromVideoBox(video, detBox);
-                $(currentObjsDiv).append(det.asCurrentDetection(useColors));
-                $('[data-toggle="popover"]').popover({
-                    html: true,
-                    template: det.asPopoverTemplate(useColors)
-                });
-            } else {
-                $(currentObjsDiv).find('span:contains(' + det.id + ')').parent().remove();
-                $('.popover:contains("' + det.id + '")').remove();
-            }
-            det.selected = selected;
-            $(tBody).find('tr:contains(' + det.id + ')')
-                .replaceWith(det.asTableRow(useColors));
-        }
-    }
-}
-
-/**
  * Paint a rect in the canvas context in color and with lineWidth pixels in border.
  * @param context The canvas context
  * @param {Number} xc The coordinate of the x in pixels
@@ -159,113 +111,6 @@ function paintRect(context, xc, yc, w, h, color, lineWidth) {
 }
 
 /**
- *  Paints the objects into the canvas element
- *
- * @param canvas
- * @param frameObjects
- * @param useColors
- */
-function paintFrameObjects(canvas, frameObjects, useColors) {
-
-    var context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
-    $(frameObjects).each(function () {
-
-        var h = parseInt($(this).find('box').attr('h'));
-        var w = parseInt($(this).find('box').attr('h'));
-        var xc = parseInt($(this).find('box').attr('xc'));
-        var yc = parseInt($(this).find('box').attr('yc'));
-        //Select the color
-        if (useColors) {
-            paintRect(context, videoProportion * xc, videoProportion * yc,
-                videoProportion * w, videoProportion * h, idToRgb(this.id), 2);
-        } else {
-            paintRect(context, videoProportion * xc, videoProportion * yc,
-                videoProportion * w, videoProportion * h, 'blue', 2);
-        }
-    });
-}
-
-/**
- * Paints the trajectories into the canvas element if the frameNumber > trainingFrames,
- * otherwise it paints the trainingLbl
- * @param canvas
- * @param frameNumber
- * @param xmlResult
- * @param useColors
- * @returns {number}
- */
-function paintFrameTrajectories(canvas, frameNumber, detections, useColors) {
-    var context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
-    for (var id in detections) {
-        if (detections[id].selected) {
-            var trajPoints = $(detections[id].xmlTrajectory).find('point');
-            context.beginPath();
-            context.moveTo(videoProportion * parseInt($(trajPoints[0]).attr('x')),
-                videoProportion * parseInt($(trajPoints[0]).attr('y')));
-            context.lineWidth = 3;
-            //Select the color
-            if (useColors) {
-                context.strokeStyle = idToRgb(id);
-            } else {
-                context.strokeStyle = '#ff0000';
-            }
-            var i = 1;
-            var f = 0;
-            while ((i < trajPoints.length) && f <= frameNumber) {
-                context.lineTo(videoProportion * parseInt($(trajPoints[i]).attr('x')),
-                    videoProportion * parseInt($(trajPoints[i]).attr('y')));
-                i++;
-                f = $(trajPoints[i]).attr('frame');
-            }
-            context.stroke();
-        }
-    }
-}
-
-/**
- * Paint the training label if it's necessary
- *
- * @param canvas
- * @param frameNumber
- * @param trainingLbl
- * @returns {number}
- */
-function paintTrainingMsgIfNecessary(canvas, frameNumber, trainingLbl) {
-
-    var context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
-    //If the system is training display the label
-    if (frameNumber < trainingFrames) {
-        if (!$(trainingLbl).is(":visible")) {
-            adjustTrainingLbl(trainingLbl);
-            $(trainingLbl).show();
-        }
-        paintRect(context, 4, 4, canvas.width - 8, canvas.height - 8, '#f0ad4e', 4);
-        return 0;
-    } else if ((frameNumber >= trainingFrames) && ($(trainingLbl).is(":visible"))) {
-        //If the system isn't training hide the label
-        $(trainingLbl).hide();
-    }
-}
-
-/**
- * Return the number of Frames per second in the HTML5 Video element
- *
- * @param video
- * @returns {Number}
- */
-function getVideoFps(video) {
-    var ext = video.currentSrc.split('.').pop();
-    var fps = $(video).children('source[src$="' + ext + '"]').attr('fps');
-    return parseInt(fps);
-}
-
-/**
  * Convert the frame number to time string
  * @param nFrame
  * @param fps
@@ -278,29 +123,6 @@ function frameToSecondsStr(nFrame, fps) {
 }
 
 /**
- * Generates the Table Objects parsing the xml file.
- *
- * @param xmlResult
- * @returns {{Detection}}
- */
-function getTableObjectsFromXml(xmlResult) {
-    var myObjects = {};
-    $(xmlResult).find('frame').each(function () {
-        var fnum = $(this).attr('number');
-        $(this).find('object').each(function () {
-            var objId = $(this).attr('id');
-            if (myObjects[objId] === undefined) {
-                var trajectory = $(xmlResult).find('trajectory#' + objId)[0];
-                myObjects[objId] = new Detection(objId, parseInt(fnum), parseInt(fnum) + 1, trajectory);
-            } else {
-                myObjects[objId].lastFrame = parseInt(fnum);
-            }
-        });
-    });
-    return myObjects;
-}
-
-/**
  * Load the detected objects in the video via AJAX.
  * @param video
  */
@@ -309,34 +131,28 @@ function loadXmlResult(video) {
     $.get(xmlUrl, function (xmlResult) {
         // This is the heart of the beast
 
-        //Generate the table of objects
-        detections = getTableObjectsFromXml(xmlResult);
-        for (var i in detections) {
-            $('#objects-tbody').append(detections[i].asTableRow(true));
-        }
+        //Create the videoDetections object from the xml result and add its observers
+        var videoDetections = new VideoDetections(video, $(xmlResult).find('trajectories'),
+            $(xmlResult).find('objects'));
+
+        videoDetections.addObserver(new CurrentDetectionsObserver(videoDetections,
+            $('#current-detected-objs')));
+        videoDetections.addObserver(new DetectionsTableObserver(videoDetections,
+            $('#objects-tbody')));
+        videoDetections.addObserver(new TrajectoriesObserver(videoDetections,
+            document.getElementById('trajectories-canvas')));
+        videoDetections.addObserver(new DetectionsObjectsObserver(videoDetections,
+            document.getElementById('objects-canvas')));
+        videoDetections.addObserver(new TrainingMsgObserver(videoDetections,
+            document.getElementById('training-canvas'),
+            document.getElementById("training-lbl"), trainingFrames));
 
         //Sort the table
         $('table').tablesorter();
         $('#first-moment-th').click();
 
         video.addEventListener("timeupdate", function () {
-            var frameNumber = Math.round(this.currentTime * getVideoFps(this));
-            var frameObjects = $(xmlResult).find('frame[number=' + frameNumber + '] objectlist object');
-            var useColors = document.getElementById('colors-checkbox').hasAttribute('checked');
-            // We mark the objects that are being shown in the table
-            selectObjects(detections, frameObjects, $('#objects-tbody'), $('#current-detected-objs'),
-                useColors, this);
-
-            // Paint the objects in the canvas element
-            paintFrameObjects(document.getElementById('objects-canvas'), frameObjects, useColors);
-
-            // Paint the trajectories in the canvas element
-            paintFrameTrajectories(document.getElementById('trajectories-canvas'), frameNumber, detections, useColors);
-
-            // Paint the training label if it's necessary
-            paintTrainingMsgIfNecessary(document.getElementById('training-canvas'), frameNumber,
-                document.getElementById("training-lbl"));
-
+            videoDetections.updateState();
         }, false);
     });
 }

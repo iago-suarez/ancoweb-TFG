@@ -179,14 +179,14 @@ test('Example unit test', function(assert) {
 //    Detection(id, firstFrame, lastFrame)
 //});
 //
-//QUnit.test("getTableObjectsFromXml Test", function (assert) {
+//QUnit.test("getDetectionsFromXml Test", function (assert) {
 //    /**
 //    * Generates the Table Objects parsing the xml file.
 //    *
 //    * @param xmlObjects
 //    * @returns {{Detection}}
 //    */
-//    getTableObjectsFromXml(xmlObjects)
+//    getDetectionsFromXml(xmlObjects)
 //
 //});
 //

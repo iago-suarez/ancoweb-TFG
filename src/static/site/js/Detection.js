@@ -8,20 +8,20 @@
  * @property {String} lastFrame
  * @constructor
  */
-function Detection(id, firstFrame, lastFrame, xmlTrajectory) {
+function Detection(videoDetections, id, firstFrame, lastFrame, xmlTrajectory) {
     this.id = id;
     this.firstFrame = firstFrame;
     this.lastFrame = lastFrame;
     this.color = idToRgb(id);
     this.selected = false;
     this.xmlTrajectory = xmlTrajectory;
+    this.videoDetections = videoDetections;
 
     // It is calculated only once when the object is created to optimize
-    this._fps = getVideoFps(document.getElementById('video-player'));
     this._fixedTableRowStr = '><th scope="row"><a href="#">' + this.id + '</a></th><td>'
-        + frameToSecondsStr(this.firstFrame, this._fps) + '</td><td>'
-        + frameToSecondsStr(this.lastFrame, this._fps) + '</td><td>'
-        + frameToSecondsStr(this.lastFrame - this.firstFrame, this._fps) + '</td></tr>\n';
+        + frameToSecondsStr(this.firstFrame, this.videoDetections.fps) + '</td><td>'
+        + frameToSecondsStr(this.lastFrame, this.videoDetections.fps) + '</td><td>'
+        + frameToSecondsStr(this.lastFrame - this.firstFrame, this.videoDetections.fps) + '</td></tr>\n';
 
     /**
      * Sets the image extracting it from the video box
@@ -139,10 +139,10 @@ function Detection(id, firstFrame, lastFrame, xmlTrajectory) {
             'data-content=\'' +
                 //popover content
             '<span class="detection-id" hidden>' + this.id + '</span>' +
-            '</p><p><strong>First Frame: </strong>\t' + frameToSecondsStr(this.firstFrame, this._fps) +
-            '</p><p><strong>Last Frame: </strong>\t' + frameToSecondsStr(this.lastFrame, this._fps) +
+            '</p><p><strong>First Frame: </strong>\t' + frameToSecondsStr(this.firstFrame, this.videoDetections.fps) +
+            '</p><p><strong>Last Frame: </strong>\t' + frameToSecondsStr(this.lastFrame, this.videoDetections.fps) +
             '</p><p><strong>Stage Frames: </strong>\t' +
-            frameToSecondsStr(this.lastFrame - this.firstFrame, this._fps) + '</p>\'>   ' +
+            frameToSecondsStr(this.lastFrame - this.firstFrame, this.videoDetections.fps) + '</p>\'>   ' +
 
             '<div class="myCaret" style="margin-top: 10px;"><span';
         if (this.imageIsDark()) {
