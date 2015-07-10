@@ -144,10 +144,10 @@ function Detection(videoDetections, id, firstFrame, lastFrame, xmlTrajectory) {
             '</p><p><strong>Stage Frames: </strong>\t' +
             frameToSecondsStr(this.lastFrame - this.firstFrame, this.videoDetections.fps) + '</p>\'>   ' +
 
-            '<div class="myCaret" style="margin-top: 10px;"><span';
-        if (this.imageIsDark()) {
-            result += ' style="border-top-color: #fff;"';
-        }
+            '<div class="myCaret" style="margin-top: 10px;"><span ';
+        //if (this.imageIsDark()) {
+        //    result += ' style="border-top-color: #fff;"';
+        //}
         result += '></span></div>' +
             '<span class="detection-id" hidden>' + this.id + '</span>' +
             '</button>';

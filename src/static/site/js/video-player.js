@@ -15,49 +15,37 @@ var canvasTopPadding = 0;
  */
 function idToRgb(id) {
 
-    function max(r, g, b) {
-        if (r > g) {
-            if (r > b) {
-                return r;
-            } else {
-                return b;
-            }
+    function toHexString(color) {
+        if (color < 16) {
+            return '0' + color.toString(16);
         } else {
-            if (g > b) {
-                return g;
-            } else {
-                return b;
-            }
+            return color.toString(16);
         }
     }
-
     var r = Math.round(id / 1000000);
     var g = Math.round((id % 1000000) / 1000);
     var b = Math.round(id % 1000);
 
-    // Transform the numbers in 2 digits hexademilas strigns
-    var rStr;
-    if (r < 16) rStr = '0' + r.toString(16);
-    else rStr = r.toString(16);
-
-    var gStr;
-    if (g < 16) gStr = '0' + g.toString(16);
-    else gStr = g.toString(16);
-
-    var bStr;
-    if (b < 16) bStr = '0' + b.toString(16);
-    else bStr = b.toString(16);
-
-    //Select the most similar light color
-    var maxVal = max(r, g, b);
-    if (maxVal === r) {
-        return '#' + 'ff' + gStr + bStr;
-    } else {
-        if (maxVal === g) {
-            return '#' + rStr + 'ff' + bStr;
-        } else {
-            return '#' + rStr + gStr + 'ff';
-        }
+    //Choose the most similar light color
+    switch (id % 3) {
+        case 0:
+            if (id % 2) {
+                return '#' + 'ff' + toHexString(g) + '00';
+            } else {
+                return '#' + 'ff' + '00' + toHexString(b);
+            }
+        case 1:
+            if (id % 2) {
+                return '#' + '00' + 'ff' + toHexString(b);
+            } else {
+                return '#' + toHexString(r) + 'ff' + '00';
+            }
+        case 2:
+            if (id % 2) {
+                return '#' + '00' + toHexString(g) + 'ff';
+            } else {
+                return '#' + toHexString(r) + '00' + 'ff';
+            }
     }
 }
 
