@@ -8,23 +8,7 @@ var videoProportion = 1;
 var canvasLeftPadding = 0;
 var canvasTopPadding = 0;
 
-/**
- * Generate a Canvas element from the video element
- * @param video
- * @param w
- * @param h
- * @param cx
- * @param cy
- * @returns {string}
- */
-function capture(video, w, h, cx, cy) {
-    var canvas = document.createElement('canvas');
-    canvas.width = w;
-    canvas.height = h;
-    var ctx = canvas.getContext('2d');
-    ctx.drawImage(video, -cx, -cy);
-    return canvas.toDataURL();
-}
+var videoDetections;
 
 /**
  * Paint a rect in the canvas context in color and with lineWidth pixels in border.
@@ -69,7 +53,7 @@ function loadXmlResult(video) {
         // This is the heart of the beast
 
         //Create the videoDetections object from the xml result and add its observers
-        var videoDetections = new VideoDetections(video, $(xmlResult).find('trajectories'),
+        videoDetections = new VideoDetections(video, $(xmlResult).find('trajectories'),
             $(xmlResult).find('objects'));
 
         videoDetections.addObserver(new CurrentDetectionsObserver(videoDetections,
@@ -78,7 +62,7 @@ function loadXmlResult(video) {
             $('#objects-tbody')));
         videoDetections.addObserver(new TrajectoriesObserver(videoDetections,
             document.getElementById('trajectories-canvas')));
-        videoDetections.addObserver(new DetectionsObjectsObserver(videoDetections,
+        videoDetections.addObserver(new DetectedObjectsObserver(videoDetections,
             document.getElementById('objects-canvas')));
         videoDetections.addObserver(new TrainingMsgObserver(videoDetections,
             document.getElementById('training-canvas'),
@@ -88,9 +72,19 @@ function loadXmlResult(video) {
         $('table').tablesorter();
         $('#first-moment-th').click();
 
-        video.addEventListener("timeupdate", function () {
+        function updateStatus() {
+            if (!video.paused) {
+                videoDetections.updateState();
+            }
+            // We suppose 25 fps
+            return setTimeout(updateStatus, 40);
+        }
+
+        updateStatus();
+
+        /*        video.addEventListener("timeupdate", function () {
             videoDetections.updateState();
-        }, false);
+         }, false);*/
     });
 }
 

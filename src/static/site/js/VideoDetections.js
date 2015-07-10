@@ -74,8 +74,21 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
             .find('frame[number=' + this.getCurrentFrame() + '] objectlist object');
     };
 
-    this.getCurrentTime = function () {
-        return this.videoElement.currentTime;
+    /**
+     * Generate a Canvas element from the video element
+     * @param w
+     * @param h
+     * @param cx
+     * @param cy
+     * @returns {string}
+     */
+    this.captureImg = function (w, h, cx, cy) {
+        var canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(this.videoElement, -cx, -cy);
+        return canvas.toDataURL();
     };
 
     this.updateState = function () {
@@ -100,7 +113,7 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
                     //if he has appeared for the first time we add it
                     //Get the detection position, and set the image of this position
                     var detBox = $(detectionsToSelect).find('object[id=' + det.id + '] box')[0];
-                    det.setImgFromVideoBox(this.videoElement, detBox);
+                    det.setImgFromVideoBox(detBox);
                     this.selectedDetections[det.id] = det;
                     this.detRecentlySelected[det.id] = det;
                 } else {
@@ -119,4 +132,14 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
             observer.update();
         });
     };
+
+    /**
+     * Refresh the detections because the user clicks in the Use Different Colors CheckBox
+     */
+    this.toggleUseColor = function () {
+        this.useColors = !this.useColors;
+        this.detRecentlyDeleted = this.selectedDetections;
+        this.detRecentlySelected = this.selectedDetections;
+        this.notify();
+    }
 }

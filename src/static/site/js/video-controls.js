@@ -13,23 +13,8 @@ $(document).ready(function () {
     });
 
     $('#colors-checkbox').click(function () {
-        if (this.hasAttribute('checked')) {
-            //Don't use different colors
-            $(this).removeAttr('checked');
-        } else {
-            //Use different colors
-            $(this).attr('checked', 'checked');
-        }
-        for (var i in detections) {
-            // For each detection change its color
-            var det = detections[i];
-            $('#detected-objs-table').find('tr:contains(' + det.id + ')')
-                .replaceWith(det.asTableRow(this.hasAttribute('checked')));
-            if (det.selected) {
-                $('#current-detected-objs').find('button:contains(' + det.id + ')')
-                    .replaceWith(det.asCurrentDetection(this.hasAttribute('checked')));
-            }
-        }
+        videoDetections.toggleUseColor();
+
     });
 
     function refreshAnalysisProgress() {

@@ -24,7 +24,7 @@ DetectionsObserver.prototype.update = function () {
  * @param canvasElement
  * @constructor
  */
-function DetectionsObjectsObserver(videoDetections, canvasElement) {
+function DetectedObjectsObserver(videoDetections, canvasElement) {
     //Call to the father constructor to init his values
     DetectionsObserver.call(this, videoDetections);
 
@@ -54,8 +54,8 @@ function DetectionsObjectsObserver(videoDetections, canvasElement) {
     }
 }
 
-// DetectionsObjectsObserver.prototype create the object that inherits from DetectionsObserver.prototype
-DetectionsObjectsObserver.prototype = Object.create(DetectionsObserver);
+// DetectedObjectsObserver.prototype create the object that inherits from DetectionsObserver.prototype
+DetectedObjectsObserver.prototype = Object.create(DetectionsObserver);
 
 /**
  * Paints the trajectories into the canvas element
@@ -103,6 +103,7 @@ function TrajectoriesObserver(videoDetections, canvasElement) {
 // TrajectoriesObserver.prototype create the object that inherits from DetectionsObserver.prototype
 TrajectoriesObserver.prototype = Object.create(DetectionsObserver.prototype);
 
+
 /**
  * Remarks the current selected detections in the currentDetectionsDiv
  *
@@ -117,6 +118,13 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
     this.currentDetectionsDiv = currentDetectionsDiv;
 
     this.update = function () {
+        for (var id in this.videoDetections.detRecentlyDeleted) {
+            //Remove the dom element if it is not already selected
+            $(this.currentDetectionsDiv).find('span:contains(' +
+                this.videoDetections.detRecentlyDeleted[id].id + ')').parent().remove();
+            $('div.popover:contains(' +
+                this.videoDetections.detRecentlyDeleted[id].id + ')').remove();
+        }
         for (var id in this.videoDetections.detRecentlySelected) {
             var det = this.videoDetections.detRecentlySelected[id];
             //Add the element
@@ -125,11 +133,6 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
                 html: true,
                 template: this.getDetectionPopoverTemplate(det)
             });
-        }
-        for (var id in this.videoDetections.detRecentlyDeleted) {
-            //Remove the dom element if it is not already selected
-            $(this.currentDetectionsDiv).find('span:contains(' +
-                this.videoDetections.detRecentlyDeleted[id].id + ')').parent().remove();
         }
     };
 
@@ -152,9 +155,9 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
             'data-content=\'' +
                 //popover content
             '<span class="detection-id" hidden>' + detection.id + '</span>' +
-            '</p><p><strong>First Frame: </strong>\t' + frameToSecondsStr(detection.firstFrame, this.videoDetections.fps) +
-            '</p><p><strong>Last Frame: </strong>\t' + frameToSecondsStr(detection.lastFrame, this.videoDetections.fps) +
-            '</p><p><strong>Stage Frames: </strong>\t' +
+            '</p><p><strong>First Occurrence: </strong>\t' + frameToSecondsStr(detection.firstFrame, this.videoDetections.fps) +
+            '</p><p><strong>Last Occurrence: </strong>\t' + frameToSecondsStr(detection.lastFrame, this.videoDetections.fps) +
+            '</p><p><strong>Screen Time: </strong>\t' +
             frameToSecondsStr(detection.lastFrame - detection.firstFrame, this.videoDetections.fps) + '</p>\'>   ' +
 
             '<div class="myCaret" style="margin-top: 10px;"><span ';

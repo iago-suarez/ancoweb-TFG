@@ -73,10 +73,9 @@ function Detection(videoDetections, id, firstFrame, lastFrame, xmlTrajectory) {
 
     /**
      * Sets the image extracting it from the video box
-     * @param video
      * @param box
      */
-    this.setImgFromVideoBox = function (video, box) {
+    this.setImgFromVideoBox = function (box) {
         const factor = 2;
 
         //We frame a rectangle that take twice the space centering it at the same point
@@ -90,7 +89,7 @@ function Detection(videoDetections, id, firstFrame, lastFrame, xmlTrajectory) {
         var increase = (factor - 1) / Math.max(h / w, w / h);
         var side = Math.round(Math.max(h, w) * (1 + increase));
 
-        this.currentImg = capture(video, side, side,
+        this.currentImg = this.videoDetections.captureImg(side, side,
             Math.round(xc - ((side - w) / 2)),
             Math.round(yc - ((side - h) / 2)));
     };
@@ -108,9 +107,11 @@ function Detection(videoDetections, id, firstFrame, lastFrame, xmlTrajectory) {
 
 /**
  * Return true if the image is dark and false if the image is light
- * @returns {boolean}
+ *
+ * @param imageData
+ * @returns {*}
  */
-Detection.imageIsDark = function () {
+Detection.imageIsDark = function (imageData) {
 
     /**
      * Return a number between 0 and 1 which is the brightness of the image
@@ -118,7 +119,7 @@ Detection.imageIsDark = function () {
      * @returns {number}
      */
     function getBrightness(image) {
-        var data = imageData.data;
+        var data = image.data;
         var r, g, b, avg;
         var colorSum = 0;
         for (var x = 0, len = data.length; x < len; x += 4) {
