@@ -72,6 +72,15 @@ function loadXmlResult(video) {
         $('table').tablesorter();
         $('#first-moment-th').click();
 
+        var max = videoDetections.getMaxAbnormalityRate();
+        if (max > 0) {
+            $("#abnormality-slider").slider({
+                max: max,
+                slide: function (event, ui) {
+                    //TODO hacer algo con ui.value
+                }
+            });
+        }
         function updateStatus() {
             if (!video.paused) {
                 videoDetections.updateState();
@@ -101,7 +110,6 @@ function adjustCanvasExtended(video) {
     videoProportion = screenHeight / videoHeight;
 
     var drawingLayers = $('.drawing-layer');
-
     if ((videoWidth / videoHeight) < (screenWidth / screenHeight)) {
         // The video is more square than the screen, so an offset to
         // the left will tell Screen
