@@ -74,31 +74,28 @@ function TrajectoriesObserver(videoDetections, canvasElement) {
         var context = this.canvasElement.getContext('2d');
         context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
 
-        for (var id in this.videoDetections.detections) {
-            var det = this.videoDetections.detections[id];
-
-            if (det.selected) {
-                var trajPoints = $(det.xmlTrajectory).find('point');
-                context.beginPath();
-                context.moveTo(videoProportion * parseInt($(trajPoints[0]).attr('x')),
-                    videoProportion * parseInt($(trajPoints[0]).attr('y')));
-                context.lineWidth = 3;
-                //Select the color
-                if (this.videoDetections.useColors) {
-                    context.strokeStyle = idToRgb(id);
-                } else {
-                    context.strokeStyle = '#ff0000';
-                }
-                var i = 1;
-                var f = 0;
-                while ((i < trajPoints.length) && f <= this.videoDetections.getCurrentFrame()) {
-                    context.lineTo(videoProportion * parseInt($(trajPoints[i]).attr('x')),
-                        videoProportion * parseInt($(trajPoints[i]).attr('y')));
-                    i++;
-                    f = $(trajPoints[i]).attr('frame');
-                }
-                context.stroke();
+        for (var id in this.videoDetections.selectedDetections) {
+            //Get the trajectory points for the current detection
+            var trajPoints = $(this.videoDetections.detections[id].xmlTrajectory).find('point');
+            context.beginPath();
+            context.moveTo(videoProportion * parseInt($(trajPoints[0]).attr('x')),
+                videoProportion * parseInt($(trajPoints[0]).attr('y')));
+            context.lineWidth = 3;
+            //Select the color
+            if (this.videoDetections.useColors) {
+                context.strokeStyle = idToRgb(id);
+            } else {
+                context.strokeStyle = '#ff0000';
             }
+            var i = 1;
+            var f = 0;
+            while ((i < trajPoints.length) && f <= this.videoDetections.getCurrentFrame()) {
+                context.lineTo(videoProportion * parseInt($(trajPoints[i]).attr('x')),
+                    videoProportion * parseInt($(trajPoints[i]).attr('y')));
+                i++;
+                f = $(trajPoints[i]).attr('frame');
+            }
+            context.stroke();
         }
     }
 }
@@ -120,24 +117,20 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
     this.currentDetectionsDiv = currentDetectionsDiv;
 
     this.update = function () {
-        for (var id in this.videoDetections.detections) {
-            var det = this.videoDetections.detections[id];
-
-            var currentDetDomElement = $(this.currentDetectionsDiv).find('span:contains(' + det.id + ')').parent();
-
-            //If is selected
-            if (det.selected && (currentDetDomElement.length === 0)) {
-                var useColor = this.videoDetections.useColors;
-                //Add the element
-                $(this.currentDetectionsDiv).append(det.asCurrentDetection(useColor));
-                $('[data-toggle="popover"]').popover({
-                    html: true,
-                    template: det.asPopoverTemplate(useColor)
-                });
-            } else if (!det.selected && (currentDetDomElement.length !== 0)) {
-                //Remove the element
-                $(currentDetDomElement).remove();
-            }
+        for (var id in this.videoDetections.detRecentlySelected) {
+            var det = this.videoDetections.detRecentlySelected[id];
+            var useColor = this.videoDetections.useColors;
+            //Add the element
+            $(this.currentDetectionsDiv).append(det.asCurrentDetection(useColor));
+            $('[data-toggle="popover"]').popover({
+                html: true,
+                template: det.asPopoverTemplate(useColor)
+            });
+        }
+        for (var id in this.videoDetections.detRecentlyDeleted) {
+            //Remove the dom element if it is not already selected
+            $(this.currentDetectionsDiv).find('span:contains(' +
+                this.videoDetections.detRecentlyDeleted[id].id + ')').parent().remove();
         }
     }
 }
@@ -163,16 +156,19 @@ function DetectionsTableObserver(videoDetections, tableBodyElement) {
     }
 
     this.update = function () {
-        for (var id in this.videoDetections.detections) {
-            var det = this.videoDetections.detections[id];
+        //For each detection recently selected we mark it
+        for (var id in this.videoDetections.detRecentlySelected) {
+            var det = this.videoDetections.detRecentlySelected[id];
+            $(this.tableBodyElement).find('tr:contains(' + det.id + ')')
+                .replaceWith(det.asTableRow(this.videoDetections.useColors));
 
-            var tableDet = $(this.tableBodyElement).find('tr:contains(' + det.id + ')');
+        }
+        //For each detection recently selected we uncheck it
+        for (var id in this.videoDetections.detRecentlyDeleted) {
+            var det = this.videoDetections.detRecentlyDeleted[id];
+            $(this.tableBodyElement).find('tr:contains(' + det.id + ')')
+                .replaceWith(det.asTableRow(this.videoDetections.useColors));
 
-            //If its state has changed
-            if ((det.selected && !$(tableDet).hasClass('selected')) ||
-                !det.selected && $(tableDet).hasClass('selected')) {
-                tableDet.replaceWith(det.asTableRow(this.videoDetections.useColors));
-            }
         }
     }
 }

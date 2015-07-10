@@ -47,53 +47,6 @@ function Detection(videoDetections, id, firstFrame, lastFrame, xmlTrajectory) {
             Math.round(yc - ((side - h) / 2)));
     };
 
-    /**
-     * Return true if the image is dark and false if the image is light
-     * @returns {boolean}
-     */
-    this.imageIsDark = function () {
-
-        /**
-         * Return a number between 0 and 1 which is the brightness of the image
-         * @param imageData
-         * @returns {number}
-         */
-        function getBrightness(imageData) {
-            var data = imageData.data;
-            var r, g, b, avg;
-            var colorSum = 0;
-            for (var x = 0, len = data.length; x < len; x += 4) {
-                r = data[x];
-                g = data[x + 1];
-                b = data[x + 2];
-
-                avg = Math.floor((r + g + b) / 3);
-                colorSum += avg;
-            }
-
-            var brightness = Math.floor(colorSum / (imageData.width * imageData.height));
-            return brightness / 255;
-        }
-
-        const umbral = 0.5;
-        if (this.currentImg == "undefined") {
-            return 0;
-        }
-        var myImg = document.createElement("IMG");
-        myImg.src = this.currentImg;
-        var canvas = document.createElement("canvas");
-        canvas.width = myImg.width / 2;
-        canvas.height = myImg.height / 2;
-
-        var ctx = canvas.getContext("2d");
-
-        ctx.drawImage(myImg, Math.round(myImg.width / 2), 0,
-            canvas.width, canvas.height
-            , 0, 0, canvas.width, canvas.height);
-        var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        return getBrightness(imageData) < umbral;
-    };
-
     this.getBgColorStyle = function (useColors) {
 
         if (useColors) {
@@ -145,7 +98,7 @@ function Detection(videoDetections, id, firstFrame, lastFrame, xmlTrajectory) {
             frameToSecondsStr(this.lastFrame - this.firstFrame, this.videoDetections.fps) + '</p>\'>   ' +
 
             '<div class="myCaret" style="margin-top: 10px;"><span ';
-        //if (this.imageIsDark()) {
+        //if (this.imageIsDark(this.currentImg)) {
         //    result += ' style="border-top-color: #fff;"';
         //}
         result += '></span></div>' +
@@ -168,3 +121,50 @@ function Detection(videoDetections, id, firstFrame, lastFrame, xmlTrajectory) {
             '<div class="popover-content"></div></div>';
     };
 }
+
+/**
+ * Return true if the image is dark and false if the image is light
+ * @returns {boolean}
+ */
+Detection.prototype.imageIsDark = function () {
+
+    /**
+     * Return a number between 0 and 1 which is the brightness of the image
+     * @param imageData
+     * @returns {number}
+     */
+    function getBrightness(image) {
+        var data = imageData.data;
+        var r, g, b, avg;
+        var colorSum = 0;
+        for (var x = 0, len = data.length; x < len; x += 4) {
+            r = data[x];
+            g = data[x + 1];
+            b = data[x + 2];
+
+            avg = Math.floor((r + g + b) / 3);
+            colorSum += avg;
+        }
+
+        var brightness = Math.floor(colorSum / (imageData.width * imageData.height));
+        return brightness / 255;
+    }
+
+    const umbral = 0.5;
+    if (image == "undefined") {
+        return 0;
+    }
+    var myImg = document.createElement("IMG");
+    myImg.src = image;
+    var canvas = document.createElement("canvas");
+    canvas.width = myImg.width / 2;
+    canvas.height = myImg.height / 2;
+
+    var ctx = canvas.getContext("2d");
+
+    ctx.drawImage(myImg, Math.round(myImg.width / 2), 0,
+        canvas.width, canvas.height
+        , 0, 0, canvas.width, canvas.height);
+    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    return getBrightness(imageData) < umbral;
+};

@@ -16,6 +16,9 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
     this.useColors = true;
     this.fps = this.getVideoFps(videoElement);
     this.detections = this.getDetectionsFromXml(this, xmlDetections, xmlTrajectories);
+    this.selectedDetections = {};
+    this.detRecentlyDeleted = {};
+    this.detRecentlySelected = {};
     this.xmlDetectionsByFrame = xmlDetections;
     xmlTrajectories = null;
 
@@ -40,7 +43,8 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
 
         //Gets the current frame objects
         var detectionsToSelect = this.getCurrentFrameXmlObjects();
-
+        this.detRecentlyDeleted = {};
+        this.detRecentlySelected = {};
         for (var id in this.detections) {
             var j = 0;
             var selected = false;
@@ -58,6 +62,12 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
                     //Get the detection position, and set the image of this position
                     var detBox = $(detectionsToSelect).find('object[id=' + det.id + '] box')[0];
                     det.setImgFromVideoBox(this.videoElement, detBox);
+                    this.selectedDetections[det.id] = det;
+                    this.detRecentlySelected[det.id] = det;
+                } else {
+                    //Remove the detection from the selectedMap
+                    delete this.selectedDetections[det.id];
+                    this.detRecentlyDeleted[det.id] = det;
                 }
                 det.selected = selected;
             }
