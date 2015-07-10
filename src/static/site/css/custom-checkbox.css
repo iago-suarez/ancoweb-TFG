@@ -1,0 +1,75 @@
+.checkbox-on-off {
+    position: relative;
+    display: inline-block;
+    width: 35px;
+    padding-right: 2px;
+    overflow: hidden;
+    vertical-align: middle;
+    margin-top: 4px;
+    box-sizing: content-box;
+}
+
+.checkbox-on-off * {
+    -webkit-box-sizing: content-box;
+}
+
+/* this positions the check box label over the text box */
+.checkbox-on-off input[type=checkbox] {
+    position: absolute;
+    opacity: 0;
+}
+
+/* makes the background blue */
+.checkbox-on-off input[type=checkbox]:checked + label {
+    background-color: #167ac6;
+}
+
+/* this is the grey background check mark */
+.checkbox-on-off label {
+    display: inline-block;
+    border: 1px solid transparent;
+    height: 15px;
+    width: 100%;
+    background: #b8b8b8;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+/* if you click the checkbox, it sometimes has a grey square */
+.checkbox-on-off label .checked {
+    display: none;
+}
+
+.checkbox-on-off input[type=checkbox]:checked + label .unchecked {
+    display: none;
+}
+
+.checkbox-on-off label .unchecked {
+    display: inline-block;
+    float: right;
+    padding-right: 3px;
+}
+
+.aaa .checkbox-on-off label {
+    display: inline-block;
+    border: 1px solid transparent;
+    height: 13px;
+    width: 100%;
+    background: #b8b8b8;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+/* this positions the white dot */
+.checkbox-on-off input[type=checkbox]:checked + label .toggle {
+    float: right;
+}
+
+/* this is the actual white dot */
+.checkbox-on-off label .toggle {
+    float: left;
+    background: #fbfbfb;
+    height: 15px;
+    width: 13px;
+    border-radius: 20px;
+}

@@ -1,0 +1,12 @@
+<span class="checkbox-on-off ">
+    <input name="before" type="hidden" value="false">
+    <input id="{{ checkboxId }}" class="" type="checkbox"
+            {% if checked == None or checked == True %} checked=""{% endif %}>
+    <label for="{{ checkboxId }}" class="aaa">
+        <span class="checked">&nbsp;</span>
+        <span class="unchecked"></span>
+        <span class="toggle">&nbsp;</span>
+        <input name="inside" type="hidden" value="false">
+    </label>
+    <input name="after" type="hidden" value="false">
+</span>

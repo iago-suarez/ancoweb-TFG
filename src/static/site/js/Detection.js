@@ -70,7 +70,7 @@ function Detection(videoDetections, id, firstFrame, lastFrame, xmlTrajectory) {
     this.selected = false;
     this.xmlTrajectory = xmlTrajectory;
     this.videoDetections = videoDetections;
-
+    this.abnormalityRate = parseFloat($(xmlTrajectory).attr('abnormality'));
     /**
      * Sets the image extracting it from the video box
      * @param box

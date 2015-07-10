@@ -141,5 +141,15 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
         this.detRecentlyDeleted = this.selectedDetections;
         this.detRecentlySelected = this.selectedDetections;
         this.notify();
+    };
+
+    this.getMaxAbnormalityRate = function () {
+        var max = 0;
+        for (var id in this.detections) {
+            if (max < this.detections[id].abnormalityRate) {
+                max = this.detections[id].abnormalityRate;
+            }
+        }
+        return max;
     }
 }

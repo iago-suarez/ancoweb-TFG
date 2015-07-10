@@ -158,7 +158,8 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
             '</p><p><strong>First Occurrence: </strong>\t' + frameToSecondsStr(detection.firstFrame, this.videoDetections.fps) +
             '</p><p><strong>Last Occurrence: </strong>\t' + frameToSecondsStr(detection.lastFrame, this.videoDetections.fps) +
             '</p><p><strong>Screen Time: </strong>\t' +
-            frameToSecondsStr(detection.lastFrame - detection.firstFrame, this.videoDetections.fps) + '</p>\'>   ' +
+            frameToSecondsStr(detection.lastFrame - detection.firstFrame, this.videoDetections.fps) +
+            '</p><p><strong>Abnormality Rate: </strong>' + detection.abnormalityRate + '</p>\'>' +
 
             '<div class="myCaret" style="margin-top: 10px;"><span ';
         //if (detection.imageIsDark(detection.currentImg)) {
@@ -234,7 +235,7 @@ function DetectionsTableObserver(videoDetections, tableBodyElement) {
             + frameToSecondsStr(detection.firstFrame, detection.videoDetections.fps) + '</td><td>'
             + frameToSecondsStr(detection.lastFrame, detection.videoDetections.fps) + '</td><td>'
             + frameToSecondsStr(detection.lastFrame - detection.firstFrame,
-                this.videoDetections.fps) + '</td></tr>\n';
+                this.videoDetections.fps) + '</td><td>' + detection.abnormalityRate + '</td></tr>\n';
 
         return result;
     };

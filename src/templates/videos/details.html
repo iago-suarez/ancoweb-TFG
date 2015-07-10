@@ -3,7 +3,12 @@
 {% load staticfiles %}
 {% load videosources %}
 
-{% block title %}{{ block.super }}Home{% endblock %}
+{% block title %}{{ block.super }}{{ object.title }}{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'jquery/jquery-ui.css' %}" rel="stylesheet">
+    <link href="{% static 'site/css/custom-checkbox.css' %}" rel="stylesheet">
+{% endblock styles %}
 
 {% block navbar-left %}
     {% include "_navbar.html" with active_link="videos" %}
@@ -23,23 +28,29 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading"><strong>Controls</strong></div>
                     <div class="panel-body text-left">
-                        <div class="checkbox">
+                        <div>
+                            {% include "videos/custom-checkbox.html" with checkboxId="show-analysis-checkbox" %}
                             <label>
-                                <input id="show-analysis-checkbox" type="checkbox" value="" checked>
                                 Show Analysis
                             </label>
                         </div>
-                        <div class="checkbox">
+                        <div>
+                            {% include "videos/custom-checkbox.html" with checkboxId="colors-checkbox" %}
                             <label>
-                                <input id="colors-checkbox" type="checkbox" value="" checked>
                                 Use different colors
                             </label>
                         </div>
-                        <div class="checkbox">
+
+                        <div>
+                            {% include "videos/custom-checkbox.html" with checkboxId="show-all-detections" checked=False %}
                             <label>
-                                <input id="show-all-detections" type="checkbox" value="">
                                 Show all detections
                             </label>
+                        </div>
+                        <div>
+                            <label>Abnormality Rate</label>
+
+                            <div id="abnormality-slider"></div>
                         </div>
                         <div class="text-center">
                             <p id="state_message">{% if ap %} {{ ap.state_message }} {% endif %}</p>
@@ -107,6 +118,7 @@
                             <th id="first-moment-th">First Occurrence</th>
                             <th>Last Occurrence</th>
                             <th>Screen Time</th>
+                            <th>Abnormality Rate</th>
                         </tr>
                         </thead>
                         <tbody id="objects-tbody">
@@ -121,6 +133,8 @@
 {% endblock container %}
 
 {% block scripts %}
+    <script src="{% static 'jquery/jquery-ui.js' %}"></script>
+
     <script src="{% static 'site/js/Detection.js' %}"></script>
     <script src="{% static 'site/js/VideoDetections.js' %}"></script>
     <script src="{% static 'site/js/DetectionsObserver.js' %}"></script>
