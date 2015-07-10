@@ -45,7 +45,7 @@ function DetectionsObjectsObserver(videoDetections, canvasElement) {
             //Select the color
             if (useColors) {
                 paintRect(context, videoProportion * xc, videoProportion * yc,
-                    videoProportion * w, videoProportion * h, idToRgb(this.id), 2);
+                    videoProportion * w, videoProportion * h, Detection.idToRgb(this.id), 2);
             } else {
                 paintRect(context, videoProportion * xc, videoProportion * yc,
                     videoProportion * w, videoProportion * h, 'blue', 2);
@@ -83,7 +83,7 @@ function TrajectoriesObserver(videoDetections, canvasElement) {
             context.lineWidth = 3;
             //Select the color
             if (this.videoDetections.useColors) {
-                context.strokeStyle = idToRgb(id);
+                context.strokeStyle = this.videoDetections.detections[id].color;
             } else {
                 context.strokeStyle = '#ff0000';
             }
@@ -119,12 +119,11 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
     this.update = function () {
         for (var id in this.videoDetections.detRecentlySelected) {
             var det = this.videoDetections.detRecentlySelected[id];
-            var useColor = this.videoDetections.useColors;
             //Add the element
-            $(this.currentDetectionsDiv).append(det.asCurrentDetection(useColor));
+            $(this.currentDetectionsDiv).append(this.getDetectionDiv(det));
             $('[data-toggle="popover"]').popover({
                 html: true,
-                template: det.asPopoverTemplate(useColor)
+                template: this.getDetectionPopoverTemplate(det)
             });
         }
         for (var id in this.videoDetections.detRecentlyDeleted) {
@@ -132,7 +131,56 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
             $(this.currentDetectionsDiv).find('span:contains(' +
                 this.videoDetections.detRecentlyDeleted[id].id + ')').parent().remove();
         }
-    }
+    };
+
+    /**
+     * Return the current detection view if it's selected
+     * @returns {*}
+     */
+    this.getDetectionDiv = function (detection) {
+        var result = '<button data-container="body"' +
+            'class="btn btn-default current-detection-small"' +
+            'style=" border: 10px solid ';
+        if (this.videoDetections.useColors) {
+            result += detection.color + '; ';
+        } else {
+            result += '#d9edf7; ';
+        }
+        result += 'background-image: url(\'' + detection.currentImg + '\'); "' +
+            'data-toggle="popover" data-placement="bottom" ' +
+            'title="Detection ' + detection.id + '" ' +
+            'data-content=\'' +
+                //popover content
+            '<span class="detection-id" hidden>' + detection.id + '</span>' +
+            '</p><p><strong>First Frame: </strong>\t' + frameToSecondsStr(detection.firstFrame, this.videoDetections.fps) +
+            '</p><p><strong>Last Frame: </strong>\t' + frameToSecondsStr(detection.lastFrame, this.videoDetections.fps) +
+            '</p><p><strong>Stage Frames: </strong>\t' +
+            frameToSecondsStr(detection.lastFrame - detection.firstFrame, this.videoDetections.fps) + '</p>\'>   ' +
+
+            '<div class="myCaret" style="margin-top: 10px;"><span ';
+        //if (detection.imageIsDark(detection.currentImg)) {
+        //    result += ' style="border-top-color: #fff;"';
+        //}
+        result += '></span></div>' +
+            '<span class="detection-id" hidden>' + detection.id + '</span>' +
+            '</button>';
+
+        return result;
+    };
+
+    /**
+     * Return the colored base of the pop over view
+     *
+     * @returns {string}
+     * @param detection
+     */
+    this.getDetectionPopoverTemplate = function (detection) {
+        return '<div class="popover" role="tooltip"><div class="arrow"></div>' +
+            '<strong><h3 class="popover-title" style=" ' +
+            detection.getBgColorStyle() + '" ></h3></strong>' +
+            '<div class="popover-content"></div></div>';
+    };
+
 }
 // CurrentDetectionsObserver.prototype create the object that inherits from DetectionsObserver.prototype
 CurrentDetectionsObserver.prototype = Object.create(DetectionsObserver.prototype);
@@ -150,26 +198,47 @@ function DetectionsTableObserver(videoDetections, tableBodyElement) {
 
     this.tableBodyElement = tableBodyElement;
 
-    //Generates the initial table
-    for (var id in videoDetections.detections) {
-        $(tableBodyElement).append(videoDetections.detections[id].asTableRow(true));
-    }
-
     this.update = function () {
         //For each detection recently selected we mark it
         for (var id in this.videoDetections.detRecentlySelected) {
             var det = this.videoDetections.detRecentlySelected[id];
             $(this.tableBodyElement).find('tr:contains(' + det.id + ')')
-                .replaceWith(det.asTableRow(this.videoDetections.useColors));
-
+                .replaceWith(this.detectionAsTableRow(det));
         }
         //For each detection recently selected we uncheck it
         for (var id in this.videoDetections.detRecentlyDeleted) {
             var det = this.videoDetections.detRecentlyDeleted[id];
             $(this.tableBodyElement).find('tr:contains(' + det.id + ')')
-                .replaceWith(det.asTableRow(this.videoDetections.useColors));
-
+                .replaceWith(this.detectionAsTableRow(det));
         }
+    };
+
+
+    /**
+     * Return the detection as a table row
+     *
+     * @returns {string}
+     * @param detection
+     */
+    this.detectionAsTableRow = function (detection) {
+
+        var result = '<tr';
+        if (detection.selected) {
+            result += ' class="selected" style="' +
+                detection.getBgColorStyle() + ';"';
+        }
+        result += '><th scope="row"><a href="#">' + detection.id + '</a></th><td>'
+            + frameToSecondsStr(detection.firstFrame, detection.videoDetections.fps) + '</td><td>'
+            + frameToSecondsStr(detection.lastFrame, detection.videoDetections.fps) + '</td><td>'
+            + frameToSecondsStr(detection.lastFrame - detection.firstFrame,
+                this.videoDetections.fps) + '</td></tr>\n';
+
+        return result;
+    };
+
+    //Generates the initial table
+    for (var id in videoDetections.detections) {
+        $(tableBodyElement).append(this.detectionAsTableRow(videoDetections.detections[id]));
     }
 }
 

@@ -9,57 +9,6 @@ var canvasLeftPadding = 0;
 var canvasTopPadding = 0;
 
 /**
- * Return the corresponding rgb light color to the object with id
- * @param id a number between 0 and 1000000
- * @returns {string}
- */
-function idToRgb(id) {
-
-    function toHexString(color) {
-        if (color < 16) {
-            return '0' + color.toString(16);
-        } else {
-            return color.toString(16);
-        }
-    }
-    var r = Math.round(id / 1000000);
-    var g = Math.round((id % 1000000) / 1000);
-    var b = Math.round(id % 1000);
-
-    //Choose the most similar light color
-    switch (id % 3) {
-        case 0:
-            if (id % 2) {
-                return '#' + 'ff' + toHexString(g) + '00';
-            } else {
-                return '#' + 'ff' + '00' + toHexString(b);
-            }
-        case 1:
-            if (id % 2) {
-                return '#' + '00' + 'ff' + toHexString(b);
-            } else {
-                return '#' + toHexString(r) + 'ff' + '00';
-            }
-        case 2:
-            if (id % 2) {
-                return '#' + '00' + toHexString(g) + 'ff';
-            } else {
-                return '#' + toHexString(r) + '00' + 'ff';
-            }
-    }
-}
-
-/**
- * Return the corresponding rgba light color to the object with id
- * @param id
- * @param a a number between 0 and 256 that represents the transparency
- * @returns {string}
- */
-function idToRgba(id, a) {
-    return idToRgb(id) + a.toString(16);
-}
-
-/**
  * Generate a Canvas element from the video element
  * @param video
  * @param w

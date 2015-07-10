@@ -2,6 +2,45 @@
  * Created by iago on 8/07/15.
  */
 
+
+/**
+ * Return the number of Frames per second in the Custom HTML5 Video element
+ *
+ * @param video
+ * @returns {Number}
+ */
+VideoDetections.getVideoFps = function (video) {
+    var ext = video.currentSrc.split('.').pop();
+    var fps = $(video).children('source[src$="' + ext + '"]').attr('fps');
+    return parseInt(fps);
+};
+
+
+/**
+ * Generates the Table Objects parsing the xml file.
+ *
+ * @returns {{Detection}}
+ * @param videoDetections
+ * @param xmlDetections
+ * @param xmlTrajectories
+ */
+VideoDetections.getDetectionsFromXml = function (videoDetections, xmlDetections, xmlTrajectories) {
+    var myObjects = {};
+    $(xmlDetections).find('frame').each(function () {
+        var fNumber = $(this).attr('number');
+        $(this).find('object').each(function () {
+            var objId = $(this).attr('id');
+            if (myObjects[objId] === undefined) {
+                var trajectory = $(xmlTrajectories).find('trajectory#' + objId)[0];
+                myObjects[objId] = new Detection(videoDetections, objId, parseInt(fNumber), parseInt(fNumber) + 1, trajectory);
+            } else {
+                myObjects[objId].lastFrame = parseInt(fNumber);
+            }
+        });
+    });
+    return myObjects;
+};
+
 /**
  *
  * @param videoElement
@@ -14,8 +53,8 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
     this.videoElement = videoElement;
     this.observers = [];
     this.useColors = true;
-    this.fps = this.getVideoFps(videoElement);
-    this.detections = this.getDetectionsFromXml(this, xmlDetections, xmlTrajectories);
+    this.fps = VideoDetections.getVideoFps(videoElement);
+    this.detections = VideoDetections.getDetectionsFromXml(this, xmlDetections, xmlTrajectories);
     this.selectedDetections = {};
     this.detRecentlyDeleted = {};
     this.detRecentlySelected = {};
@@ -81,41 +120,3 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
         });
     };
 }
-
-/**
- * Return the number of Frames per second in the HTML5 Video element
- *
- * @param video
- * @returns {Number}
- */
-VideoDetections.prototype.getVideoFps = function (video) {
-    var ext = video.currentSrc.split('.').pop();
-    var fps = $(video).children('source[src$="' + ext + '"]').attr('fps');
-    return parseInt(fps);
-};
-
-
-/**
- * Generates the Table Objects parsing the xml file.
- *
- * @returns {{Detection}}
- * @param videoDetections
- * @param xmlDetections
- * @param xmlTrajectories
- */
-VideoDetections.prototype.getDetectionsFromXml = function (videoDetections, xmlDetections, xmlTrajectories) {
-    var myObjects = {};
-    $(xmlDetections).find('frame').each(function () {
-        var fNumber = $(this).attr('number');
-        $(this).find('object').each(function () {
-            var objId = $(this).attr('id');
-            if (myObjects[objId] === undefined) {
-                var trajectory = $(xmlTrajectories).find('trajectory#' + objId)[0];
-                myObjects[objId] = new Detection(videoDetections, objId, parseInt(fNumber), parseInt(fNumber) + 1, trajectory);
-            } else {
-                myObjects[objId].lastFrame = parseInt(fNumber);
-            }
-        });
-    });
-    return myObjects;
-};
