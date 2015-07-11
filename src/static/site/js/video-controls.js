@@ -6,7 +6,6 @@ $(document).ready(function () {
 
     $('#show-analysis-checkbox').click(function () {
         $('.drawing-layer').toggle();
-        console.log("holis");
     });
 
     $('#show-all-detections').click(function () {

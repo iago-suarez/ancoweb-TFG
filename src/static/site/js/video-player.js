@@ -132,6 +132,11 @@ function adjustCanvasExtended(video) {
         .css('padding-left', canvasLeftPadding)
         .css('padding-top', canvasTopPadding);
     adjustTrainingLbl(document.getElementById('training-lbl'));
+
+    //Reload the graphical view
+    if (videoDetections) {
+        videoDetections.notify();
+    }
 }
 
 /**
@@ -150,14 +155,41 @@ function adjustTrainingLbl(trainingLbl) {
     $(trainingLbl).css("top", videoTop + 10).css("left", lblLeft);
 }
 
+function fullScreenChange() {
+
+    /** @namespace document.mozFullScreen */
+    /** @namespace document.webkitIsFullScreen */
+    /** @namespace document.fullScreen */
+    fullScreenOn = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
+    if (fullScreenOn) {
+        $('.drawing-layer').css('z-index', 2147483647);
+        $('#training-lbl').css('z-index', 2147483647);
+
+    } else {
+        $('.drawing-layer').css('z-index', "");
+        $('#training-lbl').css('z-index', 50);
+    }
+    //Reload the graphical view
+    if (videoDetections) {
+        videoDetections.notify();
+    }
+}
 
 $(document).ready(function () {
 
     var video = document.getElementById("video-player");
     if (video === null) {
-        //Si no estamos en la página de video
+        //If we aren't into the video page
         return;
     }
+
+    //If the user change the time bar we update the state
+    video.addEventListener("timeupdate", function () {
+        if (videoDetections && video.paused) {
+            videoDetections.updateState();
+        }
+    }, false);
+
 
     loadXmlResult(video);
 
@@ -170,24 +202,15 @@ $(document).ready(function () {
     });
 
     $(video).ready(function () {
-        adjustCanvasExtended(this);
+        adjustCanvasExtended(video);
     });
 
     /* Entering Exiting full screen mode */
-    $(video).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', function () {
-        /** @namespace document.mozFullScreen */
-        /** @namespace document.webkitIsFullScreen */
-        /** @namespace document.fullScreen */
-        fullScreenOn = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
-        if (fullScreenOn) {
-            $('.drawing-layer').css('z-index', 2147483647);
-            $('#training-lbl').css('z-index', 2147483647);
-
-        } else {
-            $('.drawing-layer').css('z-index', "");
-            $('#training-lbl').css('z-index', 50);
-        }
-    });
+    //$(video).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange',fullScreenChange);
+    document.addEventListener("fullscreenchange", fullScreenChange, false);
+    document.addEventListener("mozfullscreenchange", fullScreenChange, false);
+    document.addEventListener("webkitfullscreenchange", fullScreenChange, false);
+    document.addEventListener("msfullscreenchange", fullScreenChange, false);
 
     /* Start and stop functions for video player */
     function playAndPause(video) {
@@ -199,9 +222,20 @@ $(document).ready(function () {
         }
     }
 
-    $(video).click(function () {
-        playAndPause(this);
-    });
+    var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+    var isChrome = window.chrome;
+
+    if (isOpera) {
+        $(video).click(function () {
+        });
+    }
+
+    if (isChrome && !isOpera) {
+        $(video).click(function () {
+            playAndPause(this);
+            return true;
+        });
+    }
 
     $(document).keypress(function (event) {
         if (event.charCode === 32) {

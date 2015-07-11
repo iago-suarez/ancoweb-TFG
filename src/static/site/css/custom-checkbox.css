@@ -10,7 +10,20 @@
 }
 
 .checkbox-on-off * {
+    box-sizing: content-box;
     -webkit-box-sizing: content-box;
+}
+
+.checkbox-on-off span {
+    box-sizing: content-box;
+}
+
+.checkbox-on-off label {
+    box-sizing: content-box;
+}
+
+.checkbox-on-off input {
+    box-sizing: content-box;
 }
 
 /* this positions the check box label over the text box */
