@@ -15,8 +15,32 @@ $(document).ready(function () {
 
     $('#colors-checkbox').click(function () {
         videoDetections.toggleUseColor();
-
+        if ($(this).is(':checked')) {
+            var abRateDiv = $('#abnormality-rate-cb');
+            if ($(abRateDiv).is(':checked')) {
+                $(abRateDiv).click();
+                videoDetections.useAbnormalityRate = false;
+            }
+        }
     });
+
+    $('#abnormality-rate-cb').click(function () {
+        $('#abnormality-slider-div').toggle();
+        videoDetections.toggleUseAbnormalityRate();
+        if ($(this).is(':checked')) {
+            var useColors = $('#colors-checkbox');
+            if ($(useColors).is(':checked')) {
+                $(useColors).click();
+            }
+        }
+    });
+
+    $('#abnormality-input').on('input', function () {
+        $("#abnormality-slider").slider("option", "value", this.value);
+        videoDetections.alarmAbnormalRate = parseFloat(this.value);
+        videoDetections.notify();
+    });
+
 
     function refreshAnalysisProgress() {
         $.getJSON("/videos/" + getVideoIdFromUrl() + "/analyze/").done(function (analysis) {

@@ -70,7 +70,6 @@ function Detection(videoDetections, id, firstFrame, lastFrame, xmlTrajectory) {
     this.selected = false;
     this.xmlTrajectory = xmlTrajectory;
     this.videoDetections = videoDetections;
-    this.abnormalityRate = parseFloat($(xmlTrajectory).attr('abnormality'));
     /**
      * Sets the image extracting it from the video box
      * @param box
@@ -94,16 +93,85 @@ function Detection(videoDetections, id, firstFrame, lastFrame, xmlTrajectory) {
             Math.round(yc - ((side - h) / 2)));
     };
 
-    this.getBgColorStyle = function () {
-
+    this.getCurrentColor = function () {
         if (this.videoDetections.useColors) {
-            return 'background-color: ' + this.color;
-        } else {
+            return this.color;
+        }
+        if (!this.videoDetections.useAbnormalityRate) {
             // class info color
-            return 'background-color: #d9edf7';
+            return this.LIGHT_BLUE;
+        }
+        var abRate = this.getCurrentAbnormalityRate();
+
+        if (abRate === 0) {
+            // We haven't got abnormaly rate
+            return this.GREY;
+        } else if (abRate > this.videoDetections.alarmAbnormalRate) {
+            // Suspicious object
+            return this.LIGHT_RED;
+        } else {
+            //Trusty object
+            return this.LIGHT_BLUE;
         }
     };
+
+    this.getCurrentAbnormalityRate = function () {
+        //If the detection trajectory has a value for this nFrame,
+        // we update the abnormality rate
+        var nFrame = videoDetections.getCurrentFrame();
+        var framePoint = [];
+        do {
+            framePoint = $(this.xmlTrajectory).find('point[frame="' + nFrame + '"]');
+            nFrame--;
+        } while ((nFrame >= this.firstFrame) && framePoint.length === 0);
+        //If we didn't find return 0 else return the value
+        if (framePoint.length === 0) {
+            return 0;
+        } else {
+            return parseFloat($(framePoint).attr('abnormality'));
+        }
+    };
+
+    this.getMaxAbnormalityRate = function () {
+        var max = 0;
+        var currentAb = 0;
+        $(this.xmlTrajectory).find('point').each(function () {
+            currentAb = parseFloat($(this).attr('abnormality'));
+            if (currentAb > max) {
+                max = currentAb;
+            }
+        });
+        return max;
+    };
+
+    this.getAbnormalityColor = function () {
+        if (this.videoDetections.useColors) {
+            return this.color;
+        }
+        if (!this.videoDetections.useAbnormalityRate) {
+            return this.BLUE;
+        }
+
+        var abRate = this.getCurrentAbnormalityRate();
+        if (abRate === 0) {
+            // We haven't got abnormaly rate
+            return this.BLACK;
+        } else if (abRate > this.videoDetections.alarmAbnormalRate) {
+            // Suspicious object
+            return this.RED;
+        } else {
+            //Trusty object
+            return this.BLUE;
+        }
+    }
 }
+Detection.prototype.RED = '#FF0000';
+Detection.prototype.BLUE = '#0000FF';
+Detection.prototype.BLACK = '#000000';
+Detection.prototype.LIGHT_RED = '#FF6666';
+Detection.prototype.LIGHT_BLUE = '#d9edf7';
+Detection.prototype.GREY = '#777777';
+
 
 /**
  * Return true if the image is dark and false if the image is light
@@ -115,8 +183,8 @@ Detection.imageIsDark = function (imageData) {
 
     /**
      * Return a number between 0 and 1 which is the brightness of the image
-     * @param imageData
      * @returns {number}
+     * @param image
      */
     function getBrightness(image) {
         var data = image.data;
@@ -150,8 +218,8 @@ Detection.imageIsDark = function (imageData) {
     ctx.drawImage(myImg, Math.round(myImg.width / 2), 0,
         canvas.width, canvas.height
         , 0, 0, canvas.width, canvas.height);
-    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    return getBrightness(imageData) < umbral;
+    var imageCtx = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    return getBrightness(imageCtx) < umbral;
 };
 
 

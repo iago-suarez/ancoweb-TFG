@@ -76,11 +76,16 @@ function loadXmlResult(video) {
         if (max > 0) {
             $("#abnormality-slider").slider({
                 max: max,
+                step: 0.001,
                 slide: function (event, ui) {
-                    //TODO hacer algo con ui.value
+                    $('#abnormality-input').val(ui.value);
+                    videoDetections.alarmAbnormalRate = parseFloat(ui.value);
+                    videoDetections.notify();
                 }
             });
+            $('#abnormality-input').val(0);
         }
+
         function updateStatus() {
             if (!video.paused) {
                 videoDetections.updateState();
@@ -90,10 +95,6 @@ function loadXmlResult(video) {
         }
 
         updateStatus();
-
-        /*        video.addEventListener("timeupdate", function () {
-            videoDetections.updateState();
-         }, false);*/
     });
 }
 
@@ -206,7 +207,6 @@ $(document).ready(function () {
     });
 
     /* Entering Exiting full screen mode */
-    //$(video).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange',fullScreenChange);
     document.addEventListener("fullscreenchange", fullScreenChange, false);
     document.addEventListener("mozfullscreenchange", fullScreenChange, false);
     document.addEventListener("webkitfullscreenchange", fullScreenChange, false);

@@ -206,6 +206,19 @@ canvas {
     border-left: 7px solid transparent;
 }
 
+.abnormality-slider-div div.col-xs-8 {
+    margin-top: 10px;
+}
+
+.abnormality-slider-div div.col-xs-3 {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#abnormality-input {
+    margin-top: 0;
+}
+
 /* EXPIRAL ROTATORIA */
 .glyphicon-refresh-animate {
     -animation: spin .7s infinite linear;

@@ -59,6 +59,8 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
     this.detRecentlyDeleted = {};
     this.detRecentlySelected = {};
     this.xmlDetectionsByFrame = xmlDetections;
+    this.alarmAbnormalRate = 0;
+    this.useAbnormalityRate = false;
     xmlTrajectories = null;
 
     this.addObserver = function (observer) {
@@ -143,11 +145,23 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
         this.notify();
     };
 
+    /**
+     * Refresh the detections because the user clicks in the Filter by abnormality rate CheckBox
+     */
+    this.toggleUseAbnormalityRate = function () {
+        this.useAbnormalityRate = !this.useAbnormalityRate;
+        this.detRecentlyDeleted = this.selectedDetections;
+        this.detRecentlySelected = this.selectedDetections;
+        this.notify();
+    };
+
     this.getMaxAbnormalityRate = function () {
         var max = 0;
+        var maxDet;
         for (var id in this.detections) {
-            if (max < this.detections[id].abnormalityRate) {
-                max = this.detections[id].abnormalityRate;
+            maxDet = this.detections[id].getMaxAbnormalityRate();
+            if (max < maxDet) {
+                max = maxDet;
             }
         }
         return max;

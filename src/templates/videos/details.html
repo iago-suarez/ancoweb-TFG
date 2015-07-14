@@ -48,9 +48,23 @@
                             </label>
                         </div>
                         <div>
+                            {% include "videos/custom-checkbox.html" with checkboxId="abnormality-rate-cb" checked=False %}
+                            <label>
+                                Filter by abnormality rate
+                            </label>
+                        </div>
+                        <div id="abnormality-slider-div" hidden="hidden">
                             <label>Abnormality Rate</label>
 
-                            <div id="abnormality-slider"></div>
+                            <div class="row abnormality-slider-div">
+                                <div class="col-xs-8">
+                                    <div id="abnormality-slider"></div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <input id="abnormality-input" type="text" class="form-control" text="0">
+                                </div>
+                        </div>
+
                         </div>
                         <div class="text-center">
                             <p id="state_message">{% if ap %} {{ ap.state_message }} {% endif %}</p>
@@ -118,7 +132,6 @@
                             <th id="first-moment-th">First Occurrence</th>
                             <th>Last Occurrence</th>
                             <th>Screen Time</th>
-                            <th>Abnormality Rate</th>
                         </tr>
                         </thead>
                         <tbody id="objects-tbody">

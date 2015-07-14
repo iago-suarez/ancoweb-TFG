@@ -34,7 +34,8 @@ function DetectedObjectsObserver(videoDetections, canvasElement) {
         var context = this.canvasElement.getContext('2d');
         context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
 
-        var useColors = this.videoDetections.useColors;
+        var videoDetections = this.videoDetections;
+
         //For each detection in the xml we mark it
         $(this.videoDetections.getCurrentFrameXmlObjects()).each(function () {
 
@@ -42,14 +43,10 @@ function DetectedObjectsObserver(videoDetections, canvasElement) {
             var w = parseInt($(this).find('box').attr('h'));
             var xc = parseInt($(this).find('box').attr('xc'));
             var yc = parseInt($(this).find('box').attr('yc'));
-            //Select the color
-            if (useColors) {
-                paintRect(context, videoProportion * xc, videoProportion * yc,
-                    videoProportion * w, videoProportion * h, Detection.idToRgb(this.id), 2);
-            } else {
-                paintRect(context, videoProportion * xc, videoProportion * yc,
-                    videoProportion * w, videoProportion * h, 'blue', 2);
-            }
+
+            var color = videoDetections.detections[this.id].getAbnormalityColor();
+            paintRect(context, videoProportion * xc, videoProportion * yc,
+                videoProportion * w, videoProportion * h, color, 2);
         });
     }
 }
@@ -81,12 +78,10 @@ function TrajectoriesObserver(videoDetections, canvasElement) {
             context.moveTo(videoProportion * parseInt($(trajPoints[0]).attr('x')),
                 videoProportion * parseInt($(trajPoints[0]).attr('y')));
             context.lineWidth = 3;
+
             //Select the color
-            if (this.videoDetections.useColors) {
-                context.strokeStyle = this.videoDetections.detections[id].color;
-            } else {
-                context.strokeStyle = '#ff0000';
-            }
+            context.strokeStyle = this.videoDetections.detections[id].getAbnormalityColor();
+
             var i = 1;
             var f = 0;
             while ((i < trajPoints.length) && f <= this.videoDetections.getCurrentFrame()) {
@@ -117,22 +112,68 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
 
     this.currentDetectionsDiv = currentDetectionsDiv;
 
+    this.refreshCurrentDetection = function (newDet) {
+        //Select old detection and remove it popover
+        var oldDetDiv = $('.current-detection-small:contains(' + newDet.id + ')');
+        var myPopover = $('div.popover:contains(' + newDet.id + ')');
+        myPopover.popover('hide');
+        myPopover.popover('disable');
+        myPopover.remove();
+        $(oldDetDiv).replaceWith(this.getDetectionDiv(newDet));
+        var myButt = $('.current-detection-small:contains(' + newDet.id + ')');
+        this.addPopover(newDet, myButt);
+    };
+
+    this.createCurrentDetection = function (det) {
+        //Add the element
+        $(this.currentDetectionsDiv).append(this.getDetectionDiv(det));
+        var myButt = $('.current-detection-small:contains(' + det.id + ')');
+        this.addPopover(det, myButt);
+    };
+
+    this.addPopover = function (det, currentDetectionBtn) {
+
+        var showPopover = function (videoDetections, popover) {
+                var det = videoDetections.detections[$(popover).find('.detection-id').text()];
+                $(popover).attr('data-content', CurrentDetectionsObserver.getPopoverDataContent(det));
+                $(popover).popover('show');
+            }
+            , hidePopover = function () {
+                $(this).popover('hide');
+            };
+        //Pass the videoDetections ass local variable
+        var myVD = this.videoDetections;
+        $(currentDetectionBtn).popover({
+            html: true,
+            template: this.getDetectionPopoverTemplate(det),
+            content: 'Popover content',
+            trigger: 'manual'
+        })
+            .focus(function () {
+                showPopover(myVD, this);
+            })
+            .blur(hidePopover)
+            .hover(function () {
+                showPopover(myVD, this)
+            }, hidePopover);
+    };
+
     this.update = function () {
         for (var id in this.videoDetections.detRecentlyDeleted) {
-            //Remove the dom element if it is not already selected
+            //Remove the dom element
             $(this.currentDetectionsDiv).find('span:contains(' +
                 this.videoDetections.detRecentlyDeleted[id].id + ')').parent().remove();
             $('div.popover:contains(' +
                 this.videoDetections.detRecentlyDeleted[id].id + ')').remove();
         }
         for (var id in this.videoDetections.detRecentlySelected) {
-            var det = this.videoDetections.detRecentlySelected[id];
-            //Add the element
-            $(this.currentDetectionsDiv).append(this.getDetectionDiv(det));
-            $('[data-toggle="popover"]').popover({
-                html: true,
-                template: this.getDetectionPopoverTemplate(det)
-            });
+            this.createCurrentDetection(this.videoDetections.detRecentlySelected[id]);
+        }
+        //If we filter by abnormal rate update the color if it's necessary
+        if (this.videoDetections.useAbnormalityRate) {
+            for (var id in this.videoDetections.selectedDetections) {
+                this.refreshCurrentDetection(this.videoDetections.selectedDetections[id]);
+            }
         }
     };
 
@@ -143,30 +184,12 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
     this.getDetectionDiv = function (detection) {
         var result = '<button data-container="body"' +
             'class="btn btn-default current-detection-small"' +
-            'style=" border: 10px solid ';
-        if (this.videoDetections.useColors) {
-            result += detection.color + '; ';
-        } else {
-            result += '#d9edf7; ';
-        }
+            'style=" border: 10px solid ' + detection.getCurrentColor() + '; ';
         result += 'background-image: url(\'' + detection.currentImg + '\'); "' +
             'data-toggle="popover" data-placement="bottom" ' +
             'title="Detection ' + detection.id + '" ' +
-            'data-content=\'' +
-                //popover content
-            '<span class="detection-id" hidden>' + detection.id + '</span>' +
-            '</p><p><strong>First Occurrence: </strong>\t' + frameToSecondsStr(detection.firstFrame, this.videoDetections.fps) +
-            '</p><p><strong>Last Occurrence: </strong>\t' + frameToSecondsStr(detection.lastFrame, this.videoDetections.fps) +
-            '</p><p><strong>Screen Time: </strong>\t' +
-            frameToSecondsStr(detection.lastFrame - detection.firstFrame, this.videoDetections.fps) +
-            '</p><p><strong>Abnormality Rate: </strong>' + detection.abnormalityRate + '</p>\'>' +
-
-            '<div class="myCaret" style="margin-top: 10px;"><span ';
-        //if (detection.imageIsDark(detection.currentImg)) {
-        //    result += ' style="border-top-color: #fff;"';
-        //}
-        result += '></span></div>' +
-            '<span class="detection-id" hidden>' + detection.id + '</span>' +
+            'data-content=\'' + CurrentDetectionsObserver.getPopoverDataContent(detection) + '\'>';
+        result += '<span class="detection-id" hidden>' + detection.id + '</span>' +
             '</button>';
 
         return result;
@@ -180,14 +203,26 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
      */
     this.getDetectionPopoverTemplate = function (detection) {
         return '<div class="popover" role="tooltip"><div class="arrow"></div>' +
-            '<strong><h3 class="popover-title" style=" ' +
-            detection.getBgColorStyle() + '" ></h3></strong>' +
+            '<strong><h3 class="popover-title" style="background-color: ' +
+            detection.getCurrentColor() + '" ></h3></strong>' +
             '<div class="popover-content"></div></div>';
     };
-
 }
 // CurrentDetectionsObserver.prototype create the object that inherits from DetectionsObserver.prototype
 CurrentDetectionsObserver.prototype = Object.create(DetectionsObserver.prototype);
+
+
+CurrentDetectionsObserver.getPopoverDataContent = function (detection) {
+    return '<span class="detection-id" hidden>' + detection.id + '</span>' +
+        '</p><p><strong>First Occurrence: </strong>\t' +
+        frameToSecondsStr(detection.firstFrame, detection.videoDetections.fps) +
+        '</p><p><strong>Last Occurrence: </strong>\t' +
+        frameToSecondsStr(detection.lastFrame, detection.videoDetections.fps) +
+        '</p><p><strong>Screen Time: </strong>\t' +
+        frameToSecondsStr(detection.lastFrame - detection.firstFrame, detection.videoDetections.fps) +
+        '</p><p id="popover-ab-rate"><strong>Abnormality Rate: </strong>' +
+        detection.getCurrentAbnormalityRate() + '</p>';
+};
 
 /**
  * Remarks the current selected detections in the table
@@ -228,14 +263,14 @@ function DetectionsTableObserver(videoDetections, tableBodyElement) {
 
         var result = '<tr';
         if (detection.selected) {
-            result += ' class="selected" style="' +
-                detection.getBgColorStyle() + ';"';
+            result += ' class="selected" style="background-color: ' +
+                detection.getCurrentColor() + ';"';
         }
         result += '><th scope="row"><a href="#">' + detection.id + '</a></th><td>'
             + frameToSecondsStr(detection.firstFrame, detection.videoDetections.fps) + '</td><td>'
             + frameToSecondsStr(detection.lastFrame, detection.videoDetections.fps) + '</td><td>'
             + frameToSecondsStr(detection.lastFrame - detection.firstFrame,
-                this.videoDetections.fps) + '</td><td>' + detection.abnormalityRate + '</td></tr>\n';
+                this.videoDetections.fps) + '</td></tr>\n';
 
         return result;
     };
