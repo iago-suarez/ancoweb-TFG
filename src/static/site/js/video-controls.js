@@ -10,6 +10,15 @@ $(document).ready(function () {
 
     $('#show-all-detections').click(function () {
         $('#detected-objs-table').toggle();
+        var currentDetsObserver = videoDetections.observers[0];
+        var tableObserver = videoDetections.observers[1];
+        if (tableObserver.isEnable) {
+            tableObserver.disable();
+            currentDetsObserver.enable();
+        } else {
+            tableObserver.enable();
+            currentDetsObserver.disable();
+        }
         $('#current-detected-objs').toggle();
     });
 

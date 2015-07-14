@@ -17,8 +17,11 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
     this.fps = this.getVideoFps(videoElement);
     this.detections = {};
     this.selectedDetections = {};
-    this.detRecentlyDeleted = {};
-    this.detRecentlySelected = {};
+    this.detRecentlyDeleted = [];
+    this.detRecentlySelected = [];
+    this.currentSuspiciousDetections = [];
+    this.normalDetections = [];
+    this.notStudiedDetections = [];
     this.xmlDetectionsByFrame = {};
     this.alarmAbnormalRate = 0;
     this.useAbnormalityRate = false;
@@ -93,8 +96,8 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
         if (!detectionsToSelect) {
             return;
         }
-        this.detRecentlyDeleted = {};
-        this.detRecentlySelected = {};
+        this.detRecentlyDeleted = [];
+        this.detRecentlySelected = [];
         for (var id in this.detections) {
             // Check if the selected state has change
             var j = 0;
@@ -114,11 +117,11 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
                     var detBox = $(detectionsToSelect).find('object[id=' + det.id + '] box')[0];
                     det.setImgFromVideoBox(detBox);
                     this.selectedDetections[det.id] = det;
-                    this.detRecentlySelected[det.id] = det;
+                    this.detRecentlySelected[this.detRecentlySelected.length] = det;
                 } else {
                     //Remove the detection from the selectedMap
                     delete this.selectedDetections[det.id];
-                    this.detRecentlyDeleted[det.id] = det;
+                    this.detRecentlyDeleted[this.detRecentlyDeleted.length] = det;
                 }
                 det.selected = selected;
             }
@@ -166,8 +169,12 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
      */
     this.toggleUseColor = function () {
         this.useColors = !this.useColors;
-        this.detRecentlyDeleted = this.selectedDetections;
-        this.detRecentlySelected = this.selectedDetections;
+        this.detRecentlyDeleted = $.map(this.selectedDetections, function (value, index) {
+            return [value];
+        });
+        this.detRecentlySelected = $.map(this.selectedDetections, function (value, index) {
+            return [value];
+        });
         this.notify();
     };
 
@@ -176,8 +183,12 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
      */
     this.toggleUseAbnormalityRate = function () {
         this.useAbnormalityRate = !this.useAbnormalityRate;
-        this.detRecentlyDeleted = this.selectedDetections;
-        this.detRecentlySelected = this.selectedDetections;
+        this.detRecentlyDeleted = $.map(this.selectedDetections, function (value, index) {
+            return [value];
+        });
+        this.detRecentlySelected = $.map(this.selectedDetections, function (value, index) {
+            return [value];
+        });
         this.notify();
     };
 

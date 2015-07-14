@@ -10,10 +10,19 @@
  */
 function DetectionsObserver(videoDetections) {
     this.videoDetections = videoDetections;
+    this.isEnable = true;
 }
 
 DetectionsObserver.prototype.update = function () {
     throw new Error("Abstract method!");
+};
+
+DetectionsObserver.prototype.enable = function () {
+    this.isEnable = true;
+};
+
+DetectionsObserver.prototype.disable = function () {
+    this.isEnable = false;
 };
 
 /**
@@ -31,6 +40,9 @@ function DetectedObjectsObserver(videoDetections, canvasElement) {
     this.canvasElement = canvasElement;
 
     this.update = function () {
+        if (!this.isEnable) {
+            return;
+        }
         var context = this.canvasElement.getContext('2d');
         context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
 
@@ -48,7 +60,7 @@ function DetectedObjectsObserver(videoDetections, canvasElement) {
             paintRect(context, videoProportion * xc, videoProportion * yc,
                 videoProportion * w, videoProportion * h, color, 2);
         });
-    }
+    };
 }
 
 // DetectedObjectsObserver.prototype create the object that inherits from DetectionsObserver.prototype
@@ -68,6 +80,9 @@ function TrajectoriesObserver(videoDetections, canvasElement) {
     this.canvasElement = canvasElement;
 
     this.update = function () {
+        if (!this.isEnable) {
+            return;
+        }
         var context = this.canvasElement.getContext('2d');
         context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
 
@@ -92,7 +107,7 @@ function TrajectoriesObserver(videoDetections, canvasElement) {
             }
             context.stroke();
         }
-    }
+    };
 }
 
 // TrajectoriesObserver.prototype create the object that inherits from DetectionsObserver.prototype
@@ -113,7 +128,7 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
     this.currentDetectionsDiv = currentDetectionsDiv;
 
     this.refreshCurrentDetection = function (newDet) {
-        //TODO Optimizar esta functión para que solo cambie el color en vez de todo el botton
+        //TODO Optimizar esta functión para que solo cambie el color en vez de todo el button
         //Select old detection and remove it popover
         var oldDetDiv = $('.current-detection-small:contains(' + newDet.id + ')');
         var myPopover = $('div.popover:contains(' + newDet.id + ')');
@@ -160,16 +175,18 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
     };
 
     this.update = function () {
-        for (var id in this.videoDetections.detRecentlyDeleted) {
+        if (!this.isEnable) {
+            return;
+        }
+        var self = this;
+        this.videoDetections.detRecentlyDeleted.forEach(function (detection) {
             //Remove the dom element
-            $(this.currentDetectionsDiv).find('span:contains(' +
-                this.videoDetections.detRecentlyDeleted[id].id + ')').parent().remove();
-            $('div.popover:contains(' +
-                this.videoDetections.detRecentlyDeleted[id].id + ')').remove();
-        }
-        for (var id in this.videoDetections.detRecentlySelected) {
-            this.createCurrentDetection(this.videoDetections.detRecentlySelected[id]);
-        }
+            $(self.currentDetectionsDiv).find('span:contains(' + detection.id + ')').parent().remove();
+            $('div.popover:contains(' + detection.id + ')').remove();
+        });
+        this.videoDetections.detRecentlySelected.forEach(function (detection) {
+            self.createCurrentDetection(detection);
+        });
         //If we filter by abnormal rate update the color if it's necessary
         if (this.videoDetections.useAbnormalityRate) {
             for (var id in this.videoDetections.selectedDetections) {
@@ -208,6 +225,21 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
             detection.getCurrentColor() + '" ></h3></strong>' +
             '<div class="popover-content"></div></div>';
     };
+
+    this.enable = function () {
+        this.isEnable = true;
+        for (var id in this.videoDetections.selectedDetections) {
+            this.createCurrentDetection(this.videoDetections.selectedDetections[id]);
+        }
+    };
+    this.disable = function () {
+        this.isEnable = false;
+        $('.current-detection-small').remove();
+        var popover = $('.popover');
+        popover.popover('hide');
+        popover.popover('disable');
+        popover.remove();
+    };
 }
 // CurrentDetectionsObserver.prototype create the object that inherits from DetectionsObserver.prototype
 CurrentDetectionsObserver.prototype = Object.create(DetectionsObserver.prototype);
@@ -236,25 +268,28 @@ function DetectionsTableObserver(videoDetections, tableBodyElement) {
     //Call to the father constructor to init his values
     DetectionsObserver.call(this, videoDetections);
 
+    this.isEnable = false;
     this.tableBodyElement = tableBodyElement;
 
     this.update = function () {
+        if (!this.isEnable) {
+            return;
+        }
+        var self = this;
         //For each detection recently selected we mark it
-        for (var id in this.videoDetections.detRecentlySelected) {
-            var det = this.videoDetections.detRecentlySelected[id];
-            $(this.tableBodyElement).find('tr:contains(' + det.id + ')')
-                .replaceWith(this.detectionAsTableRow(det));
-        }
+        this.videoDetections.detRecentlySelected.forEach(function (det) {
+            $(self.tableBodyElement).find('tr#' + det.id)
+                .replaceWith(self.detectionAsTableRow(det));
+        });
         //For each detection recently selected we uncheck it
-        for (var id in this.videoDetections.detRecentlyDeleted) {
-            var det = this.videoDetections.detRecentlyDeleted[id];
-            $(this.tableBodyElement).find('tr:contains(' + det.id + ')')
-                .replaceWith(this.detectionAsTableRow(det));
-        }
+        this.videoDetections.detRecentlyDeleted.forEach(function (det) {
+            $(self.tableBodyElement).find('tr#' + det.id)
+                .replaceWith(self.detectionAsTableRow(det));
+        });
         if (this.videoDetections.useAbnormalityRate) {
             for (var id in this.videoDetections.selectedDetections) {
                 var det = this.videoDetections.selectedDetections[id];
-                $(this.tableBodyElement).find('tr:contains(' + det.id + ')')
+                $(this.tableBodyElement).find('tr#' + det.id)
                     .replaceWith(this.detectionAsTableRow(det));
             }
         }
@@ -266,13 +301,29 @@ function DetectionsTableObserver(videoDetections, tableBodyElement) {
      *
      * @returns {string}
      * @param detection
+     * @param opts can contain {'color' , 'selected' }
      */
-    this.detectionAsTableRow = function (detection) {
+    this.detectionAsTableRow = function (detection, opts) {
+        // Javascript method overloading pattern {'color' , 'selected' }
+        var color;
+        var selected;
+        if (opts) {
+            if (opts['color'] !== undefined) { //if test param exists, do something..
+                color = opts['color'];
+            } else if (opts['selected'] !== undefined) {
+                selected = opts['selected'];
+            }
+        }
+        if (color === undefined) {
+            color = detection.getCurrentColor();
+        }
+        if (selected === undefined) {
+            selected = detection.selected;
+        }
 
-        var result = '<tr';
-        if (detection.selected) {
-            result += ' class="selected" style="background-color: ' +
-                detection.getCurrentColor() + ';"';
+        var result = '<tr id="' + detection.id + '"';
+        if (selected) {
+            result += ' class="selected" style="background-color: ' + color + ';"';
         }
         result += '><th scope="row"><a href="#">' + detection.id + '</a></th><td>'
             + frameToSecondsStr(detection.firstFrame, detection.videoDetections.fps) + '</td><td>'
@@ -283,11 +334,28 @@ function DetectionsTableObserver(videoDetections, tableBodyElement) {
         return result;
     };
 
+    this.enable = function () {
+        this.isEnable = true;
+        for (var id in this.videoDetections.selectedDetections) {
+            var det = this.videoDetections.selectedDetections[id];
+            $(this.tableBodyElement).find('tr#' + det.id)
+                .replaceWith(this.detectionAsTableRow(det));
+        }
+    };
+    this.disable = function () {
+        this.isEnable = false;
+        for (var id in this.videoDetections.selectedDetections) {
+            var det = this.videoDetections.selectedDetections[id];
+            $(this.tableBodyElement).find('tr#' + det.id)
+                .replaceWith(this.detectionAsTableRow(det, {'selected': false}));
+        }
+    };
+
     //Generates the initial table
     for (var id in videoDetections.detections) {
         $(tableBodyElement).append(this.detectionAsTableRow(videoDetections.detections[id]));
     }
-};
+}
 
 // DetectionsTableObserver.prototype create the object that inherits from DetectionsObserver.prototype
 DetectionsTableObserver.prototype = Object.create(DetectionsObserver.prototype);
@@ -309,6 +377,9 @@ function TrainingMsgObserver(videoDetections, canvasElement, trainingLbl, traini
     this.trainingFramesNum = trainingFramesNum;
 
     this.update = function () {
+        if (!this.isEnable) {
+            return;
+        }
         //If the system is training and the label is not displayed, display them
         if ((this.videoDetections.getCurrentFrame() < this.trainingFramesNum) && !this.isLabelDisplayed) {
 
@@ -332,7 +403,7 @@ function TrainingMsgObserver(videoDetections, canvasElement, trainingLbl, traini
             $(this.trainingLbl).hide();
             this.isLabelDisplayed = false;
         }
-    }
+    };
 }
 
 // TrainingMsgObserver.prototype create the object that inherits from DetectionsObserver.prototype
