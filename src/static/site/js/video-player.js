@@ -1,5 +1,5 @@
 /****************** Video Details view ********************/
-
+const DEBUG_TIME = true;
 const trainingFrames = 35;
 
 //Used to resize the video if we are in full screen

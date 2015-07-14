@@ -2,45 +2,6 @@
  * Created by iago on 8/07/15.
  */
 
-
-/**
- * Return the number of Frames per second in the Custom HTML5 Video element
- *
- * @param video
- * @returns {Number}
- */
-VideoDetections.getVideoFps = function (video) {
-    var ext = video.currentSrc.split('.').pop();
-    var fps = $(video).children('source[src$="' + ext + '"]').attr('fps');
-    return parseInt(fps);
-};
-
-
-/**
- * Generates the Table Objects parsing the xml file.
- *
- * @returns {{Detection}}
- * @param videoDetections
- * @param xmlDetections
- * @param xmlTrajectories
- */
-VideoDetections.getDetectionsFromXml = function (videoDetections, xmlDetections, xmlTrajectories) {
-    var myObjects = {};
-    $(xmlDetections).find('frame').each(function () {
-        var fNumber = $(this).attr('number');
-        $(this).find('object').each(function () {
-            var objId = $(this).attr('id');
-            if (myObjects[objId] === undefined) {
-                var trajectory = $(xmlTrajectories).find('trajectory#' + objId)[0];
-                myObjects[objId] = new Detection(videoDetections, objId, parseInt(fNumber), parseInt(fNumber) + 1, trajectory);
-            } else {
-                myObjects[objId].lastFrame = parseInt(fNumber);
-            }
-        });
-    });
-    return myObjects;
-};
-
 /**
  *
  * @param videoElement
@@ -53,15 +14,43 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
     this.videoElement = videoElement;
     this.observers = [];
     this.useColors = true;
-    this.fps = VideoDetections.getVideoFps(videoElement);
-    this.detections = VideoDetections.getDetectionsFromXml(this, xmlDetections, xmlTrajectories);
+    this.fps = this.getVideoFps(videoElement);
+    this.detections = {};
     this.selectedDetections = {};
     this.detRecentlyDeleted = {};
     this.detRecentlySelected = {};
-    this.xmlDetectionsByFrame = xmlDetections;
+    this.xmlDetectionsByFrame = {};
     this.alarmAbnormalRate = 0;
     this.useAbnormalityRate = false;
+
+    /**
+     * Generates the initial State of the VideoDetections object.
+     *
+     * @param xmlDetections
+     * @param xmlTrajectories
+     */
+    this._init = function (xmlDetections, xmlTrajectories) {
+        var selfVD = this;
+        $(xmlDetections).find('frame').each(function () {
+            var fNumber = $(this).attr('number');
+            selfVD.xmlDetectionsByFrame[fNumber] = $(this).find('object');
+            $(selfVD.xmlDetectionsByFrame[fNumber]).each(function () {
+                var objId = $(this).attr('id');
+                if (selfVD.detections[objId] === undefined) {
+                    var trajectory = $(xmlTrajectories).find('trajectory#' + objId)[0];
+                    selfVD.detections[objId] = new Detection(selfVD, objId,
+                        parseInt(fNumber), parseInt(fNumber) + 1, trajectory);
+                } else {
+                    selfVD.detections[objId].lastFrame = parseInt(fNumber);
+                }
+            });
+        });
+    };
+
+    //Get initial state from xml
+    this._init(xmlDetections, xmlTrajectories);
     xmlTrajectories = null;
+    xmlDetections = null;
 
     this.addObserver = function (observer) {
         this.observers.push(observer);
@@ -72,8 +61,7 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
     };
 
     this.getCurrentFrameXmlObjects = function () {
-        return $(this.xmlDetectionsByFrame)
-            .find('frame[number=' + this.getCurrentFrame() + '] objectlist object');
+        return this.xmlDetectionsByFrame[this.getCurrentFrame()];
     };
 
     /**
@@ -96,20 +84,29 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
     this.updateState = function () {
 
         //Gets the current frame objects
+        if (DEBUG_TIME) {
+            var debugTime = Date.now();
+        }
+
         var detectionsToSelect = this.getCurrentFrameXmlObjects();
+        //if the XML file had no detections for the current frame we exit
+        if (!detectionsToSelect) {
+            return;
+        }
         this.detRecentlyDeleted = {};
         this.detRecentlySelected = {};
         for (var id in this.detections) {
+            // Check if the selected state has change
             var j = 0;
             var selected = false;
             var obj;
             var det = this.detections[id];
-            while ((j < detectionsToSelect.length) && (!selected)) {
+            while ((j < detectionsToSelect.size()) && (!selected)) {
                 obj = detectionsToSelect[j];
                 selected = (obj.id === det.id);
                 j++;
             }
-            //If it's necessary update the row state
+            // If it's necessary update the row state
             if (det.selected != selected) {
                 if (!det.selected) {
                     //if he has appeared for the first time we add it
@@ -126,13 +123,42 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
                 det.selected = selected;
             }
         }
+        if (DEBUG_TIME) {
+            console.log("Select time: " + Math.abs(Date.now() - debugTime));
+        }
         this.notify();
+
     };
 
     this.notify = function () {
+        if (DEBUG_TIME) {
+            var notifyTime = Date.now();
+            var totalTime = Date.now();
+        }
         this.observers.forEach(function (observer) {
             observer.update();
+            if (DEBUG_TIME) {
+                if (observer instanceof CurrentDetectionsObserver) {
+                    console.log("CurrentDetectionsObserver time: " + Math.abs(Date.now() - notifyTime));
+                    notifyTime = Date.now();
+                } else if (observer instanceof DetectionsTableObserver) {
+                    console.log("DetectionsTableObserver time:   " + Math.abs(Date.now() - notifyTime));
+                    notifyTime = Date.now();
+                } else if (observer instanceof TrajectoriesObserver) {
+                    console.log("TrajectoriesObserver time:      " + Math.abs(Date.now() - notifyTime));
+                    notifyTime = Date.now();
+                } else if (observer instanceof DetectedObjectsObserver) {
+                    console.log("DetectedObjectsObserver time:   " + Math.abs(Date.now() - notifyTime));
+                    notifyTime = Date.now();
+                } else if (observer instanceof TrainingMsgObserver) {
+                    console.log("TrainingMsgObserver time:       " + Math.abs(Date.now() - notifyTime));
+                    notifyTime = Date.now();
+                }
+            }
         });
+        if (DEBUG_TIME) {
+            console.log("------------ TOTAL Time: " + Math.abs(Date.now() - totalTime) + " -----");
+        }
     };
 
     /**
@@ -167,3 +193,15 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
         return max;
     }
 }
+
+/**
+ * Return the number of Frames per second in the Custom HTML5 Video element
+ *
+ * @param video
+ * @returns {Number}
+ */
+VideoDetections.prototype.getVideoFps = function (video) {
+    var ext = video.currentSrc.split('.').pop();
+    var fps = $(video).children('source[src$="' + ext + '"]').attr('fps');
+    return parseInt(fps);
+};

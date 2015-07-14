@@ -113,6 +113,7 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
     this.currentDetectionsDiv = currentDetectionsDiv;
 
     this.refreshCurrentDetection = function (newDet) {
+        //TODO Optimizar esta functión para que solo cambie el color en vez de todo el botton
         //Select old detection and remove it popover
         var oldDetDiv = $('.current-detection-small:contains(' + newDet.id + ')');
         var myPopover = $('div.popover:contains(' + newDet.id + ')');
@@ -250,6 +251,13 @@ function DetectionsTableObserver(videoDetections, tableBodyElement) {
             $(this.tableBodyElement).find('tr:contains(' + det.id + ')')
                 .replaceWith(this.detectionAsTableRow(det));
         }
+        if (this.videoDetections.useAbnormalityRate) {
+            for (var id in this.videoDetections.selectedDetections) {
+                var det = this.videoDetections.selectedDetections[id];
+                $(this.tableBodyElement).find('tr:contains(' + det.id + ')')
+                    .replaceWith(this.detectionAsTableRow(det));
+            }
+        }
     };
 
 
@@ -279,7 +287,7 @@ function DetectionsTableObserver(videoDetections, tableBodyElement) {
     for (var id in videoDetections.detections) {
         $(tableBodyElement).append(this.detectionAsTableRow(videoDetections.detections[id]));
     }
-}
+};
 
 // DetectionsTableObserver.prototype create the object that inherits from DetectionsObserver.prototype
 DetectionsTableObserver.prototype = Object.create(DetectionsObserver.prototype);

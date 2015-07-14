@@ -116,7 +116,9 @@ class QUnitVideoPlayerTests(QUnitSuite, JsTemplateTestCase):
     js_files = (
         'site/js/jquery-1.10.2.min.js',
         'site/js/Detection.js',
-        'site/js/video-player.js',
+        'site/tests/Detection.tests.js',
+        'site/js/VideoDetections.js',
+        #'site/js/video-player.js',
         'site/tests/video-player.tests.js',
         'site/tests/qunit-assert-canvas.js',
     )

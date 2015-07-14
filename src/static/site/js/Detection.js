@@ -70,107 +70,110 @@ function Detection(videoDetections, id, firstFrame, lastFrame, xmlTrajectory) {
     this.selected = false;
     this.xmlTrajectory = xmlTrajectory;
     this.videoDetections = videoDetections;
-    /**
-     * Sets the image extracting it from the video box
-     * @param box
-     */
-    this.setImgFromVideoBox = function (box) {
-        const factor = 2;
-
-        //We frame a rectangle that take twice the space centering it at the same point
-        var w = parseInt($(box).attr('w'));
-        var h = parseInt($(box).attr('h'));
-        var xc = parseInt($(box).attr('xc'));
-        var yc = parseInt($(box).attr('yc'));
-
-        // A square is selected, the square will have the dimensions:
-        // longest side * (factor - degree of difference between height and width)
-        var increase = (factor - 1) / Math.max(h / w, w / h);
-        var side = Math.round(Math.max(h, w) * (1 + increase));
-
-        this.currentImg = this.videoDetections.captureImg(side, side,
-            Math.round(xc - ((side - w) / 2)),
-            Math.round(yc - ((side - h) / 2)));
-    };
-
-    this.getCurrentColor = function () {
-        if (this.videoDetections.useColors) {
-            return this.color;
-        }
-        if (!this.videoDetections.useAbnormalityRate) {
-            // class info color
-            return this.LIGHT_BLUE;
-        }
-        var abRate = this.getCurrentAbnormalityRate();
-
-        if (abRate === 0) {
-            // We haven't got abnormaly rate
-            return this.GREY;
-        } else if (abRate > this.videoDetections.alarmAbnormalRate) {
-            // Suspicious object
-            return this.LIGHT_RED;
-        } else {
-            //Trusty object
-            return this.LIGHT_BLUE;
-        }
-    };
-
-    this.getCurrentAbnormalityRate = function () {
-        //If the detection trajectory has a value for this nFrame,
-        // we update the abnormality rate
-        var nFrame = videoDetections.getCurrentFrame();
-        var framePoint = [];
-        do {
-            framePoint = $(this.xmlTrajectory).find('point[frame="' + nFrame + '"]');
-            nFrame--;
-        } while ((nFrame >= this.firstFrame) && framePoint.length === 0);
-        //If we didn't find return 0 else return the value
-        if (framePoint.length === 0) {
-            return 0;
-        } else {
-            return parseFloat($(framePoint).attr('abnormality'));
-        }
-    };
-
-    this.getMaxAbnormalityRate = function () {
-        var max = 0;
-        var currentAb = 0;
-        $(this.xmlTrajectory).find('point').each(function () {
-            currentAb = parseFloat($(this).attr('abnormality'));
-            if (currentAb > max) {
-                max = currentAb;
-            }
-        });
-        return max;
-    };
-
-    this.getAbnormalityColor = function () {
-        if (this.videoDetections.useColors) {
-            return this.color;
-        }
-        if (!this.videoDetections.useAbnormalityRate) {
-            return this.BLUE;
-        }
-
-        var abRate = this.getCurrentAbnormalityRate();
-        if (abRate === 0) {
-            // We haven't got abnormaly rate
-            return this.BLACK;
-        } else if (abRate > this.videoDetections.alarmAbnormalRate) {
-            // Suspicious object
-            return this.RED;
-        } else {
-            //Trusty object
-            return this.BLUE;
-        }
-    }
 }
+
 Detection.prototype.RED = '#FF0000';
 Detection.prototype.BLUE = '#0000FF';
 Detection.prototype.BLACK = '#000000';
 Detection.prototype.LIGHT_RED = '#FF6666';
 Detection.prototype.LIGHT_BLUE = '#d9edf7';
 Detection.prototype.GREY = '#777777';
+
+/**
+ * Sets the image extracting it from the video box
+ * @param box
+ */
+Detection.prototype.setImgFromVideoBox = function (box) {
+    const factor = 2;
+
+    //We frame a rectangle that take twice the space centering it at the same point
+    var w = parseInt($(box).attr('w'));
+    var h = parseInt($(box).attr('h'));
+    var xc = parseInt($(box).attr('xc'));
+    var yc = parseInt($(box).attr('yc'));
+
+    // A square is selected, the square will have the dimensions:
+    // longest side * (factor - degree of difference between height and width)
+    var increase = (factor - 1) / Math.max(h / w, w / h);
+    var side = Math.round(Math.max(h, w) * (1 + increase));
+
+    this.currentImg = this.videoDetections.captureImg(side, side,
+        Math.round(xc - ((side - w) / 2)),
+        Math.round(yc - ((side - h) / 2)));
+};
+
+Detection.prototype.getCurrentColor = function () {
+    if (this.videoDetections.useColors) {
+        return this.color;
+    }
+    if (!this.videoDetections.useAbnormalityRate) {
+        // class info color
+        return this.LIGHT_BLUE;
+    }
+    var abRate = this.getCurrentAbnormalityRate();
+
+    if (abRate === 0) {
+        // We haven't got abnormaly rate
+        return this.GREY;
+    } else if (abRate > this.videoDetections.alarmAbnormalRate) {
+        // Suspicious object
+        return this.LIGHT_RED;
+    } else {
+        //Trusty object
+        return this.LIGHT_BLUE;
+    }
+};
+
+Detection.prototype.getCurrentAbnormalityRate = function () {
+    //If the detection trajectory has a value for this nFrame,
+    // we update the abnormality rate
+    var nFrame = videoDetections.getCurrentFrame();
+    var framePoint = [];
+    do {
+        framePoint = $(this.xmlTrajectory).find('point[frame="' + nFrame + '"]');
+        nFrame--;
+    } while ((nFrame >= this.firstFrame) && framePoint.length === 0);
+    //If we didn't find return 0 else return the value
+    if (framePoint.length === 0) {
+        return 0;
+    } else {
+        return parseFloat($(framePoint).attr('abnormality'));
+    }
+};
+
+Detection.prototype.getMaxAbnormalityRate = function () {
+    var max = 0;
+    var currentAb = 0;
+    $(this.xmlTrajectory).find('point').each(function () {
+        currentAb = parseFloat($(this).attr('abnormality'));
+        if (currentAb > max) {
+            max = currentAb;
+        }
+    });
+    return max;
+};
+
+Detection.prototype.getAbnormalityColor = function () {
+    if (this.videoDetections.useColors) {
+        return this.color;
+    }
+    if (!this.videoDetections.useAbnormalityRate) {
+        return this.BLUE;
+    }
+
+    var abRate = this.getCurrentAbnormalityRate();
+    if (abRate === 0) {
+        // We haven't got abnormaly rate
+        return this.BLACK;
+    } else if (abRate > this.videoDetections.alarmAbnormalRate) {
+        // Suspicious object
+        return this.RED;
+    } else {
+        //Trusty object
+        return this.BLUE;
+    }
+};
+
 
 
 /**
