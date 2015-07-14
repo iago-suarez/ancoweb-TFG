@@ -1,5 +1,4 @@
 /****************** Video Details view ********************/
-const DEBUG_TIME = true;
 const trainingFrames = 35;
 
 //Used to resize the video if we are in full screen
@@ -80,7 +79,7 @@ function loadXmlResult(video) {
                 slide: function (event, ui) {
                     $('#abnormality-input').val(ui.value);
                     videoDetections.alarmAbnormalRate = parseFloat(ui.value);
-                    videoDetections.notify();
+                    videoDetections.updateState();
                 }
             });
             $('#abnormality-input').val(0);

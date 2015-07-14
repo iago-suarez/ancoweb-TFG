@@ -47,7 +47,7 @@ $(document).ready(function () {
     $('#abnormality-input').on('input', function () {
         $("#abnormality-slider").slider("option", "value", this.value);
         videoDetections.alarmAbnormalRate = parseFloat(this.value);
-        videoDetections.notify();
+        videoDetections.updateState();
     });
 
 

@@ -116,6 +116,9 @@ QUnit.test('getCurrentAbnormalityRate', function (assert) {
     //Same frame
     mockVD.setMockCurrentFrame(425);
     assert.equal(testDet.getCurrentAbnormalityRate(), 0.2);
+    //Repeat the sale call
+    assert.equal(testDet.getCurrentAbnormalityRate(), 0.2);
+    assert.equal(testDet.getCurrentAbnormalityRate(), 0.2);
 
     //<point frame="509" abnormality="0.473684" x="81" y="65"></point>
     //After the last detection

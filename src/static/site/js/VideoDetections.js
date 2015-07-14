@@ -19,9 +19,7 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
     this.selectedDetections = {};
     this.detRecentlyDeleted = [];
     this.detRecentlySelected = [];
-    this.currentSuspiciousDetections = [];
-    this.normalDetections = [];
-    this.notStudiedDetections = [];
+    this.abChangingDetections = [];
     this.xmlDetectionsByFrame = {};
     this.alarmAbnormalRate = 0;
     this.useAbnormalityRate = false;
@@ -84,20 +82,37 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
         return canvas.toDataURL();
     };
 
-    this.updateState = function () {
+    this.updateState = function (opts) {
 
-        //Gets the current frame objects
-        if (DEBUG_TIME) {
-            var debugTime = Date.now();
+        // Javascript method overloading pattern {'detRecentlyDeleted' ,
+        // 'detRecentlySelected' , 'abChangingDetections' }
+        if (opts) {
+            //if test param exists, do something..
+            if (opts['detRecentlyDeleted'] !== undefined) {
+                this.detRecentlyDeleted = opts['detRecentlyDeleted'];
+            } else if (opts['detRecentlySelected'] !== undefined) {
+                this.detRecentlySelected = opts['detRecentlySelected'];
+            } else if (opts['abChangingDetections'] !== undefined) {
+                this.abChangingDetections = opts['abChangingDetections'];
+            }
         }
+        if (!opts || (opts['detRecentlyDeleted'] === undefined)) {
+            this.detRecentlyDeleted = []
+        }
+        if (!opts || (opts['detRecentlySelected'] === undefined)) {
+            this.detRecentlySelected = []
+        }
+        if (!opts || (opts['abChangingDetections'] === undefined)) {
+            this.abChangingDetections = []
+        }
+
 
         var detectionsToSelect = this.getCurrentFrameXmlObjects();
         //if the XML file had no detections for the current frame we exit
         if (!detectionsToSelect) {
             return;
         }
-        this.detRecentlyDeleted = [];
-        this.detRecentlySelected = [];
+
         for (var id in this.detections) {
             // Check if the selected state has change
             var j = 0;
@@ -125,43 +140,24 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
                 }
                 det.selected = selected;
             }
-        }
-        if (DEBUG_TIME) {
-            console.log("Select time: " + Math.abs(Date.now() - debugTime));
+            //Manages the changes in the Detection.State
+            if (selected && this.useAbnormalityRate) {
+                var state = det.calcCurrAbState();
+                if (state !== det.abnormalityState) {
+                    //Update the current state and mark the detection to be updated
+                    det.abnormalityState = state;
+                    this.abChangingDetections.push(det);
+                }
+            }
         }
         this.notify();
 
     };
 
     this.notify = function () {
-        if (DEBUG_TIME) {
-            var notifyTime = Date.now();
-            var totalTime = Date.now();
-        }
         this.observers.forEach(function (observer) {
             observer.update();
-            if (DEBUG_TIME) {
-                if (observer instanceof CurrentDetectionsObserver) {
-                    console.log("CurrentDetectionsObserver time: " + Math.abs(Date.now() - notifyTime));
-                    notifyTime = Date.now();
-                } else if (observer instanceof DetectionsTableObserver) {
-                    console.log("DetectionsTableObserver time:   " + Math.abs(Date.now() - notifyTime));
-                    notifyTime = Date.now();
-                } else if (observer instanceof TrajectoriesObserver) {
-                    console.log("TrajectoriesObserver time:      " + Math.abs(Date.now() - notifyTime));
-                    notifyTime = Date.now();
-                } else if (observer instanceof DetectedObjectsObserver) {
-                    console.log("DetectedObjectsObserver time:   " + Math.abs(Date.now() - notifyTime));
-                    notifyTime = Date.now();
-                } else if (observer instanceof TrainingMsgObserver) {
-                    console.log("TrainingMsgObserver time:       " + Math.abs(Date.now() - notifyTime));
-                    notifyTime = Date.now();
-                }
-            }
         });
-        if (DEBUG_TIME) {
-            console.log("------------ TOTAL Time: " + Math.abs(Date.now() - totalTime) + " -----");
-        }
     };
 
     /**
@@ -169,13 +165,16 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
      */
     this.toggleUseColor = function () {
         this.useColors = !this.useColors;
-        this.detRecentlyDeleted = $.map(this.selectedDetections, function (value, index) {
+        this.detRecentlyDeleted = $.map(this.selectedDetections, function (value) {
             return [value];
         });
-        this.detRecentlySelected = $.map(this.selectedDetections, function (value, index) {
+        this.detRecentlySelected = $.map(this.selectedDetections, function (value) {
             return [value];
         });
-        this.notify();
+        this.updateState({
+            'detRecentlyDeleted': this.detRecentlyDeleted.reverse(),
+            'detRecentlySelected': this.detRecentlySelected.reverse()
+        });
     };
 
     /**
@@ -183,13 +182,16 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
      */
     this.toggleUseAbnormalityRate = function () {
         this.useAbnormalityRate = !this.useAbnormalityRate;
-        this.detRecentlyDeleted = $.map(this.selectedDetections, function (value, index) {
+        this.detRecentlyDeleted = $.map(this.selectedDetections, function (value) {
             return [value];
         });
-        this.detRecentlySelected = $.map(this.selectedDetections, function (value, index) {
+        this.detRecentlySelected = $.map(this.selectedDetections, function (value) {
             return [value];
         });
-        this.notify();
+        this.updateState({
+            'detRecentlyDeleted': this.detRecentlyDeleted.reverse(),
+            'detRecentlySelected': this.detRecentlySelected.reverse()
+        });
     };
 
     this.getMaxAbnormalityRate = function () {

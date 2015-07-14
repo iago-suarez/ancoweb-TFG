@@ -70,14 +70,15 @@ function Detection(videoDetections, id, firstFrame, lastFrame, xmlTrajectory) {
     this.selected = false;
     this.xmlTrajectory = xmlTrajectory;
     this.videoDetections = videoDetections;
+    this.abnormalityState = null;
 }
 
-Detection.prototype.RED = '#FF0000';
-Detection.prototype.BLUE = '#0000FF';
-Detection.prototype.BLACK = '#000000';
-Detection.prototype.LIGHT_RED = '#FF6666';
-Detection.prototype.LIGHT_BLUE = '#d9edf7';
-Detection.prototype.GREY = '#777777';
+Detection.RED = '#FF0000';
+Detection.BLUE = '#0000FF';
+Detection.BLACK = '#000000';
+Detection.LIGHT_RED = '#FF6666';
+Detection.LIGHT_BLUE = '#d9edf7';
+Detection.GREY = '#777777';
 
 /**
  * Sets the image extracting it from the video box
@@ -102,32 +103,86 @@ Detection.prototype.setImgFromVideoBox = function (box) {
         Math.round(yc - ((side - h) / 2)));
 };
 
-Detection.prototype.getCurrentColor = function () {
+Detection.prototype.getCurrentLightColor = function () {
     if (this.videoDetections.useColors) {
         return this.color;
     }
     if (!this.videoDetections.useAbnormalityRate) {
         // class info color
-        return this.LIGHT_BLUE;
+        return Detection.LIGHT_BLUE;
     }
     var abRate = this.getCurrentAbnormalityRate();
 
     if (abRate === 0) {
-        // We haven't got abnormaly rate
-        return this.GREY;
+        // We haven't got abnormality rate
+        return Detection.GREY;
     } else if (abRate > this.videoDetections.alarmAbnormalRate) {
         // Suspicious object
-        return this.LIGHT_RED;
+        return Detection.LIGHT_RED;
     } else {
         //Trusty object
-        return this.LIGHT_BLUE;
+        return Detection.LIGHT_BLUE;
+    }
+};
+
+Detection.prototype.getCurrentColor = function () {
+    if (this.videoDetections.useColors) {
+        return this.color;
+    }
+    if (!this.videoDetections.useAbnormalityRate) {
+        return Detection.BLUE;
+    }
+
+    var abRate = this.getCurrentAbnormalityRate();
+    if (abRate === 0) {
+        // We haven't got abnormality rate
+        return Detection.BLACK;
+    } else if (abRate > this.videoDetections.alarmAbnormalRate) {
+        // Suspicious object
+        return Detection.RED;
+    } else {
+        //Trusty object
+        return Detection.BLUE;
+    }
+};
+
+Detection.State = {
+    NO_ABNORMALITY_RATE: 0,
+    SUSPECT: 1,
+    TRUSTY: 2
+};
+
+/**
+ * Return the current Detection state, but don't set it, so if you want
+ * you can access to the last abnormalityState to check the difference
+ *
+ * @returns {number}
+ */
+Detection.prototype.calcCurrAbState = function () {
+    var abRate = this.getCurrentAbnormalityRate();
+    if (abRate === 0) {
+        // We haven't got abnormality rate
+        return Detection.State.NO_ABNORMALITY_RATE;
+    } else if (abRate > this.videoDetections.alarmAbnormalRate) {
+        // Suspicious object
+        return Detection.State.SUSPECT = 1;
+    } else {
+        //Trusty object
+        return Detection.State.TRUSTY = 2;
     }
 };
 
 Detection.prototype.getCurrentAbnormalityRate = function () {
-    //If the detection trajectory has a value for this nFrame,
-    // we update the abnormality rate
-    var nFrame = videoDetections.getCurrentFrame();
+
+    var nFrame = this.videoDetections.getCurrentFrame();
+
+    //If we still have a value for this frame return it
+    if (nFrame === this._currentAbRateNumberFrame) {
+        return this._abnormalityRate;
+    }
+
+    //Look for the last abnormalityRate
+    this._currentAbRateNumberFrame = nFrame;
     var framePoint = [];
     do {
         framePoint = $(this.xmlTrajectory).find('point[frame="' + nFrame + '"]');
@@ -135,8 +190,10 @@ Detection.prototype.getCurrentAbnormalityRate = function () {
     } while ((nFrame >= this.firstFrame) && framePoint.length === 0);
     //If we didn't find return 0 else return the value
     if (framePoint.length === 0) {
+        this._abnormalityRate = 0;
         return 0;
     } else {
+        this._abnormalityRate = parseFloat($(framePoint).attr('abnormality'));
         return parseFloat($(framePoint).attr('abnormality'));
     }
 };
@@ -153,26 +210,7 @@ Detection.prototype.getMaxAbnormalityRate = function () {
     return max;
 };
 
-Detection.prototype.getAbnormalityColor = function () {
-    if (this.videoDetections.useColors) {
-        return this.color;
-    }
-    if (!this.videoDetections.useAbnormalityRate) {
-        return this.BLUE;
-    }
 
-    var abRate = this.getCurrentAbnormalityRate();
-    if (abRate === 0) {
-        // We haven't got abnormaly rate
-        return this.BLACK;
-    } else if (abRate > this.videoDetections.alarmAbnormalRate) {
-        // Suspicious object
-        return this.RED;
-    } else {
-        //Trusty object
-        return this.BLUE;
-    }
-};
 
 
 

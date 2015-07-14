@@ -56,7 +56,7 @@ function DetectedObjectsObserver(videoDetections, canvasElement) {
             var xc = parseInt($(this).find('box').attr('xc'));
             var yc = parseInt($(this).find('box').attr('yc'));
 
-            var color = videoDetections.detections[this.id].getAbnormalityColor();
+            var color = videoDetections.detections[this.id].getCurrentColor();
             paintRect(context, videoProportion * xc, videoProportion * yc,
                 videoProportion * w, videoProportion * h, color, 2);
         });
@@ -95,7 +95,7 @@ function TrajectoriesObserver(videoDetections, canvasElement) {
             context.lineWidth = 3;
 
             //Select the color
-            context.strokeStyle = this.videoDetections.detections[id].getAbnormalityColor();
+            context.strokeStyle = this.videoDetections.detections[id].getCurrentColor();
 
             var i = 1;
             var f = 0;
@@ -128,7 +128,6 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
     this.currentDetectionsDiv = currentDetectionsDiv;
 
     this.refreshCurrentDetection = function (newDet) {
-        //TODO Optimizar esta functión para que solo cambie el color en vez de todo el button
         //Select old detection and remove it popover
         var oldDetDiv = $('.current-detection-small:contains(' + newDet.id + ')');
         var myPopover = $('div.popover:contains(' + newDet.id + ')');
@@ -189,8 +188,8 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
         });
         //If we filter by abnormal rate update the color if it's necessary
         if (this.videoDetections.useAbnormalityRate) {
-            for (var id in this.videoDetections.selectedDetections) {
-                this.refreshCurrentDetection(this.videoDetections.selectedDetections[id]);
+            for (var id in this.videoDetections.abChangingDetections) {
+                this.refreshCurrentDetection(this.videoDetections.abChangingDetections[id]);
             }
         }
     };
@@ -202,7 +201,7 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
     this.getDetectionDiv = function (detection) {
         var result = '<button data-container="body"' +
             'class="btn btn-default current-detection-small"' +
-            'style=" border: 10px solid ' + detection.getCurrentColor() + '; ';
+            'style=" border: 10px solid ' + detection.getCurrentLightColor() + '; ';
         result += 'background-image: url(\'' + detection.currentImg + '\'); "' +
             'data-toggle="popover" data-placement="bottom" ' +
             'title="Detection ' + detection.id + '" ' +
@@ -222,7 +221,7 @@ function CurrentDetectionsObserver(videoDetections, currentDetectionsDiv) {
     this.getDetectionPopoverTemplate = function (detection) {
         return '<div class="popover" role="tooltip"><div class="arrow"></div>' +
             '<strong><h3 class="popover-title" style="background-color: ' +
-            detection.getCurrentColor() + '" ></h3></strong>' +
+            detection.getCurrentLightColor() + '" ></h3></strong>' +
             '<div class="popover-content"></div></div>';
     };
 
@@ -287,8 +286,8 @@ function DetectionsTableObserver(videoDetections, tableBodyElement) {
                 .replaceWith(self.detectionAsTableRow(det));
         });
         if (this.videoDetections.useAbnormalityRate) {
-            for (var id in this.videoDetections.selectedDetections) {
-                var det = this.videoDetections.selectedDetections[id];
+            for (var id in this.videoDetections.abChangingDetections) {
+                var det = this.videoDetections.abChangingDetections[id];
                 $(this.tableBodyElement).find('tr#' + det.id)
                     .replaceWith(this.detectionAsTableRow(det));
             }
@@ -315,7 +314,7 @@ function DetectionsTableObserver(videoDetections, tableBodyElement) {
             }
         }
         if (color === undefined) {
-            color = detection.getCurrentColor();
+            color = detection.getCurrentLightColor();
         }
         if (selected === undefined) {
             selected = detection.selected;
