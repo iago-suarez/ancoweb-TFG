@@ -1,4 +1,4 @@
-<span class="checkbox-on-off ">
+<span class="{% if red %}red{% endif %} checkbox-on-off">
     <input name="before" type="hidden" value="false">
     <input id="{{ checkboxId }}" class="" type="checkbox"
             {% if checked == None or checked == True %} checked=""{% endif %}>

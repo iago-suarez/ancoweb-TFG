@@ -273,3 +273,18 @@ input [type="file"] {
     width: 150px;
     margin-top: 15px;
 }
+
+/* Popup page */
+.panel-heading h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.backgroundBlack {
+    background-color: black;
+}
+
+#susp-det-popup-body {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}

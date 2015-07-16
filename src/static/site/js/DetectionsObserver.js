@@ -407,3 +407,80 @@ function TrainingMsgObserver(videoDetections, canvasElement, trainingLbl, traini
 
 // TrainingMsgObserver.prototype create the object that inherits from DetectionsObserver.prototype
 TrainingMsgObserver.prototype = Object.create(DetectionsObserver.prototype);
+
+
+function PopupLauncherObserver(videoDetections) {
+    DetectionsObserver.call(this, videoDetections);
+    this.throwPopups = false;
+    this.nPopups = 0;
+
+    this.update = function () {
+        if (!this.isEnable) {
+            return;
+        }
+        if (this.videoDetections.useAbnormalityRate && this.throwPopups) {
+            for (var id in this.videoDetections.abChangingDetections) {
+                var det = this.videoDetections.abChangingDetections[id];
+                if (det.abnormalityState === Detection.State.SUSPECT) {
+                    var simpleDet = {
+                        id: det.id,
+                        firstFrame: det.firstFrame,
+                        lastFrame: det.lastFrame,
+                        color: det.color,
+                        selected: det.selected,
+                        xmlTrajectory: new XMLSerializer().serializeToString(det.xmlTrajectory),
+                        abnormalityState: det.abnormalityState
+                    };
+                    var url = window.location.href + "suspicious?";
+
+                    if (areCookiesEnabled()) {
+
+                        $.cookie("suspiciousDet-" + det.id, window.JSON.stringify(simpleDet));
+                        url += "suspiciousDetId=" + det.id;
+                    } else { //Use the URL
+                        url += serializeObject(simpleDet);
+                    }
+                    this.throwPopup(url);
+                }
+            }
+        }
+    };
+
+    this.throwPopup = function (url) {
+        var w = 400;
+        var h = 360;
+        var left;
+        var top;
+
+        switch (this.nPopups % 4) {
+            case 0:
+                //Top left
+                left = 0;
+                top = 0;
+                break;
+            case 1:
+                //Top right
+                left = screen.width - w;
+                top = 0;
+                break;
+            case 2:
+                //Bottom left
+                left = 0;
+                top = screen.height - h;
+                break;
+            case 3:
+                //bottom right
+                left = screen.width - w;
+                top = screen.height - h;
+                break;
+        }
+        window.open(url, this.target, 'width=' + w + ' ,height=' + h
+            + ' , scrollbars=no, top= ' + top + ', left= ' + left);
+        this.nPopups++;
+    }
+}
+
+// PopupLauncherObserver.prototype create the object that inherits from DetectionsObserver.prototype
+PopupLauncherObserver.prototype = Object.create(PopupLauncherObserver.prototype);
+
+

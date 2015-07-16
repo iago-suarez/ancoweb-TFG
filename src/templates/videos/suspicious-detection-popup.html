@@ -1,0 +1,42 @@
+{% load staticfiles %}
+{% load videosources %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Suspicious Detection</title>
+
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
+
+</head>
+<body id="susp-det-popup-body">
+
+<div class="panel panel-danger">
+    <div class="panel-heading text-center"><h3>Suspicious Detection</h3></div>
+    <div class="panel-body text-center backgroundBlack">
+        <div id="current-detected-objs">
+            <video id="video-player" controls>
+                {% videosources object %}
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+</div>
+
+<!-- JQuery JavaScript === -->
+<script src="{% static 'jquery/jquery-1.10.2.min.js' %}"></script>
+<script src="{% static 'jquery/jquery.cookie.js' %}"></script>
+
+<!-- Bootstrap core JavaScript -->
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{% static 'site/js/site.js' %}"></script>
+<script src="{% static 'site/js/Detection.js' %}"></script>
+<script src="{% static 'site/js/VideoDetections.js' %}"></script>
+<script src="{% static 'site/js/suspicious-popup.js' %}"></script>
+
+</body>
+</html>

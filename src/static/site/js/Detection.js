@@ -76,7 +76,7 @@ function Detection(videoDetections, id, firstFrame, lastFrame, xmlTrajectory) {
 Detection.RED = '#FF0000';
 Detection.BLUE = '#0000FF';
 Detection.BLACK = '#000000';
-Detection.LIGHT_RED = '#FF6666';
+Detection.LIGHT_RED = '#d9534f';
 Detection.LIGHT_BLUE = '#d9edf7';
 Detection.GREY = '#777777';
 
@@ -209,10 +209,6 @@ Detection.prototype.getMaxAbnormalityRate = function () {
     });
     return max;
 };
-
-
-
-
 
 /**
  * Return true if the image is dark and false if the image is light

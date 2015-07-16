@@ -63,9 +63,14 @@
                                 <div class="col-xs-3">
                                     <input id="abnormality-input" type="text" class="form-control" text="0">
                                 </div>
+                            </div>
+                            <div>
+                                {% include "videos/custom-checkbox.html" with checkboxId="suspicious-popup" checked=False red=True %}
+                                <label>Throw Pop-ups</label>
+                            </div>
+                            <br/>
                         </div>
 
-                        </div>
                         <div class="text-center">
                             <p id="state_message">{% if ap %} {{ ap.state_message }} {% endif %}</p>
                             {% if not ap %}

@@ -9,6 +9,24 @@ function getUrlParameter(sParam) {
     }
 }
 
+function areCookiesEnabled() {
+    document.cookie = "__verify=1";
+    var supportsCookies = document.cookie.length >= 1 &&
+        document.cookie.indexOf("__verify=1") !== -1;
+    var thePast = new Date(1976, 8, 16);
+    document.cookie = "__verify=1;expires=" + thePast.toUTCString();
+    return supportsCookies;
+}
+
+function serializeObject(obj) {
+    var str = [];
+    for (var p in obj)
+        if (obj.hasOwnProperty(p)) {
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+        }
+    return str.join("&");
+}
+
 $(document).ready(function () {
     /* Search Bar */
     $('#search-video-form').find('input#id_name').attr('value', getUrlParameter('name'));

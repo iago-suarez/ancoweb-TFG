@@ -33,6 +33,11 @@ $(document).ready(function () {
         }
     });
 
+    $('#suspicious-popup').click(function () {
+        videoDetections.observers[5].throwPopups = !videoDetections.observers[5].throwPopups;
+        videoDetections.updateState({'abChangingDetections': videoDetections.selectedDetections})
+    });
+
     $('#abnormality-rate-cb').click(function () {
         $('#abnormality-slider-div').toggle();
         videoDetections.toggleUseAbnormalityRate();

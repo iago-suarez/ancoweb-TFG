@@ -66,7 +66,7 @@ function loadXmlResult(video) {
         videoDetections.addObserver(new TrainingMsgObserver(videoDetections,
             document.getElementById('training-canvas'),
             document.getElementById("training-lbl"), trainingFrames));
-
+        videoDetections.addObserver(new PopupLauncherObserver(videoDetections));
         //Sort the table
         $('table').tablesorter();
         $('#first-moment-th').click();

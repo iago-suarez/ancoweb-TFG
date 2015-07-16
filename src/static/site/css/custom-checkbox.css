@@ -37,6 +37,10 @@
     background-color: #167ac6;
 }
 
+.red input[type=checkbox]:checked + label {
+    background-color: #d9534f;
+}
+
 /* this is the grey background check mark */
 .checkbox-on-off label {
     display: inline-block;

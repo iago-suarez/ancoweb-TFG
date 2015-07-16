@@ -162,6 +162,7 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
 
     /**
      * Refresh the detections because the user clicks in the Use Different Colors CheckBox
+     * and reloading all selected detections its colors will change.
      */
     this.toggleUseColor = function () {
         this.useColors = !this.useColors;
@@ -179,6 +180,7 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
 
     /**
      * Refresh the detections because the user clicks in the Filter by abnormality rate CheckBox
+     * and reloading all selected detections its state and its colors will change.
      */
     this.toggleUseAbnormalityRate = function () {
         this.useAbnormalityRate = !this.useAbnormalityRate;

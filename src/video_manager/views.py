@@ -95,3 +95,7 @@ def get_video_analysis_json(request, video_id):
 
     json_serializer.serialize([obj, ])
     return HttpResponse(json_serializer.getvalue())
+
+
+class SuspiciousDetailsView(DetailsView):
+    template_name = "videos/suspicious-detection-popup.html"
