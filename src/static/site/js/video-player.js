@@ -88,12 +88,14 @@ function loadXmlResult(video) {
         function updateStatus() {
             if (!video.paused) {
                 videoDetections.updateState();
+                // We suppose 25 fps
+                return setTimeout(updateStatus, 40);
             }
-            // We suppose 25 fps
-            return setTimeout(updateStatus, 40);
         }
 
-        updateStatus();
+        $(video).bind('play', function () {
+            updateStatus();
+        });
     });
 }
 

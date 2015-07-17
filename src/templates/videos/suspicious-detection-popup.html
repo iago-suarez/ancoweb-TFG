@@ -8,7 +8,9 @@
     <title>Suspicious Detection</title>
 
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'site/css/suspicious-detection-popup.css' %}" rel="stylesheet">
+    <link href="{% static 'jquery/jquery-ui-1.11.4/jquery-ui.css' %}" rel="stylesheet">
+
 
 </head>
 <body id="susp-det-popup-body">
@@ -21,13 +23,19 @@
                 {% videosources object %}
                 Your browser does not support the video tag.
             </video>
+
+            <div id="canvas-container">
+                <canvas id="suspicious-layer" class="drawing-layer"></canvas>
+                <div id="zoom-slider"></div>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- JQuery JavaScript === -->
-<script src="{% static 'jquery/jquery-1.10.2.min.js' %}"></script>
+<script src="{% static 'jquery/jquery-1.11.3.js' %}"></script>
 <script src="{% static 'jquery/jquery.cookie.js' %}"></script>
+<script src="{% static 'jquery/jquery-ui-1.11.4/jquery-ui.js' %}"></script>
 
 <!-- Bootstrap core JavaScript -->
 <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>

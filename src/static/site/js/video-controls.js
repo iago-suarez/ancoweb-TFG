@@ -35,7 +35,10 @@ $(document).ready(function () {
 
     $('#suspicious-popup').click(function () {
         videoDetections.observers[5].throwPopups = !videoDetections.observers[5].throwPopups;
-        videoDetections.updateState({'abChangingDetections': videoDetections.selectedDetections})
+        var selectedDetList = $.map(videoDetections.selectedDetections, function (value) {
+            return [value];
+        });
+        videoDetections.updateState({'abChangingDetections': selectedDetList.reverse()})
     });
 
     $('#abnormality-rate-cb').click(function () {

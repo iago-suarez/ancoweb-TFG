@@ -114,11 +114,10 @@ class QUnitVideoPlayerTests(QUnitSuite, JsTemplateTestCase):
     django_js = True
     template_name = 'integration_tests/test-qunit.html'
     js_files = (
-        'site/js/jquery-1.10.2.min.js',
+        'site/js/jquery-1.11.3.js',
         'site/js/Detection.js',
         'site/tests/Detection.tests.js',
         'site/js/VideoDetections.js',
-        #'site/js/video-player.js',
         'site/tests/video-player.tests.js',
         'site/tests/qunit-assert-canvas.js',
     )

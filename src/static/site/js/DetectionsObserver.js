@@ -434,12 +434,17 @@ function PopupLauncherObserver(videoDetections) {
                     var url = window.location.href + "suspicious?";
 
                     if (areCookiesEnabled()) {
-
-                        $.cookie("suspiciousDet-" + det.id, window.JSON.stringify(simpleDet));
+                        var cookieName = "suspiciousDet-" + det.id;
+                        console.log("cookieName: " + cookieName);
+                        $.cookie(cookieName, window.JSON.stringify(simpleDet));
                         url += "suspiciousDetId=" + det.id;
                     } else { //Use the URL
                         url += serializeObject(simpleDet);
                     }
+
+                    //Add the current time and the video time to the url
+                    url += "&now=" + Date.now() + "&videoCurrTime=" +
+                        (1000 * this.videoDetections.videoElement.currentTime);
                     this.throwPopup(url);
                 }
             }

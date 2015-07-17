@@ -6,7 +6,7 @@
 {% block title %}{{ block.super }}{{ object.title }}{% endblock %}
 
 {% block styles %}
-    <link href="{% static 'jquery/jquery-ui.css' %}" rel="stylesheet">
+    <link href="{% static 'jquery/jquery-ui-1.11.4/jquery-ui.css' %}" rel="stylesheet">
     <link href="{% static 'site/css/custom-checkbox.css' %}" rel="stylesheet">
 {% endblock styles %}
 
@@ -151,7 +151,7 @@
 {% endblock container %}
 
 {% block scripts %}
-    <script src="{% static 'jquery/jquery-ui.js' %}"></script>
+    <script src="{% static 'jquery/jquery-ui-1.11.4/jquery-ui.js' %}"></script>
 
     <script src="{% static 'site/js/Detection.js' %}"></script>
     <script src="{% static 'site/js/VideoDetections.js' %}"></script>
