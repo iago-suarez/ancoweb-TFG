@@ -63,17 +63,43 @@ As reunións pola súa parte modifícanse do seguinte xeito:
 
 
 \section{Control de Versións con GitHub}
+	Os sistemas de control de versións permiten a xestión dos distintos cambios efectuados sobre
+	un produto software ou sobre a súa configuración. Facilitando a administración das distintas
+	versións do produto. 
+	
+	En concreto, GitHub é unha plataforma de desenvolvemento colaborativo que emprega o sistema de
+	control de versións Git. Escolleuse empregar este sistema pola súa potencia e simplicidade, xa
+	que proporciona libre acceso aos titores para comprobar o avance do proxecto, e a súa vez asegura
+	que o código este sempre a bo recaudo.
+	
+	A páxina do proxecto é: \url{https://github.com/iago-suarez/ancoweb-TFG} 
+	
+\section{Integración Continua con Travis CI}
 
-  Bla bla bla
-
-  \subsection{Título}
-
-  Bla bla bla
-
-  \subsubsection{Título}
-
-  Bla bla bla
-
-\section{Integración Continua con TravisCI}
+	A Integración Contínua (CI do ingles Continuous Integration) é un modelo informático que 
+	consiste en facer integracións automáticas dun proxecto o mais a miúdo posible para así 
+	poder detectar os posibles erros o antes posible, minimizando as súas posibles consecuencias.
+	Outro factor importante é o feito de garantir que a versión subida ao repositorio segue a
+	funcionar con independencia do entorno de desenvolvemento. Enténdense como pertencentes á 
+	integración continua a compilación e a execución das probas de todo un proxecto.
+	
+	Travis CI é unha plataforma de integración continua para proxectos aloxados en GitHub, que 
+	detecta automaticamente cando se produce un cambio no repositorio, e executa unha serie de pasos 
+	definidos no ficheiro .travis.yml \ref{fig:travisYml}, que contén as accións a realizar 
+	antes, durante e tras a as probas.
+	
+	Escolleuse Travis CI, pola súa integración con GitHub, pola súa potencia(permite executar 
+	practicamente todo o que se pode executar nunha máquina local) e pola súa sinxela integración
+	con outras ferramentas como Coveralls.
+	
+	\begin{figure}[htp]
+	\begin{center}
+		\includegraphics[scale=0.6]{figures/travisYml.png}
+		\caption{Imaxe de parte do ficheiro .travis.yml}
+	\label{fig:travisYml}
+	\end{center}
+	\end{figure}
+	
+	
 \section{Control da cobertura con Coveralls}
 \section{Xestión de Incidencias e Control de Proxecto con YouTrack}
