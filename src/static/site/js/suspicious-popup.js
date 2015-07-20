@@ -35,8 +35,8 @@ function loop() {
             }
         }
 
-        //console.log("(" + detection.videoDetections.getCurrentFrame()
-        //    + "): Center.x: " + center.x + ", center.y: " + center.y + ", wSize: " + window_size);
+        console.log("(" + detection.videoDetections.getCurrentFrame()
+            + "): Center.x: " + center.x + ", center.y: " + center.y + ", wSize: " + window_size);
 
         drawZoomedImage(video, context);
         // We suppose 25 fps
@@ -101,6 +101,8 @@ function drawZoomedImage(video, context) {
 }
 
 function adjustCanvas(video) {
+    $('#video-player').width(window.innerWidth -30);
+    window.resizeTo(window.innerWidth, $('body').height() +30);
     $('#canvas-container')
         .height($(video).height())
         .width($(video).width())
