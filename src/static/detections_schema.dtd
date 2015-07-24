@@ -1,0 +1,27 @@
+<!ELEMENT dataset (objects,trajectories)>
+<!ELEMENT objects (frame*)>
+
+<!ELEMENT frame (objectlist, grouplist?)>
+<!ELEMENT objectlist (object*)>
+<!ELEMENT object (box, orientation?)>
+<!ELEMENT orientation (#PCDATA)>
+<!ELEMENT box EMPTY>
+<!ELEMENT grouplist (#PCDATA)>
+
+<!ELEMENT trajectories (trajectory*)>
+<!ELEMENT trajectory (point*)>
+<!ELEMENT point EMPTY>
+
+<!ATTLIST frame number CDATA #REQUIRED>
+<!ATTLIST object id CDATA #REQUIRED>
+
+<!ATTLIST box h CDATA #REQUIRED>
+<!ATTLIST box w CDATA #REQUIRED>
+<!ATTLIST box xc CDATA #REQUIRED>
+<!ATTLIST box yc CDATA #REQUIRED>
+
+<!ATTLIST trajectory id CDATA #REQUIRED>
+<!ATTLIST point abnormality CDATA #REQUIRED>
+<!ATTLIST point frame CDATA #REQUIRED>
+<!ATTLIST point x CDATA #REQUIRED>
+<!ATTLIST point y CDATA #REQUIRED>
