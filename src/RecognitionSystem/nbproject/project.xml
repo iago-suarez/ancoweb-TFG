@@ -10,8 +10,9 @@
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects/>
             <sourceRootList>
-                <sourceRootElem>source</sourceRootElem>
-                <sourceRootElem>header</sourceRootElem>
+                <sourceRootElem>BehaviorLib/header</sourceRootElem>
+                <sourceRootElem>EllipseLib/header</sourceRootElem>
+                <sourceRootElem>XmlRecognition/header</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>

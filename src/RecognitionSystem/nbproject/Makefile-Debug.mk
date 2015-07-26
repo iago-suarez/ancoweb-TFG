@@ -35,9 +35,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/RecognitionFacade.o \
-	${OBJECTDIR}/XmlUtils.o \
-	${OBJECTDIR}/main.o
+	${OBJECTDIR}/XmlRecognition/source/RecognitionFacade.o \
+	${OBJECTDIR}/XmlRecognition/source/XmlUtils.o \
+	${OBJECTDIR}/XmlRecognition/source/main.o
 
 
 # C Compiler Flags
@@ -54,30 +54,29 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=`pkg-config --libs opencv`  
+LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/recognitionsystem
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk recognitionsystem
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/recognitionsystem: ${OBJECTFILES}
-	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/recognitionsystem ${OBJECTFILES} ${LDLIBSOPTIONS}
+recognitionsystem: ${OBJECTFILES}
+	${LINK.cc} -o recognitionsystem ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/RecognitionFacade.o: RecognitionFacade.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/XmlRecognition/source/RecognitionFacade.o: XmlRecognition/source/RecognitionFacade.cpp 
+	${MKDIR} -p ${OBJECTDIR}/XmlRecognition/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g `pkg-config --cflags opencv`   -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/RecognitionFacade.o RecognitionFacade.cpp
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/XmlRecognition/source/RecognitionFacade.o XmlRecognition/source/RecognitionFacade.cpp
 
-${OBJECTDIR}/XmlUtils.o: XmlUtils.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/XmlRecognition/source/XmlUtils.o: XmlRecognition/source/XmlUtils.cpp 
+	${MKDIR} -p ${OBJECTDIR}/XmlRecognition/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g `pkg-config --cflags opencv`   -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/XmlUtils.o XmlUtils.cpp
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/XmlRecognition/source/XmlUtils.o XmlRecognition/source/XmlUtils.cpp
 
-${OBJECTDIR}/main.o: main.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/XmlRecognition/source/main.o: XmlRecognition/source/main.cpp 
+	${MKDIR} -p ${OBJECTDIR}/XmlRecognition/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g `pkg-config --cflags opencv`   -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/XmlRecognition/source/main.o XmlRecognition/source/main.cpp
 
 # Subprojects
 .build-subprojects:
@@ -85,7 +84,7 @@ ${OBJECTDIR}/main.o: main.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/recognitionsystem
+	${RM} recognitionsystem
 
 # Subprojects
 .clean-subprojects:

@@ -35,9 +35,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/RecognitionFacade.o \
-	${OBJECTDIR}/XmlUtils.o \
-	${OBJECTDIR}/main.o
+	${OBJECTDIR}/XmlRecognition/source/RecognitionFacade.o \
+	${OBJECTDIR}/XmlRecognition/source/XmlUtils.o \
+	${OBJECTDIR}/XmlRecognition/source/main.o
 
 
 # C Compiler Flags
@@ -64,20 +64,20 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/recognitionsystem: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/recognitionsystem ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/RecognitionFacade.o: RecognitionFacade.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/XmlRecognition/source/RecognitionFacade.o: XmlRecognition/source/RecognitionFacade.cpp 
+	${MKDIR} -p ${OBJECTDIR}/XmlRecognition/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/RecognitionFacade.o RecognitionFacade.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/XmlRecognition/source/RecognitionFacade.o XmlRecognition/source/RecognitionFacade.cpp
 
-${OBJECTDIR}/XmlUtils.o: XmlUtils.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/XmlRecognition/source/XmlUtils.o: XmlRecognition/source/XmlUtils.cpp 
+	${MKDIR} -p ${OBJECTDIR}/XmlRecognition/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/XmlUtils.o XmlUtils.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/XmlRecognition/source/XmlUtils.o XmlRecognition/source/XmlUtils.cpp
 
-${OBJECTDIR}/main.o: main.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/XmlRecognition/source/main.o: XmlRecognition/source/main.cpp 
+	${MKDIR} -p ${OBJECTDIR}/XmlRecognition/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/XmlRecognition/source/main.o XmlRecognition/source/main.cpp
 
 # Subprojects
 .build-subprojects:

@@ -11,6 +11,10 @@
 #include <iostream>
 #include <map>
 
+#include "../header/RecognitionFacade.h"
+
+#include <opencv/cv.h>
+#include <opencv/highgui.h>
 #include <fstream>
 #include <sstream>
 
@@ -19,7 +23,6 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-#include <../header/RecognitionFacade.h>
 
 using namespace std;
 using namespace cv;
@@ -200,5 +203,29 @@ int main(int argc, char **argv) {
     
     trackToFile(input, output, 0, 35, std_output_flag, frecuency);
 
+    
+//    cv::VideoCapture capture(input);
+//    int rows = capture.get(CV_CAP_PROP_FRAME_HEIGHT);
+//    int cols = capture.get(CV_CAP_PROP_FRAME_WIDTH);
+//    BehaviorFacade bfacade(rows, cols);
+//    std::map<int, cv::vector< std::pair<int, cv::Rect> > > tresult;
+//    tfacade.RecoverTrackingFromFile(output, tresult, 1000);
+//    cv::Mat frame;
+//    for (int i = 0; i < 1000; i++) {
+//        if (capture.grab())
+//            capture.retrieve(frame, 0);
+//        bfacade.BehaviorFromFile(frame, tresult, i);
+//    }
+//    
+//    std::cout << "density" << std::endl;
+//    cv::Mat density = bfacade.getDensity();
+//    std::cout << "velocity" << std::endl;
+//    cv::Mat velocity = bfacade.getVelocity();
+//    std::cout << "minpath" << std::endl;
+//    cv::Point ini(40, 40);
+//    cv::Point fin(42, 40);
+//    cv::vector< cv::Point > path = bfacade.GetPath(ini, fin);
+//    std::cout << density.cols << " " << velocity.rows << " " << path.size() << std::endl << std::endl;
+    
     exit(0);
 }

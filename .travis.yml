@@ -5,8 +5,7 @@ python:
 before_install:
 # Install ffmpeg
   - sudo apt-get update
-  - sudo apt-get -y install curl
-  - sudo apt-get -qq install libopencv-dev build-essential checkinstall cmake pkg-config yasm libtiff4-dev libjpeg-dev libjasper-dev libavcodec-dev libavformat-dev libswscale-dev libdc1394-22-dev libxine-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libv4l-dev python-dev python-numpy libtbb-dev libqt4-dev libgtk2.0-dev libfaac-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev libtheora-dev libvorbis-dev libxvidcore-dev x264 v4l-utils ffmpeg libqt5opengl5-dev
+  - sudo apt-get install -y curl
   - PROY_DIR=$(pwd)
   - cd 
   - curl -o ~/ffmpeg.tar.xz http://johnvansickle.com/ffmpeg/releases/ffmpeg-release-64bit-static.tar.xz
@@ -27,18 +26,11 @@ install:
   - pip install -r requirements.txt
   - pip install coveralls
 before_script:
-# Install the Recognition System
-  - echo $RecognitionSystemPrivKey > ~/.ssh/recg
-  - echo $RecognitionSystemPubKey > ~/.ssh/recg.pub
-  - cd src
-  - git clone git@github.com:iago-suarez/RecognitionSystem.git
-  - cd RecognitionSystem/
+  - cd src/RecognitionSystem
   - make CONF=Debug
-  - cp dist/Debug/GNU-Linux-x86/recognitionsystem .
   - cd ..
-
-script:
 # command to run tests
+script:
   - python manage.py migrate
   - python manage.py test -v 2
   - coverage run --source='.' manage.py test

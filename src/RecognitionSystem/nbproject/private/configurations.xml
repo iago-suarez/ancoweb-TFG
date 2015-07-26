@@ -24,9 +24,18 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
-          <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -h</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" --help</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -i /home/iago/NetBeansProjects/RecognitionSystem/files/lankershim-camera4-0845am-0900am.avi -o </runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -i /home/iago/NetBeansProjects/RecognitionSystem/files/lankershim-camera4-0845am-0900am.avi -o /home/iago/NetBeansProjects/RecognitionSystem/files/out.txt</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -i /home/iago/NetBeansProjects/RecognitionSystem/files/</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -i /home/iago/NetBeansProjects/RecognitionSystem/files/lankershim-camera4-0845am-0900am.avi</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -i /home/iago/NetBeansProjects/RecognitionSystem/files/v296.mpg</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" --verbose -f 3 -i /home/iago/NetBeansProjects/RecognitionSystem/files/v296.mpg</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -i /home/iago/NetBeansProjects/RecognitionSystem/files/v296.mpg --verbose -f 3</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -i emptyDocument.mp4 --verbose -f 3</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}"</runcommand>
+        <runcommand>"${OUTPUT_PATH}" -i emptyDocument.mp4 --verbose -f 3</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>

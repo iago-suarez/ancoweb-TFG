@@ -16,10 +16,6 @@
     overflow-y: hidden;
 }
 
-#susp-det-popup-body .panel{
-    margin-bottom: 0;
-}
-
 #zoom-slider {
     height: 76%;
     position: absolute;
