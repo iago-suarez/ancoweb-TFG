@@ -8,13 +8,12 @@
 #include <stdlib.h>
 #include <getopt.h>
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
 #include <map>
 
 #include "../header/RecognitionFacade.h"
 
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
 #include <fstream>
 #include <sstream>
 
@@ -25,7 +24,6 @@
 
 
 using namespace std;
-using namespace cv;
 
 /* Flag set by ‘--verbose’. */
 static int verbose_flag;
