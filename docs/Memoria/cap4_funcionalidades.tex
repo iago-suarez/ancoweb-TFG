@@ -1,28 +1,50 @@
 \chapter{Funcionalidades Destacadas}
 
-Bla bla bla
 
 \section{Control de Usuarios}
 
 \section{Reprodución de Vídeo}
+	Desexase que a aplicación permita a reprodución dos videos contidos, mediante tecnics de
+	streaming ou pseudo-streaming. Neste caso empregarase o pseudo-streaming polo sinxela que
+	resulta esta implementación empregando as capacidades do tag $<video>$ de HTML5 en conxunto
+	con un servidor HTTP como Apache ou o servidor para desenvolvemento de Django.
 
 \section{Carga de Vídeo}
+	Para a subida de vídeo empregarase un formulario HTML que empregue unha chamada POST de HTTP.
+	Cando isto ocorra, o vídeo comezará a subirse ao servidor.
+	
+	É de especial importancia que no caso de que o vídeo teña un peso considerable e precise 
+	duns cantos segundos para subirse á plataforma, o usuario poida coñecer de forma gráfica
+	o avance deste proceso.
+	
+	Con este fin, crease un sistema de notificación de progreso baseado no 
+	django-progressbarupload \cite{django-progressbarupload}.
 
+	Este sistema crea no lado servidor basease na interface de Django TemporaryFileUploadHandler
+	\cite{TemporaryFileUploadHandler}.
+	
+	Na función de inicio (handle\_raw\_input) crea unha entrada na Cache de Django, que almacena como 
+	chave un número aleatorio e a IP do cliente que está a subir o vídeo, e como valor o tamaño
+	do ficheiro e o porcentaxe de este que xa está subido.Esta entrada será actualizada cada vez 
+	que o servido reciba un novo anaco de vídeo (mediante a función receive\_data\_chunk). 
+	
+	Por outra parte, para que visualmente o cliente poida ver o avance da subida mediante unha
+	barra de progreso, crease unha función asíncrona en javascript (Tecnoloxía AJAX), que 
+	periodicamente consulta ao servidor para obter o valor da cache que indica a porcentaxe de
+	subida do vídeo, e unha vez obtido, actualiza a barra de progreso para mostralo. Todo isto
+	ten lugar no navegador mentres este inda está a subir o arquivo de vídeo.
+
+	Unha vez que a subida se completa, o POST é manexado pola vista UploadView, que se todos
+	os datos do formulario son correctos, encargase de crear un modelo VideoModel. Como parte
+	desta creación o vídeo pasa do directorio temporal no que foi almacenado (baixo linux por 
+	defecto é /tmp) ao un directorio calculado pola función get\_valid\_filename. Esta función
+	pásaselle ao modelo como parte do seu campo ''video'' do tipo FileField.
+	
 \section{Análise de Vídeo}
+	Para a análise de vídeo
 
 \section{Detección de Obxectos}
 
 \section{Traxectorias}
 
 \section{Comportamento anormal}
-
-
-Bla bla bla
-
-\subsection{Título}
-
-Bla bla bla
-
-\subsubsection{Título}
-
-Bla bla bla
