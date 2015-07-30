@@ -29,7 +29,7 @@ serie de conceptos teóricos que se expoñen a continuación:
 	
 	\begin{itemize}
 	
-		\item{\textbf{Detección de Obxectos:}} Partindo dunha secuencia de vídeo como 
+		\item{\textbf{Detección de Obxectos:}}\label{cap:DeteccionObxetos} Partindo dunha secuencia de vídeo como 
 		entrada obtéñense os distintos obxectos que aparecen en cada fotograma da escena.
 		Para este fin empréganse técnicas de visión por computador.
 		
@@ -119,13 +119,14 @@ serie de conceptos teóricos que se expoñen a continuación:
 	\subsection {Desenvolvemento Áxil}
 		Para reducir custos e poder proporcionar solucións rápidas é preciso que as 
 		aplicacións web's de caracter empresarial se leven a cabo en pouco tempo e con
-		bos principios de enxeñaría.
+		bos principios de enxeñaría, a isto contribúen en gran medida as tecnoloxías 
+		que se amosan a continuación.
 	
 	\subsection{Soporte para transaccións}
 		Unha transacción nun Sistema Xestor de Base de Datos (SGBD) é un conxunto de ordes que
 		se executan formando unha unidade de traballo, de forma invisible e atómica. 
 		As transaccións cobran gran importancia nas aplicacións web debido á inestabilidade 
-		da rede, e á concorrencia dos distintos clientes conectados, polo que é axuda a un 
+		da rede e á concorrencia dos distintos clientes conectados, polo que é axuda a un 
 		desenvolvemento moi áxil que a tecnoloxía traia a súa xestión integrada.
 	
 	\subsection{Object-Relational Mapping (ORM)}
@@ -148,53 +149,59 @@ serie de conceptos teóricos que se expoñen a continuación:
 		visualización de grande cantidades de datos(en listas ou táboas), seguridade...
 		
 		
-\section{Streaming de Vídeo}
-	Dado que este proxecto está centrado no tratamento de vídeo, é de especial importancia ver 
-	de que xeitos podemos distribuílo e reproducilo a través da rede. A estes efectos existen dúas
-	grandes alternativas que varían en canto ao seu grao de escalabilidade, dificultade de 
-	implementación, e calidade final do servizo:
-	
-	\subsection{Pseudo Streaming ou Descarga Progresiva}
-		Consiste na descarga do vídeo por fragmentos, típicamente empregando o protocolo HTTP. 
-		Neste formato, o reprodutor vai acumulando fragmentos de vídeo ata obter os precisos como 
-		para comezar a reprodución, mais se o ancho de banda fose insuficiente, o vídeo remataría
-		por pararse. É o empregado por servizos como YouTube, Vimeo, DailyMotion...
-		
-		Será a opción empregada por motivos de simplicidade, mais compre explicar tamén o verdadeiro 
-		Streaming, xa que é a diferenza do pseudo-streaming pode ser empregado para a emisión de
-		contido en directo como o dunha cámara de seguridade.
-		
-	\subsection{Streaming}
-		O verdadeiro streaming ( do inglés True Streaming) consiste na emisión en directo do 
-		contido multimedia a través da rede, que o reprodutor reproduce no momento que recibe.
-		Este outro xeito de distribuír vídeo, apoiase en axustar a calidade do vídeo ao ancho de
-		banda do que dispón o cliente, evitando así interrupcións na reprodución.
-		
-		O protocolo mais destacable á hora de empregar este tipo de streaming é RTSP (Real-Time
-		Streaming Protocol) que operando a nivel de aplicación permite controlar un ou varios fluxos 
-		sincronizados de contido multimedia.
-		
-		Por unha parte RTSP soe empregar o Real-Time Transport Protocol (RTP) sobre UDP(User 
-		Datagram Protocol) para o transporte de contido multimedia, maximizando así o emprego 
-		da rede que sen garantir ningunha calidade de servizo.
-		
-		E por outra parte RTSP emprega o Real-time Control Protocol (RTCP) sobre TCP(Transmission 
-		Control Protocol) para a transmisión periódica de paquetes de control da sesión, o
-		diagnóstico de fallos e o control de la calidade da transmisión.
-		
-		\begin{figure}[htp]
-		\begin{center}
-			\includegraphics[scale=0.6]{figures/RTPS-diagram.png}
-			\caption{Diagrama conexión RTPS}
-		\label{fig:ArquitecturaAppWeb}
-		\end{center}
-		\end{figure}
-		
-		RTSP asemellase a HTTP no formato das peticións/repostas e na sintaxe, pero dispoñendo 
-		dun estado e permite tanto a clientes como a servidores facer peticións.
+\section{O Vídeo}
 
-		Tamén existen outros protocolos propietarios como MMS (Microsoft Media Server)ou RTMP 
-		(Real-Time Messaging Protocol) e RTMFP (Real-Time Media Flow Protocol) de Adobe.
+    \subsection{Formato de Vídeo}
+    
+    \subsection{Codec's}
+
+    \subsection{Streaming de Vídeo}
+        Dado que este proxecto está centrado no tratamento de vídeo, é de especial importancia ver 
+        de que xeitos podemos distribuílo e reproducilo a través da rede. A estes efectos existen dúas
+        grandes alternativas que varían en canto ao seu grao de escalabilidade, dificultade de 
+        implementación, e calidade final do servizo:
+        
+        \subsection{Pseudo Streaming ou Descarga Progresiva}
+            Consiste na descarga do vídeo por fragmentos, típicamente empregando o protocolo HTTP. 
+            Neste formato, o reprodutor vai acumulando fragmentos de vídeo ata obter os precisos como 
+            para comezar a reprodución, mais se o ancho de banda fose insuficiente, o vídeo remataría
+            por pararse. Este sistema é o empregado por servizos como YouTube, Vimeo, DailyMotion...
+            
+            Será a opción empregada por motivos de simplicidade, mais compre explicar tamén o verdadeiro 
+            Streaming, xa que é a diferenza do pseudo-streaming pode ser empregado para a emisión de
+            contido en directo como o dunha cámara de seguridade.
+            
+        \subsection{Streaming}
+            O verdadeiro streaming ( do inglés True Streaming) consiste na emisión en directo do 
+            contido multimedia a través da rede, que o reprodutor reproduce no momento que recibe.
+            Este outro xeito de distribuír vídeo, apoiase en axustar a calidade do vídeo ao ancho de
+            banda do que dispón o cliente, evitando así interrupcións na reprodución.
+            
+            O protocolo mais destacable á hora de empregar este tipo de streaming é RTSP (Real-Time
+            Streaming Protocol) que operando a nivel de aplicación permite controlar un ou varios fluxos 
+            sincronizados de contido multimedia.
+            
+            Por unha parte RTSP soe empregar o Real-Time Transport Protocol (RTP) sobre UDP(User 
+            Datagram Protocol) para o transporte de contido multimedia, maximizando así o emprego 
+            da rede pero sen garantir un mínimo na calidade do servizo.
+            
+            E por outra parte RTSP emprega o Real-time Control Protocol (RTCP) sobre TCP(Transmission 
+            Control Protocol) para a transmisión periódica de paquetes de control da sesión, o
+            diagnóstico de fallos e o control de la calidade da transmisión.
+            
+            \begin{figure}[htp]
+            \begin{center}
+                \includegraphics[scale=0.6]{figures/RTPS-diagram.png}
+                \caption{Diagrama conexión RTPS}
+            \label{fig:RTPS-diagram}
+            \end{center}
+            \end{figure}
+            
+            RTSP asemellase a HTTP no formato das peticións/repostas e na sintaxe, pero dispoñendo 
+            dun estado que permite tanto a clientes como a servidores facer peticións.
+
+            Tamén existen outros protocolos propietarios como MMS (Microsoft Media Server)ou RTMP 
+            (Real-Time Messaging Protocol) e RTMFP (Real-Time Media Flow Protocol) de Adobe.
   
 \chapter{Análise de antecedentes e alternativas}
 	Se trata de realizar un estudio de alternativas o “estado del arte” o un análisis comparativo

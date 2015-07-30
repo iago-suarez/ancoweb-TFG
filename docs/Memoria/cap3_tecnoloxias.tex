@@ -1,9 +1,9 @@
 \chapter{Estudo das tecnoloxías para a creación de aplicacións web baseadas en vídeo}
 
-	A continuación mostrase un estudo feito sobre as tecnoloxías mais empregadas hoxe en día
-	de cara ao deseño de aplicacións web baseadas en vídeo. Os criterios que se valoraron á
-	hora de escoller unha destas metodoloxías son os seguintes:
-
+	Para a elaboración de este traballo de fin de grao, é preciso seleccionar unha serie de
+	tecnoloxías, vamos a empregar os seguintes criterios para poder comparalas entre si e 
+	escoller entre elas a que mellor se adecúan ás necesidades do proxecto.
+	
 \begin{itemize}
 
 	\item {\textbf{Plataforma e Portabilidade\\}}
@@ -12,7 +12,7 @@
 		Sistemas Operativos baseados en Linux.
 
 	\item {\textbf{Compatibilidade co algoritmo de Procesado de Vídeo\\}}
-		Dado que o algoritmo que procesa o vídeo foi parcialmente implementado en c++,
+		Dado que o algoritmo que procesa o vídeo foi parcialmente implementado en C++,
 		a tecnoloxía que se empregue para o desenvolvemento da parte web debe dispoñer da
 		máxima compatibilidade con esta linguaxe de programación.
 
@@ -24,11 +24,15 @@
 
 \end{itemize}
 
+Posto que empregamos unha arquitectura baseada no modelo cliente-servidor, temos que determinar 
+en que tecnoloxías vamos a construír por un lado o Servidor ou Back-End, e por outra parte o 
+Cliente ou Front-End que se executará nun navegador.  
+
 \section{Back-End}
-	O Back-End é a parte que procesa os datos proporcionados polo Front-End, atende as súas 
-	peticións, e xestiona o modelo de datos e os procesos implicados na aplicación. Neste
-	caso en concreto, o Back-End será o encargado de interactuar directamente co sistema de
-	Análise de Vídeo.\\
+	En canto ás tecnoloxías para a elaboración do Back-End, hai que ter en conta que procesará
+	os datos proporcionados polo Front-End, atendendo as súas peticións, e xestionando o modelo de 
+	datos e os procesos implicados na aplicación. A maiores neste caso en concreto, o Back-End será
+	o encargado de interactuar directamente co sistema de Análise de Vídeo.\\
 	
 	As tecnoloxías estudadas para esta parte do sistema son as seguintes:
 
@@ -41,7 +45,7 @@
   	para ver o seu funcionamento é Red5 \cite{red5-github-url}.
   	
 	\subsection{C\#}
-	esta linguaxe en combinación con .NET resulta unha combinación bastante áxil de cara
+	Esta linguaxe en combinación con .NET resulta unha combinación bastante áxil de cara
 	á programación web, integrando na propia plataforma un deseñador Web e un ORM moi 
 	intuitivo. O gran problema polo que se descartou este entorno foi polo seu baixo grao
 	de compatibilidade cos sistemas operativos Linux.
@@ -64,16 +68,19 @@
 	
 	
 \section{Front-End}
-	É a parte do Sistema encargada de interactuar co usuario. O maior requisito de esta 
+	Unha vez seleccionada a tecnoloxía do lado servidor, é hora de ver que opcións existen para
+	o Front-End, a parte do Sistema encargada da interacción co usuario. O maior requisito de esta 
 	parte é ser capaz de representar todas as capas de información complexa que xera o
 	Back-End. E tratándose dunha aplicación web estudaranse aqueles xeitos que permitan
-	a reprodución de vídeo, e a maiores o debuxado de figuras en movemento sobre este vídeo.
+	a reprodución de vídeo, e a maiores o debuxado de figuras en movemento sobre este vídeo.\\
+	
+	Destacan principalmente dúas alternativas:
 	
 	\subsection{Vídeo en Flash}
-		Video Flash é a tecnoloxía de reprodución de vídeo mais empregada e madura en
+		Vídeo Flash é a tecnoloxía de reprodución de vídeo mais empregada e madura en
 		internet dende hai anos. Inicialmente creada por Macromedia e mercada por Adobe 
 		en 2005, permite crear elaboradas animacións vectoriais, que logo poden proxectarse
-		sobre un vídeo, e á vez tamén manexa os eventos de reprodución de vídeo como o 
+		sobre un vídeo, mentres que tamén manexa os eventos de reprodución de vídeo como o 
 		play ou o stop.\\
 		
 		Ten certos problemas en tanto ao Posicionamento Web(SEO), reprodución en 
@@ -83,7 +90,7 @@
 		
 	
 	\subsection{Vídeo HTML5 + Javascript}
-		Está é unha das combinacións mais empregadas actualmente, xa que segue o estándar
+		Esta é outra das combinacións mais empregadas actualmente, xa que segue o estándar
 		do W3C (World Wide Web Consortium)\cite{w3schools-video-tag}. Nel defínese como se
 		han de mostrar e obter os vídeos dunha páxina codificada coa linguaxe HTML5, e 
 		destaca por seres extremadamente sinxelo en comparación con Flash ou outras tecnoloxías.

@@ -14,92 +14,86 @@ traballo planifica reunións diarias (Daily Scrum), ao supoñer que todos os mem
 traballan unha xornada laboral enteira entre cada unha destas reunións, o cal tampouco se dá 
 no caso deste proxecto, xa que a dedicación será de determinadas horas nos momentos dispoñibles.
 
+\section{As metodoloxías áxiles}
+
 \section{Persoas}
 
-Os tres papeis que se definen nesta metodoloxía \cite{la-guia-de-scrum} foron 
-adaptados do seguinte xeito:
-\begin{itemize}
+    Os tres papeis que se definen nesta metodoloxía \cite{la-guia-de-scrum} foron 
+    adaptados do seguinte xeito:
 
-	\item{\textbf{ProductOwner:}}
-	O papel de ProductOwner, que define os requisitos da aplicación estivo representado 
-	polo director de proxecto Brais Cancela, que participou na creación do Anteproxecto.
-	En certos momentos o señor Cancela tamén desempeñou a función de membro do equipo, 
-	posto que é foi autor do algoritmo de análise de vídeo. 
+    \subsection{ProductOwner}
+        O papel de ProductOwner, que define os requisitos da aplicación estivo representado 
+        polo director de proxecto Brais Cancela, que participou na creación do Anteproxecto.
+        En certos momentos o señor Cancela tamén desempeñou a función de membro do equipo, 
+        posto que é foi autor do algoritmo de análise de vídeo. 
 
-	\item{\textbf{ScrumMaster e Development Team:}}
-	Ambos papeis leváronse a cabo polo autor, xa que carece de sentido definir ambas figuras
-	nun equipo de unha soa persoa. De este xeito á par que se desenvolvía o proxecto, íase
-	asegurando o cumprimento das regras de SCRUM.
-
-\end{itemize}
-
-\vspace{1cm}
+    \subsection{ScrumMaster e Development Team}
+        Ambos papeis leváronse a cabo polo autor, xa que carece de sentido definir ambas figuras
+        nun equipo de unha soa persoa. De este xeito á par que se desenvolvía o proxecto, íase
+        asegurando o cumprimento das regras de SCRUM.
+    
 \section{Reunións}
 As reunións pola súa parte modifícanse do seguinte xeito:
 
-\begin{itemize}
-	\item{\textbf{Sprint Planning Meeting:}}
-	Esta reunión mantén o mesmo formato que no SCRUM puro, xuntando ao autor co	ProductOwner 
-	e concretando as tarefas do Product Backlog que se realizarán no seguinte Sprint, pasando
-	por tanto a formar parte do Sprint Backlog.
-	
-	\item{\textbf{Daily Scrum:}}
-	Dado que o equipo de Desenvolvemento e o ScrumMaster están conformados pola mesma persoa
-	e que o número de horas diarias adicadas é moito menos ao dunha xornada laboral, considerouse
-	oportuno substituír esta reunión diaria por unha reunión dúas veces á semana (Martes e Xoves 
-	pola tarde normalmente). Na que se mostrase ao ProductOwner o avance do proxecto.
-	
-	\item{\textbf{Sprint Review:}}
-	Esta reunión fusionase co Sprint Planning Meeting, xa que ao mesmo tempo valorase o traballo
-	realizado no Sprint que remata e, en base a el, planificase a videira Iteración. 
-	
-	\item{\textbf{Sprint Retrospective:}}
-	Pola súa parte, esta reunión toma un carácter unipersoal, pasando a ser unha valoración do
-	propio autor sobre as persoas, relaciones, procesos e ferramentas implicadas no último Sprint.
-	Nela avalíase os elementos con éxito e os suxeitos a melloras, creando un plan para implementar
-	estas melloras na Videira iteración.
-	
-\end{itemize}
-
+    \subsection{Sprint Planning Meeting}
+        Esta reunión mantén o mesmo formato que no SCRUM puro, xuntando ao autor co	ProductOwner 
+        e concretando as tarefas do Product Backlog que se realizarán no seguinte Sprint, pasando
+        por tanto a formar parte do Sprint Backlog.
+    
+    \subsection{Daily Scrum}
+        Dado que o equipo de Desenvolvemento e o ScrumMaster están conformados pola mesma persoa
+        e que o número de horas diarias adicadas é moito menos ao dunha xornada laboral, considerouse
+        oportuno substituír esta reunión diaria por unha reunión dúas veces á semana (Martes e Xoves 
+        pola tarde normalmente). Na que se mostrase ao ProductOwner o avance do proxecto.
+    
+    \subsection{Sprint Review}
+        Esta reunión fusionase co Sprint Planning Meeting, xa que ao mesmo tempo valorase o traballo
+        realizado no Sprint que remata e, en base a el, planificase a videira Iteración. 
+    
+    \subsection{Sprint Retrospective}
+        Pola súa parte, esta reunión toma un carácter unipersoal, pasando a ser unha valoración do
+        propio autor sobre as persoas, relaciones, procesos e ferramentas implicadas no último Sprint.
+        Nela avalíase os elementos con éxito e os suxeitos a melloras, creando un plan para implementar
+        estas melloras na Videira iteración.
 
 \section{Control de Versións con GitHub}
-	Os sistemas de control de versións permiten a xestión dos distintos cambios efectuados sobre
-	un produto software ou sobre a súa configuración. Facilitando a administración das distintas
-	versións do produto. 
-	
-	En concreto, GitHub é unha plataforma de desenvolvemento colaborativo que emprega o sistema de
-	control de versións Git. Escolleuse empregar este sistema pola súa potencia e simplicidade, xa
-	que proporciona libre acceso aos titores para comprobar o avance do proxecto, e a súa vez asegura
-	que o código este sempre a bo recaudo.
-	
-	A páxina do proxecto é: \url{https://github.com/iago-suarez/ancoweb-TFG} 
-	
+    Os sistemas de control de versións permiten a xestión dos distintos cambios efectuados sobre
+    un produto software ou sobre a súa configuración. Facilitando a administración das distintas
+    versións do produto. 
+    
+    En concreto, GitHub é unha plataforma de desenvolvemento colaborativo que emprega o sistema de
+    control de versións Git. Escolleuse empregar este sistema pola súa potencia e simplicidade, xa
+    que proporciona libre acceso aos titores para comprobar o avance do proxecto, e a súa vez asegura
+    que o código este sempre a bo recaudo.
+    
+    A páxina do proxecto é: \url{https://github.com/iago-suarez/ancoweb-TFG} 
+    
 \section{Integración Continua con Travis CI}
 
-	A Integración Contínua (CI do ingles Continuous Integration) é un modelo informático que 
-	consiste en facer integracións automáticas dun proxecto o mais a miúdo posible para así 
-	poder detectar os posibles erros o antes posible, minimizando as súas posibles consecuencias.
-	Outro factor importante é o feito de garantir que a versión subida ao repositorio segue a
-	funcionar con independencia do entorno de desenvolvemento. Enténdense como pertencentes á 
-	integración continua a compilación e a execución das probas de todo un proxecto.
-	
-	Travis CI é unha plataforma de integración continua para proxectos aloxados en GitHub, que 
-	detecta automaticamente cando se produce un cambio no repositorio, e executa unha serie de pasos 
-	definidos no ficheiro .travis.yml \ref{fig:travisYml}, que contén as accións a realizar 
-	antes, durante e tras a as probas.
-	
-	Escolleuse Travis CI, pola súa integración con GitHub, pola súa potencia(permite executar 
-	practicamente todo o que se pode executar nunha máquina local) e pola súa sinxela integración
-	con outras ferramentas como Coveralls.
-	
-	\begin{figure}[htp]
-	\begin{center}
-		\includegraphics[scale=0.6]{figures/travisYml.png}
-		\caption{Imaxe de parte do ficheiro .travis.yml}
-	\label{fig:travisYml}
-	\end{center}
-	\end{figure}
-	
-	
+    A Integración Contínua (CI do ingles Continuous Integration) é un modelo informático que 
+    consiste en facer integracións automáticas dun proxecto o mais a miúdo posible para así 
+    poder detectar os posibles erros o antes posible, minimizando as súas posibles consecuencias.
+    Outro factor importante é o feito de garantir que a versión subida ao repositorio segue a
+    funcionar con independencia do entorno de desenvolvemento. Enténdense como pertencentes á 
+    integración continua a compilación e a execución das probas de todo un proxecto.
+    
+    Travis CI é unha plataforma de integración continua para proxectos aloxados en GitHub, que 
+    detecta automaticamente cando se produce un cambio no repositorio, e executa unha serie de pasos 
+    definidos no ficheiro .travis.yml \ref{fig:travisYml}, que contén as accións a realizar 
+    antes, durante e tras a as probas.
+    
+    Escolleuse Travis CI, pola súa integración con GitHub, pola súa potencia(permite executar 
+    practicamente todo o que se pode executar nunha máquina local) e pola súa sinxela integración
+    con outras ferramentas como Coveralls.
+    
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.6]{figures/travisYml.png}
+        \caption{Imaxe de parte do ficheiro .travis.yml}
+    \label{fig:travisYml}
+    \end{center}
+    \end{figure}
+    
+    
 \section{Control da cobertura con Coveralls}
 \section{Xestión de Incidencias e Control de Proxecto con YouTrack}
