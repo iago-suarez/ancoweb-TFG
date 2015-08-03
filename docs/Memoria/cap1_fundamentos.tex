@@ -60,44 +60,6 @@ serie de conceptos teóricos que se expoñen a continuación:
 	para realizar toda esta serie de cálculos, empregase algunha biblioteca de código que simplifique 
 	o traballo a realizar, e neste caso, esta biblioteca é OpenCV.
 	
-	\subsection{OpenCV}
-		OpenCV é unha biblioteca libre de visión artificial escrita en código C/C++ optimizado.
-		Dende a súa aparición publicada por Intel en Xaneiro de 1999, empregouse en infinidade 
-		de proxectos, tanto para detección de movemento como para aplicativos de control de procesos
-		que requiren recoñecemento de obxectos.
-		
-		OpenCV é multiplataforma, existindo versión para GNU/Linux, Mac OS X e Windows. Contén mais 
-		de 500 funcións que abarcan unha ampla gama de áreas como o proceso de visión, recoñecemento
-		de obxectos (tamén recoñecemento facial), calibrado de cámaras, realidade aumentada e visión
-		robótica.
-		
-		Por todas estas características OpenCV é unha das bibliotecas mais empregadas hoxe en día, e é
-		por elo tamén que se escolleu para a implementación do sistema de recoñecemento que a aplicación
-		web empregará para a análise do vídeo.
-		
-		Non obstante, xa que se desexa que a aplicación web sexa o mais versátil posible, contemplase a
-		posibilidade de que poida empregar para a análise sistemas desenvoltos noutras tecnoloxías como
-		pode ser Matlab. E para dotala deste grao de versatilidade decídese definir unha interface de
-		liña de comando a través da cal se chamará ao sistema, e un formato de ficheiro XML (Extensible 
-		Markup Language) no que este sistema de recoñecemento deben escribir os datos da súa análise.
-		
-\section{Extensible Markup Language (XML)}
-	XML é unha linguaxe de marcas desenvolvida polo W3C (World Wide Web Consortium) e empregado
-	para almacenar datos de forma clara e lexible. Permite definir a gramática de linguaxes 
-	específicas para estruturar así grandes documentos.
-	
-	Os documentos XML seguen una estrutura xerárquica baseada en etiquetas(tag's) e atributos,
-	que se poden definir nunha Definición de Tipo de Documento ou DTD. \cite{dtd-web-page}
-	
-	Cando un documento en formato XML segue as directrices definidas no ficheiro DTD asociado,
-	dise que este ficheiro esta ben formado(well formed en ingles), e para validar iso empregarase
-	na elaboración do traballo algún avaliador de XML en liña como por exemplo o da W3Chools.\cite{xml-validator}
-	
-	XML é especialmente útil para comunicar varias aplicacións que traballan en tecnoloxías 
-	diferentes grazas á súa simplicidade que permite integrar os datos de xeito moi sinxelo. Precisamente
-	por iso, servirá como nexo de unión entre o sistema de análise que explicamos anteriormente, e a 
-	aplicación web cuxos fundamentos teóricos vemos a continuación. 
-	
 \section{Programación Web}
 
 	A programación web de aplicacións de carácter empresarial require do coñecemento da rede, ademais
@@ -142,6 +104,8 @@ serie de conceptos teóricos que se expoñen a continuación:
 		html ben estruturado dinamicamente. Algúns exemplos son o Sistema de Templates de Django, o 
 		Sistema JSP de Spring, a libraría Thymeleaf ou os compoñentes de ASP.NET. Todos eles axudan 
 		a xerar contido HTML de xeito sinxelo e escalable.
+		
+    \subsection{AJAX}
 		
 	\subsection{Outras cuestións da web}
 		A maiores existe toda unha gama de outras funcionalidades que cobran importancia cando deseñamos

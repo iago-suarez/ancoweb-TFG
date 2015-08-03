@@ -1,12 +1,44 @@
 \chapter{Probas Realizadas}
 
+Á hora de deseñar probas é importante abarcar a maior parte do código posible, neste proxecto isto
+foi todo un reto, pois o alto nivel de integración dificulta enormemente a realización das probas.
+Pese a todo, logrouse probar tanto o código realizado en Python-Django así como o código da capa 
+cliente en javascript, empregando para elo distintos modelos e bibliotecas de probas que vemos a
+continuación.
+
 \section{Probas Unitarias}
   \subsection{Probas Automáticas}
   Estaría ben!
 
 \section{Probas de Integración}
-  \subsection{Probas funcionais Selenium}
+    \subsection{Probas funcionais Selenium}
 
+    \subsection{Probas Web con Javascript}
+        As probas da capa web en escrita en javascript apoiaranse no framework Qunit de 
+        jQuery que proporciona un xeito sinxelo de crear probas unitarias sempre e cando o código 
+        javascript esté convintemente separado do HTML que forma a vista da capa web.
+        
+        Como resulta lóxico, estas probas estarán escritas en javascript e almacenadas no directorio
+        do proxecto /src/static/site/tests, podendo executarse de dous xeitos diferentes: Ou ben 
+        como unha páxina web pertencente á aplicación (isto favorece o desenvolvemento áxil), ou ben
+        como unha proba das realizadas polo comando python manage.py test.
+        
+        Para poder executar un código javascript dende a execución común dos tests da aplicación, 
+        precisamos un lanzador ou runner que lance estes tests contra algún navegador de liña de 
+        comandos, neste caso a opción seleccionada foi a combinación do paquete django.js (v0.8.1)
+        en combinación co navegador de liña de comandos phantomJS. 
+        
+        Django.js é un conxunto de utilidades que permiten a integración de código javascript e 
+        Django, e en concreto neste proxecto empréganse aquelas que teñen que ver co testing de
+        aplicacións\ref{DjangojsTestTools}, mais en concreto QUnitSuite e JsTemplateTestCase para a
+        execución dos tests como parte dos test da aplicación (sen parte servidor) e QUnitView 
+        para a execución a modo de páxina web.
+        
+        Po outro lado PhantomJS é un navegador WebKit de liña de comandos, cunha API Javascript que
+        da soporte rápido e nativo para varios estándares web que resultan moi do noso interese,
+        como son a manipulación DOM, os selectores CSS, JSON, Canvas e SVG. PhantomJS será chamado
+        implícitamente polo runner de Django.js cando se executen os test, mentres que no caso da 
+        vista QUnitView os tests executaranse directamente no navegador que realice a petición.
 
 \section{Probas de Sistema}
 
