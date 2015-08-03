@@ -24,18 +24,18 @@ class ProcessState(object):
         raise NotImplementedError("Subclasses should implement this!")
 
 
-class ProcessFinishedStated(ProcessState):
+class ProcessFinishedState(ProcessState):
     def __init__(self, upload_model):
-        super(ProcessFinishedStated, self).__init__("Your video has been successfully uploaded", upload_model)
+        super(ProcessFinishedState, self).__init__("Your video has been successfully uploaded", upload_model)
 
     def exec(self):
         self.process.is_finished = True
         self.process.save()
 
 
-class AnalysisFinishedStated(ProcessState):
+class AnalysisFinishedState(ProcessState):
     def __init__(self, upload_model):
-        super(AnalysisFinishedStated, self).__init__("Your video has been successfully analyzed", upload_model)
+        super(AnalysisFinishedState, self).__init__("Your video has been successfully analyzed", upload_model)
 
     def exec(self):
         self.process.progress = 100

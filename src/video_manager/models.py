@@ -6,8 +6,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from ancoweb import settings
-from video_upload import utils
-import video_upload
+from video_upload import utils, tasks
 
 
 def get_valid_filename(filename, bad_extensions=None, directory=""):
@@ -91,5 +90,5 @@ class AnalysisProcess(models.Model):
         self.exec_thread.start()
 
     def exec_states(self):
-        video_upload.tasks.AnalyzeVideo(self).exec()
-        video_upload.tasks.AnalysisFinishedStated(self).exec()
+        tasks.AnalyzeVideo(self).exec()
+        tasks.AnalysisFinishedState(self).exec()

@@ -7,7 +7,18 @@ var videoProportion = 1;
 var canvasLeftPadding = 0;
 var canvasTopPadding = 0;
 
+var updateIndex = 0;
+var lastUpdateTimes = Array.apply(null, new Array(10)).map(Number.prototype.valueOf,0);
+
 var videoDetections;
+
+function arrayMean(arr){
+    var sum = 0;
+    for( var i = 0; i < arr.length; i++ ){
+        sum += parseInt( arr[i], 10 );
+    }
+    return  sum/arr.length;
+}
 
 /**
  * Paint a rect in the canvas context in color and with lineWidth pixels in border.
@@ -85,11 +96,17 @@ function loadXmlResult(video) {
             $('#abnormality-input').val(0);
         }
 
+
         function updateStatus() {
             if (!video.paused) {
+                var time = Date.now();
                 videoDetections.updateState();
-                // We suppose 25 fps
-                return setTimeout(updateStatus, 40);
+
+                updateIndex = (updateIndex + 1) % lastUpdateTimes.length;
+                lastUpdateTimes[updateIndex] = Date.now() - time;
+                var updateTime  = Math.floor((1000 / videoDetections.fps) - arrayMean(lastUpdateTimes));
+                //console.log("(fps: " + videoDetections.fps + ")estimateTime: " + updateTime);
+                return setTimeout(updateStatus, updateTime);
             }
         }
 

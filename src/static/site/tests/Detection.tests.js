@@ -2,27 +2,37 @@
  * Created by iago on 13/07/15.
  */
 
-QUnit.module("Detections Tests");
-/*, {
- setup: function() {
- // prepare something Detections Tests following tests
- console.log( "Now running: ");
- QUnit.config.autostart = false;
+var videoDetections;
 
- $('body').append('<video id="video-player" controls="" hidden>' +
- '<source src="/media/tests_resources/we2645.mp4" type="video/mp4" fps="25"/>' +
- 'Your browser does not support the video tag.' +
- '</video>');
- var myQunit = this;
- $.get('/media/tests_resources/wk1gt.xml', function (xmlResult) {
- //Create the videoDetections object from the xml result and add its observers
- myQunit.videoDetections = new VideoDetections(document.getElementById('video-player'),
- $(xmlResult).find('trajectories'), $(xmlResult).find('objects'));
- start();
- });
+$('body').append('<video id="video-player" controls="" hidden>' +
+'<source src="/media/tests_resources/we2645.mp4" type="video/mp4" fps="25"/>' +
+'Your browser does not support the video tag.' +
+'</video>');
 
- }
- });*/
+if (navigator.userAgent.indexOf('PhantomJS') != -1) {
+    QUnit.test('Async Load Data', function() {
+        expect(1);
+        QUnit.stop();
+        $.get('/media/tests_resources/wk1gt.xml', function (xmlResult) {
+            //Create the videoDetections object from the xml result and add its observers
+            var video = document.getElementById('video-player');
+            video.currentSrc = window.location.host + $('source').attr('src');
+            videoDetections = new VideoDetections(video,
+                $(xmlResult).find('trajectories'), $(xmlResult).find('objects'));
+            ok(true);
+            QUnit.start();
+        });
+    });
+}else{
+    QUnit.config.autostart =false;
+    $.get('/media/tests_resources/wk1gt.xml', function (xmlResult) {
+        //Create the videoDetections object from the xml result and add its observers
+        videoDetections = new VideoDetections(document.getElementById('video-player'),
+        $(xmlResult).find('trajectories'), $(xmlResult).find('objects'));
+        QUnit.start();
+    });
+}
+
 
 QUnit.test("idToRgb Test", function (assert) {
     //Return the corresponding rgb light color to the object with id
@@ -50,23 +60,8 @@ QUnit.test("idToRgba Test", function (assert) {
     assert.equal(Detection.idToRgba(56235004, "00"), "#00ff0400", "Passed!");
 
 });
-QUnit.config.autostart = false;
 
-$('body').append('<video id="video-player" controls="" hidden>' +
-    '<source src="/media/tests_resources/we2645.mp4" type="video/mp4" fps="25"/>' +
-    'Your browser does not support the video tag.' +
-    '</video>');
-
-var videoDetections;
-$.get('/media/tests_resources/wk1gt.xml', function (xmlResult) {
-    //Create the videoDetections object from the xml result and add its observers
-    videoDetections = new VideoDetections(document.getElementById('video-player'),
-        $(xmlResult).find('trajectories'), $(xmlResult).find('objects'));
-    QUnit.start();
-
-});
-
-QUnit.test('Load Data', function (assert) {
+QUnit.test('Check loaded data', function (assert) {
     assert.equal(videoDetections.detections[18150237].id, "18150237");
     assert.equal(videoDetections.detections[50152232].id, "50152232");
     assert.equal(videoDetections.detections[71227248].id, "71227248");

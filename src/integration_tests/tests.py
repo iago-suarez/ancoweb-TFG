@@ -1,6 +1,7 @@
 import os
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
-from djangojs.runners import QUnitSuite, JsTemplateTestCase
+from djangojs.runners import QUnitSuite, PhantomJsRunner, JsTestException
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from selenium.webdriver.common.by import By
@@ -110,14 +111,24 @@ class VideoManagerSeleniumTests(SeleniumAncowebTest):
         pass
 
 
-class QUnitVideoPlayerTests(QUnitSuite, JsTemplateTestCase):
-    django_js = True
-    template_name = 'integration_tests/test-qunit.html'
-    js_files = (
-        'site/js/jquery-1.11.3.js',
-        'site/js/Detection.js',
-        'site/tests/Detection.tests.js',
-        'site/js/VideoDetections.js',
-        'site/tests/video-player.tests.js',
-        'site/tests/qunit-assert-canvas.js',
-    )
+class StaticJsTestCase(PhantomJsRunner, StaticLiveServerTestCase):
+    """
+        A PhantomJS suite that run against the Django StaticLiveServerTestCase
+    """
+    #: a mandatory named URL that point to the test runner page
+    url_name = None
+    #: an optionnal arguments array to pass to the ``reverse()`` function
+    url_args = None
+    #: an optionnal keyword arguments dictionnary to pass to the ``reverse()`` function
+    url_kwargs = None
+
+    def get_url(self):
+        if not self.url_name:
+            raise JsTestException('url_name need to be defined')
+
+        reversed_url = reverse(self.url_name, args=self.url_args, kwargs=self.url_kwargs)
+        return ''.join([self.live_server_url, reversed_url])
+
+
+class QUnitVideoPlayerTests(QUnitSuite, StaticJsTestCase):
+    url_name = 'my_qunit_view'

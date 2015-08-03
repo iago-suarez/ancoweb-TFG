@@ -408,7 +408,12 @@ function TrainingMsgObserver(videoDetections, canvasElement, trainingLbl, traini
 // TrainingMsgObserver.prototype create the object that inherits from DetectionsObserver.prototype
 TrainingMsgObserver.prototype = Object.create(DetectionsObserver.prototype);
 
-
+/**
+ * Throws the popup suspicious windows
+ *
+ * @param videoDetections
+ * @constructor
+ */
 function PopupLauncherObserver(videoDetections) {
     DetectionsObserver.call(this, videoDetections);
     this.throwPopups = false;

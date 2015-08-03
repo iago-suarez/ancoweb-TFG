@@ -90,13 +90,13 @@ class VideoUtils:
         :return:
         """
         p = Popen("ffmpeg -i %s -vcodec copy -f rawvideo "
-                  "-y /dev/null 2>&1 | tr ^M '\n' | grep 'frame'" % video_path,
+                  "-y /dev/null 2>&1 | tr ^M '\n' | grep 'frame='" % video_path,
                   shell=True, stdout=PIPE, stderr=STDOUT, universal_newlines=True)
         line = p.stdout.readline()
         # De toda la linea de información buscamos los frames y los devolvemos
         video_properties = line.split()
         for i in range(len(video_properties)):
-            if 'frame' in video_properties[i]:
+            if 'frame=' in video_properties[i]:
                 return int(video_properties[i + 1])
 
     @staticmethod

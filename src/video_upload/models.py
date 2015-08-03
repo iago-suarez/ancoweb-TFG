@@ -37,7 +37,7 @@ class UploadProcess(models.Model):
         states = [tasks.CovertVideo,
                   tasks.AnalyzeVideo,
                   tasks.GeneratingImagesState,
-                  tasks.ProcessFinishedStated]
+                  tasks.ProcessFinishedState]
         for state in states:
             self.refresh_from_db()
             if not self.canceled:
