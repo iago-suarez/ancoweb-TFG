@@ -103,9 +103,17 @@ serie de conceptos teóricos que se expoñen a continuación:
 		Tamén resulta moi practico dispoñer dunha linguaxe de prantilla que permitan xerar contido
 		html ben estruturado dinamicamente. Algúns exemplos son o Sistema de Templates de Django, o 
 		Sistema JSP de Spring, a libraría Thymeleaf ou os compoñentes de ASP.NET. Todos eles axudan 
-		a xerar contido HTML de xeito sinxelo e escalable.
+		a xerar contido HTML de xeito sinxelo e escalable que logo será enviado ao cliente, de
+		todolos xeitos esta parte cliente as veces precisa comunicarse co servidor sen que sexa 
+		preciso unha recarga da páxina e para elo empregase AJAX.
 		
     \subsection{AJAX}
+		AJAX ou Asynchronous JavaScript And XML é unha tecnoloxía da web empregada para crear 
+		aplicacións interactivas, estas aplicacións executanse no navegador dos usuarios mentres 
+		manteñen unha comunicación asíncrona co lado servidor en segundo plano. Normalmente 
+		emplegrase javascript coma linguaxe para a realización das chamadas asíncronas en combinación
+		con algunha linguaxe para a definición de obxectos como XML ou JSON, para as que ademais os
+		propios navegadores adoitan a facilitar ferramentas de parsing.
 		
 	\subsection{Outras cuestións da web}
 		A maiores existe toda unha gama de outras funcionalidades que cobran importancia cando deseñamos
@@ -114,10 +122,71 @@ serie de conceptos teóricos que se expoñen a continuación:
 		
 		
 \section{O Vídeo}
-
-    \subsection{Formato de Vídeo}
+    O vídeo permite gravar, procesar, almacenar e transmitir información en forma de 
+    imaxe en movemento, esta imaxe en movemento soe estar composta por unha serie de imaxes 
+    estáticas chamadas fotogramas, que se manexan a unha velocidade alta causando o efecto de que o
+    que se está a ver está en movemento.
     
+    Non obstante o vídeo en formato electrónico non almacena necesariamente todas as imaxes de forma
+    individual xa que isto suporía moita información redundante. En lugar disto empréganse técnicas
+    de codificación-decodificación (codec's) que comprimen e descomprimen os datos para facilitar o
+    seu manexo.
+
     \subsection{Codec's}
+        Os codec's teñen como función principal a de transformar unha sinal de vídeo para que poida
+        ser visto. A maioría dos codec's provocan con cada transformación unha perda de información
+        para conseguir un tamaño final o mais pequeno posible, estes codec's chámanse lossless (con 
+        perdida) e a pesares de que perden calidade soe compensar pola cantidade de espazo que 
+        aforran.
+        
+        A parte de este fenómeno da compresión tamén cobra moita importancia outros aspectos 
+        relacionados co vídeo como a reprodución e sincronización de son, os subtítulos do vídeo...
+        Todo isto depende do formato no que se almacene o vídeo.
+        
+    \subsection{Formato de Vídeo}
+        O formato dun vídeo determina como se almacenan os distintos tipos de información involucrada
+        como as imaxes que poden estar codificadas en varios codec, o son, os subtitulos...
+        este formato correspondese cunha extensión específica do arquivo que o contén, como por 
+        exemplo:
+        
+        \begin{itemize}
+        \item \textbf{AVI (Audio Video Interleaved):} 
+            Sendo un dos formatos mais famosos pode conter un vídeo dunha calidade excelente pero
+            soe requerir dunha gran capacidade. Os codec's que se soen empregar neste formato pola 
+            súa capacidade de compresión e calidade aceptable son DivX y XviD, inda que tamén se 
+            permiten outros como DV(Digital Video), CinePak... 
+            
+        \item \textbf{MKV (Matroska):}
+            É un formato de código aberto que basea o seu nome nas clásicas bonecas Matrioskas. Ten
+            capacidade para conter tanto vídeo, son e subtitulos en diferentes idiomas, empregandose
+            como códec de video normalmente algunha implementación de H.264, como por exemplo x264. 
+            Mentres que para o son é habitual empregar o codec de audio Vorbis.
+
+        \item \textbf{ WebM (Google, 2010):}
+            Un dos formatos mais recentes é o WebM (WebMovie), un proxecto lixeiramente baseado en 
+            Matroska adquirido e liberalizado por Google en 2010 co obxectivo de empregalo con HTML5
+            como estándar libre. O formato ten un excelente rendemento e xunto ao codec VP9, motivo
+            polo cal forma parte dos recomendados pola W3C.
+            
+        \item \textbf{Formato OGG (Xiph.Org, 1993):} 
+            O formato contedor OGG é un formato libre deseñado para incluír vídeo, son, 
+            subtítulos e metadatos. O vídeo en este formato soe estar codificado co codec Theora, 
+            que se basea nunha versión liberada de VP3. Tamén se emprega para este tipo de 
+            empaquetado a extensión .OGV, mais o que marca o estandar é a extensión .OGG.  
+            
+        \item \textbf{MP4 - MPEG (Moving Pictures Expert Group):}
+        
+        O  Moving Picture Experts Group (MPEG) é un grupo de expertos da ISO (Organización 
+        Internacional de Normalización) e da Comisión Electrotécnica Internacional (IEC) para
+        crear estándares en canto ao mundo do audio e o vídeo.
+        
+        Froito do traballo deste grupo naceron os formatos MPEG-1 (calidade CD), MPEG-2 (calidade 
+        DVD), MPEG-3 (orientado ao audio MP3) e MPEG-4 que é o que mais nos interesa xa que vai 
+        enfocado á compresión de vídeo e son na web, podendo incluír tamén subtítulos ou imaxes de 
+        referencia. O ficheiros de este último formato teñen extensión .mp4.
+
+        \end{itemize}
+
 
     \subsection{Streaming de Vídeo}
         Dado que este proxecto está centrado no tratamento de vídeo, é de especial importancia ver 

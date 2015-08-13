@@ -51,7 +51,7 @@ Make python 3.4 default python version:
 
 Now restart the terminal and the pip commands should work smoothly. Install all dependencies:
 
-    pip install -r dev-requirements.txt
+    pip install -r requirements.txt
 
 Run migrations:
 

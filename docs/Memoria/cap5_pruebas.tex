@@ -7,13 +7,32 @@ cliente en javascript, empregando para elo distintos modelos e bibliotecas de pr
 continuación.
 
 \section{Probas Unitarias}
-  \subsection{Probas Automáticas}
-  Estaría ben!
 
-\section{Probas de Integración}
-    \subsection{Probas funcionais Selenium}
+    As probas unitarias proban as funcionalidades mais básica do software. Executanse sempre no 
+    ámbito de un só modulo para probar o correcto funcionamento de este, simulando se fose preciso 
+    a súa interacción con outros módulos (este proceso chamase mocking).
+    
+    No ámbito da nosa aplicación as probas de cada módulo recollense nos ficheiros tests.py de cada
+    un deles. Estas probas inclúen tanto comprobacións de funcións illadas, como a correcta xeración
+    de algunha webs independentes do resto dos módulos.
+    
+    \subsection{Política de acceso ás páxinas web}
+        Como resulta lóxico non todo o mundo pode acceder a tódalas páxinas da aplicación, algunhas
+        delas están reservadas para o administrador, outras para o propio usuario logueado, unhas
+        terceiras para calquera usuario logueado e por último hai páxinas de dominio público.
+        
+        É importante de cara a non cometer erros de seguridade, que este correcto comportamento sexa
+        comprobado, así na táboa excel que se atopa no ficheiro docs/urlsMap.ods pódese observar con
+        detalle que política de acceso segue cada unha das páxinas da aplicación segundo a súa URL.
+        Foi a partir deste mapa de urls dende onde se elaborou a base dos test de unidade para 
+        o acceso ás páxinas, que comprobar para cada unha das páxinas da aplicación que un usuario
+        cos permisos adecuados poida acceder e que calquera dos demais reciba o erro axeitado.
+        
+        Pero só con probas unitarias non se pode asegurar a calidade dos software xa que moitos dos
+        módulos están pensados para interactuar entre eles, polo que fanse necesarias as Probas de
+        Integración.
 
-    \subsection{Probas Web con Javascript}
+    \subsection{Probas da Capa Web con Javascript}
         As probas da capa web en escrita en javascript apoiaranse no framework Qunit de 
         jQuery que proporciona un xeito sinxelo de crear probas unitarias sempre e cando o código 
         javascript esté convintemente separado do HTML que forma a vista da capa web.
@@ -28,11 +47,13 @@ continuación.
         comandos, neste caso a opción seleccionada foi a combinación do paquete django.js (v0.8.1)
         en combinación co navegador de liña de comandos phantomJS. 
         
-        Django.js é un conxunto de utilidades que permiten a integración de código javascript e 
-        Django, e en concreto neste proxecto empréganse aquelas que teñen que ver co testing de
-        aplicacións\ref{DjangojsTestTools}, mais en concreto QUnitSuite e JsTemplateTestCase para a
-        execución dos tests como parte dos test da aplicación (sen parte servidor) e QUnitView 
-        para a execución a modo de páxina web.
+        Django.js é un conxunto de utilidades que permiten a integración de código javascript en 
+        Django. Mais en concreto neste proxecto empréganse aquelas que teñen que ver co testing de
+        aplicacións\ref{DjangojsTestTools}, destacando as clases QUnitSuite e PhantomJsRunner que se
+        empregan para lanzar os tests como parte dos test da aplicación mediante a clase creada
+        StaticJsTestCase que obtén os resultados do modo de páxina web co navegador de liña de 
+        comandos, e tamén a clase QUnitView que é a peza central para a execución a neste modo de
+        páxina web.
         
         Po outro lado PhantomJS é un navegador WebKit de liña de comandos, cunha API Javascript que
         da soporte rápido e nativo para varios estándares web que resultan moi do noso interese,
@@ -40,9 +61,44 @@ continuación.
         implícitamente polo runner de Django.js cando se executen os test, mentres que no caso da 
         vista QUnitView os tests executaranse directamente no navegador que realice a petición.
 
+\section{Probas de Integración}
+
+    As probas de integración so aquelas que proban o funcionamento conxunto de varios módulos da 
+    aplicación, realizanse tras o éxito das probas unitarias tamén sen que haxa interacción humana.
+    
+    No noso caso agruparemos as probas de integración nun paquete a parte, para evitar así 
+    mesturalas coas probas unitarias de cada módulo. A estes efectos creamos a clase SeleniumAncowebTest
+    que extende StaticLiveServerTestCase engadindo ademais os métodos login\_user(self, user, 
+    password) e logout\_user(self, user) xa que todo-los tests que comproben outros módulos precisando
+    de un usuario logueado consideranse tests de integración.
+
+    \subsection{Probas Funcionais Selenium}
+
+        As probas funcionais son aquelas nas que se lle dita ao sistema cales serán as saídas a unha 
+        determinada serie de entradas co fin de comprobar que a funcionalidade é a correcta. No caso da
+        nosa aplicación empregaremos tests funcionais para as probas de integración apoiandonos en Selenium.
+        
+        Selenium é un framework para a realización de probas funcionais que permite lanzar un navegador
+        e indicar as accións a realizar sobre él xunto cunha serie de comprobacións para verificar que
+        estas accións provocan na páxina web o efecto desexado. Resultan de especial relevancia na 
+        programación web, xa que o seu functionamento asemellase moito ao que un humano faría para 
+        comprobar o correcto funcionamento da web sendo por tanto moi intuitivo.
+        
+        %TODO Modificar si se testean mais cousas 
+        No noso caso comprobanse con Selenium, o logueado de Usuarios, a subida de vídeos e o listado de
+        vídeos.
+    
 \section{Probas de Sistema}
 
+    %TODO 
+
 \section{Probas de Aceptación}
+    Por último están as probas de Aceptación que se fan co obxectivo de comprobar se o software cumpre
+    coas expectativas que o cliente tiña de el. A estes efectos cada vez que se finalizaba unha 
+    funcionalidade realizouse acorde coa metodoloxía unha proba completa por parte do titor Brais 
+    Cancela que garantise que todo o implementado era acorde cos que se desexaba. Ocasionalmente o 
+    proxecto tamén foi revisado polos outros titores aportandolle así un toque mais plural.
+    
 
 \chapter{Calidade}
 	Os parámetros de calidade empregados para a codificación do código fonte son:
