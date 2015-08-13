@@ -8,3 +8,7 @@
     <h1>Ancoweb Tests</h1>
     {{ block.super }}
 {% endblock %}
+
+{% block js_content %}
+    <script> $('script[src *="site/js/"]').attr('data-cover','')</script>
+{% endblock %}

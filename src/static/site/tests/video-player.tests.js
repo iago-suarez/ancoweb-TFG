@@ -2,17 +2,6 @@ QUnit.test("Trivial Test", function (assert) {
     assert.ok(1 == "1", "Passed!");
 });
 
-//QUnit.test("frameToSecondsStr Test", function (assert) {
-//    //Convert the frame number to time string
-//    //frameToSecondsStr(nFrame, fps)
-//
-//    assert.equal(frameToSecondsStr(0, 25), "00:00", "Passed!");
-//    assert.equal(frameToSecondsStr(100, 25), "00:04", "Passed!");
-//    assert.equal(frameToSecondsStr(1020, 25), "00:40", "Passed!");
-//    assert.equal(frameToSecondsStr(4454, 34), "02:11", "Passed!");
-//
-//});
-
 module('Trajectories Tests', {
   setup: function() {
     var canvas, context,
