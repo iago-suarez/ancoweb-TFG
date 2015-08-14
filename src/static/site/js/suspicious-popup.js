@@ -10,6 +10,8 @@ var context;
 var center = {x: 10, y: 28}; //Object with x and y fields
 var zoomedOut = false;
 
+var firstResize = true;
+
 Number.prototype.between = function (a, b) {
     return ((this >= a) && (this <= b));
 };
@@ -140,33 +142,9 @@ function initVideo(video, detection) {
     loop();
 }
 
+/**************************************************************************/
+
 $(document).ready(function () {
-
-    var dummyVD = new VideoDetections(document.getElementById('video-player'), "", "");
-    //recover the detection from the url or the cookie
-    if (areCookiesEnabled()) {
-        var cookieName = "suspiciousDet-" + getUrlParameter("suspiciousDetId");
-        console.log("Reading cookieName: " + cookieName);
-        var jsonDet = window.JSON.parse($.cookie(cookieName));
-        detection = new Detection(dummyVD,
-            jsonDet.id, jsonDet.firstFrame, jsonDet.lastFrame, jsonDet.xmlTrajectory);
-
-        //$.removeCookie(cookieName);
-    } else {
-        detection = new Detection(dummyVD,
-            parseInt(decodeURIComponent(getUrlParameter("id"))),
-            parseInt(decodeURIComponent(getUrlParameter("firstFrame"))),
-            parseInt(decodeURIComponent(getUrlParameter("lastFrame"))),
-            decodeURIComponent(getUrlParameter("xmlTrajectory")));
-    }
-
-    //Sets the initial time to the video
-    var loadedTime = decodeURIComponent(getUrlParameter("now"));
-    var videoLoadedTime = decodeURIComponent(getUrlParameter("videoCurrTime"));
-    var diff = Math.abs(Date.now() - loadedTime);
-    dummyVD.videoElement.currentTime = (videoLoadedTime + diff) / 1000;
-
-    /**************************************************************************/
 
     video = document.getElementById('video-player');
 
@@ -176,9 +154,29 @@ $(document).ready(function () {
     });
 
     $(video).resize(function () {
+
+        if (firstResize) {
+            var xmlUrl = decodeURIComponent(getUrlParameter("xmlResult"));
+            $.get(xmlUrl, function (xmlResult) {
+
+                //Create the videoDetections object from the xml result and add its observers
+                var videoDetections = new VideoDetections(video, $(xmlResult).find('trajectories'),
+                    $(xmlResult).find('objects'));
+                detection = videoDetections.detections[getUrlParameter("suspiciousDetId")];
+                //Sets the initial time to the video
+                console.log("ff: " + detection.firstFrame);
+                console.log("f ms: " + (detection.firstFrame * (1000 / videoDetections.fps) / 1000));
+
+                videoDetections.videoElement.currentTime = detection.firstFrame *
+                    ((1000 / videoDetections.fps) / 1000);
+
+                initVideo(video, detection);
+            });
+            firstResize = false;
+        }
+
         //Here we have the necessary data of the video
         console.log("resize1 h: " + video.videoHeight + ", w: " + video.videoWidth);
-        initVideo(video, detection);
         adjustCanvas(video);
     });
 

@@ -427,29 +427,9 @@ function PopupLauncherObserver(videoDetections) {
             for (var id in this.videoDetections.abChangingDetections) {
                 var det = this.videoDetections.abChangingDetections[id];
                 if (det.abnormalityState === Detection.State.SUSPECT) {
-                    var simpleDet = {
-                        id: det.id,
-                        firstFrame: det.firstFrame,
-                        lastFrame: det.lastFrame,
-                        color: det.color,
-                        selected: det.selected,
-                        xmlTrajectory: new XMLSerializer().serializeToString(det.xmlTrajectory),
-                        abnormalityState: det.abnormalityState
-                    };
                     var url = window.location.href + "suspicious?";
-
-                    if (areCookiesEnabled()) {
-                        var cookieName = "suspiciousDet-" + det.id;
-                        console.log("cookieName: " + cookieName);
-                        $.cookie(cookieName, window.JSON.stringify(simpleDet));
-                        url += "suspiciousDetId=" + det.id;
-                    } else { //Use the URL
-                        url += serializeObject(simpleDet);
-                    }
-
-                    //Add the current time and the video time to the url
-                    url += "&now=" + Date.now() + "&videoCurrTime=" +
-                        (1000 * this.videoDetections.videoElement.currentTime);
+                    url += "suspiciousDetId=" + det.id;
+                    url += "&xmlResult=" + $('#xml_detected_objs').text();
                     this.throwPopup(url);
                 }
             }

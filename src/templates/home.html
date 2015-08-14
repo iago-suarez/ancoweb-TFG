@@ -3,6 +3,8 @@
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 
+{% load latest_videos %}
+
 {% block title %}{{ block.super }}Home{% endblock %}
 
 {% block navbar-left %}
@@ -16,9 +18,7 @@
                 <div class="col-md-8 col-sm-8">
                     <h1>{% include "_brandname.html" %}</h1>
 
-                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus
-                        commodo,
-                        tortor mauris condimentum nibh, ut fermentum massa justo sit amet!</p>
+                    <p>A Web Application for the analysis of human behavior in crowded environments.</p>
                 </div>
                 <div class="col-md-4 col-sm-4">
 
@@ -40,34 +40,25 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-4">
-                <h2>Heading</h2>
+                <h2>Objective</h2>
 
-                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
-                    mauris
-                    condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis
-                    euismod. Donec sed odio dui. </p>
+                <p>This project aims at conducting a web application that uses a variety
+                    of features related to behavior analysis in crowded environments,
+                    including video viewing and creating layers display high level information.</p>
 
-                <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
+                <p><a target="_blank" class="btn btn-primary"
+                      href="https://github.com/iago-suarez/ancoweb-TFG/blob/master/docs/Memoria/memoria.pdf"
+                      role="button">Memory (Galician) &raquo;</a></p>
             </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+            <div class="col-lg-8">
 
-                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
-                    mauris
-                    condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis
-                    euismod. Donec sed odio dui. </p>
+                <h2>Latest uploaded videos</h2>
 
-                <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula
-                    porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
-                    ut
-                    fermentum massa.</p>
-
-                <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
+                <div>
+                    {% latest_videos 3 %}
+                </div>
+                <p><a id="see-all-videos" class="btn btn-primary"
+                      href="/videos" role="button">See All Videos &raquo;</a></p>
             </div>
         </div>
     </div>
