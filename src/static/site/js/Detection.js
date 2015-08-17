@@ -2,6 +2,9 @@
  * Created by iago on 30/06/15.
  */
 
+Number.prototype.between = function (a, b) {
+    return ((this >= a) && (this <= b));
+};
 
 /**
  * Return the corresponding rgb light color to the object with id
@@ -302,7 +305,7 @@ Detection.prototype.getPositionPoint = function (nFrame) {
         p2 = points[f2];
     } while (p2 === undefined);
 
-    var ratio = ((nFrame - f1) / (f1 - f2));
+    var ratio = Math.abs((nFrame - f1) / (f1 - f2));
 
     var x = p1.x + ratio * (p2.x - p1.x);
     var y = p1.y + ratio * (p2.y - p1.y);

@@ -84,7 +84,7 @@ function MockVideoDetections() {
     }
 }
 
-QUnit.test('getCurrentAbnormalityRate', function (assert) {
+QUnit.test('getCurrentAbnormalityRate Test', function (assert) {
     var originDet = videoDetections.detections[93083010];
     var mockVD = new MockVideoDetections();
     var testDet = new Detection(mockVD, originDet.id, 395, 93083010, {h: 0, w: 0}, originDet.xmlTrajectory);
@@ -121,7 +121,7 @@ QUnit.test('getCurrentAbnormalityRate', function (assert) {
     assert.equal(testDet.getCurrentAbnormalityRate(), 0.473684);
 });
 
-QUnit.test('getMaxAbnormalityRate', function (assert) {
+QUnit.test('getMaxAbnormalityRate Test', function (assert) {
     var mockVD = new MockVideoDetections();
 
     //Only one value
@@ -145,6 +145,35 @@ QUnit.test('getMaxAbnormalityRate', function (assert) {
         originDet.lastFrame, {h: 0, w: 0}, originDet.xmlTrajectory);
     assert.equal(testDet.getMaxAbnormalityRate(), 0);
 
+});
+
+QUnit.test('getPositionPoint Test', function (assert) {
+
+    // max h = 33, max w = 59
+    var det = videoDetections.detections[50152232];
+    var det2 = videoDetections.detections[71227248];
+    //First Point
+    assert.equal(JSON.stringify(det.getPositionPoint(61)),
+        JSON.stringify({x: 28, y: 208}));
+    //Last Point
+    assert.equal(JSON.stringify(det.getPositionPoint(91)),
+        JSON.stringify({x: 33, y: 196}));
+    //Existent Point
+    assert.equal(JSON.stringify(det2.getPositionPoint(174)),
+        JSON.stringify({x: 49, y: 174}));
+    //Non-existent point
+    assert.equal(det2.getPositionPoint(100), undefined);
+    //Calculated point
+    // 108 -> x="45" y="191"
+    // 114 -> x="42" y="187"
+    // res: x = 45 - 1 = 44 , y = 191 - 1.33 = 190
+    assert.equal(JSON.stringify(det2.getPositionPoint(110)),
+        JSON.stringify({x: 44, y: 190}));
+
+    // 216 -> x="50" y="173"
+    // 222 -> x="51" y="173"
+    assert.equal(JSON.stringify(det2.getPositionPoint(221)),
+        JSON.stringify({x: 51, y: 173}));
 });
 
 QUnit.test('checkMaxSize', function (assert) {

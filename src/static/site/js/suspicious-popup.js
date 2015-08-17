@@ -7,23 +7,37 @@ var loop_running = false;
 var systemStarted = false;
 var zoomVD;
 
-Number.prototype.between = function (a, b) {
-    return ((this >= a) && (this <= b));
-};
+var updateIndex = 0;
+var lastUpdateTimes = Array.apply(null, new Array(10)).map(Number.prototype.valueOf, 0);
 
-function loop() {
+var videoDetections;
+
+function arrayMean(arr) {
+    var sum = 0;
+    for (var i = 0; i < arr.length; i++) {
+        sum += parseInt(arr[i], 10);
+    }
+    return sum / arr.length;
+}
+
+function updateStatus() {
     if (!video.paused) {
         loop_running = true;
 
+        var time = Date.now();
         zoomVD.updateState();
-        // We suppose 25 fps
-        return setTimeout(loop, 40);
+
+        updateIndex = (updateIndex + 1) % lastUpdateTimes.length;
+        lastUpdateTimes[updateIndex] = Date.now() - time;
+        //Waits the fps time least data processing time
+        var updateTime = Math.floor((1000 / zoomVD.fps) - arrayMean(lastUpdateTimes));
+        //console.log("(fps: " + zoomVD.fps + ")estimateTime: " + updateTime);
+        return setTimeout(updateStatus, updateTime);
     } else {
         loop_running = false;
-        }
-    console.log("EXIT!!");
+        console.log("EXIT!!");
+    }
 }
-
 
 function adjustCanvas(video) {
     $('#video-player').width(window.innerWidth -30);
@@ -63,9 +77,9 @@ function bindVideoEvents(video) {
 
     $(video).bind('play', function () {
         //Checks if the loop is still running
-        if (!loop_running) {
-            loop();
-        }
+        //if (!loop_running) {
+        updateStatus();
+        //}
     });
 }
 
@@ -168,14 +182,6 @@ function ZoomVideoDetections(videoElement, xmlTrajectories, xmlDetections, detId
         }
         return {left: x, top: y};
     };
-
-    /**
-     *
-     * @returns {number} the proportion between the video and the window
-     */
-    this.getProportion = function () {
-        return this.window_size / this.minZoom;
-    }
 }
 
 // ZoomVideoDetections.prototype create the object that inherits from VideoDetections.prototype
@@ -187,6 +193,7 @@ ZoomVideoDetections.prototype = Object.create(VideoDetections.prototype);
  *
  * @param zoomVideoDetections
  * @constructor
+ * @param canvasElement
  */
 function PopupManagerObserver(zoomVideoDetections, canvasElement) {
     DetectionsObserver.call(this, zoomVideoDetections);
@@ -317,10 +324,6 @@ $(document).ready(function () {
                 bindVideoEvents(video);
 
                 video.play();
-                //Checks if the loop is still running
-                if (!loop_running) {
-                    loop();
-                }
             });
         } else {
             //Here we have the necessary data of the video
