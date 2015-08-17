@@ -75,6 +75,27 @@ function Detection(videoDetections, id, firstFrame, lastFrame, maxSize, xmlTraje
     this.xmlTrajectory = xmlTrajectory;
     this.videoDetections = videoDetections;
     this.abnormalityState = null;
+    this.trajectory = {};
+
+    /**
+     * Parse the xml trajectory to a map
+     *
+     * @private
+     */
+    this._loadTrajectory = function () {
+        this.trajectory.points = {};
+
+        var xmlPoints = $(this.xmlTrajectory).find('point');
+
+        var tmpDet = this;
+        $(xmlPoints).each(function () {
+            tmpDet.trajectory.points[parseInt($(this).attr('frame'))] =
+            {x: parseInt($(this).attr('x')), y: parseInt($(this).attr('y'))};
+        });
+        this.trajectory.firstFrame = parseInt($(xmlPoints[0]).attr('frame'));
+        this.trajectory.lastFrame = parseInt($(xmlPoints[xmlPoints.length - 1]).attr('frame'));
+    };
+    this._loadTrajectory();
 }
 
 Detection.RED = '#FF0000';
@@ -270,46 +291,38 @@ Detection.imageIsDark = function (imageData) {
  * @returns {*} Return undefined if there are no position available for nFrame
  */
 Detection.prototype.getPositionPoint = function (nFrame) {
-    var points = {};
-    var tmpPoints = $(this.xmlTrajectory).find('point');
 
     //If there are no points exit
-    if (tmpPoints.length === 0) {
+    if (Object.keys(this.trajectory.points).length === 0) {
         return;
     }
-    $(tmpPoints).each(function () {
-        points[parseInt($(this).attr('frame'))] =
-        {x: parseInt($(this).attr('x')), y: parseInt($(this).attr('y'))};
-    });
 
-    var firstFrame = parseInt($(tmpPoints[0]).attr('frame'));
-    var lastFrame = parseInt($(tmpPoints[tmpPoints.length - 1]).attr('frame'));
     // if the object is not detected on nFrame
-    if (!nFrame.between(firstFrame, lastFrame)) {
+    if (!nFrame.between(this.trajectory.firstFrame, this.trajectory.lastFrame)) {
         return;
     }
 
-    if (points[nFrame] !== undefined) {
-        //If we have a point for this frame we return it
-        return points[nFrame];
+    if (this.trajectory.points[nFrame] === undefined) {
+        //If we have't got a point for this frame we calc it.
+        var p1, f1 = nFrame;
+        do {
+            f1--;
+            p1 = this.trajectory.points[f1];
+        } while (p1 === undefined);
+        var p2, f2 = nFrame;
+        do {
+            f2++;
+            p2 = this.trajectory.points[f2];
+        } while (p2 === undefined);
+
+        var ratio = Math.abs((nFrame - f1) / (f1 - f2));
+
+        var x = p1.x + ratio * (p2.x - p1.x);
+        var y = p1.y + ratio * (p2.y - p1.y);
+
+        this.trajectory.points[nFrame] = {x: Math.round(x), y: Math.round(y)};
     }
-    // If it doesn't exists we calc it.
-    var p1, f1 = nFrame;
-    do {
-        f1--;
-        p1 = points[f1];
-    } while (p1 === undefined);
-    var p2, f2 = nFrame;
-    do {
-        f2++;
-        p2 = points[f2];
-    } while (p2 === undefined);
+    return this.trajectory.points[nFrame];
 
-    var ratio = Math.abs((nFrame - f1) / (f1 - f2));
-
-    var x = p1.x + ratio * (p2.x - p1.x);
-    var y = p1.y + ratio * (p2.y - p1.y);
-
-    return {x: Math.round(x), y: Math.round(y)};
 };
 

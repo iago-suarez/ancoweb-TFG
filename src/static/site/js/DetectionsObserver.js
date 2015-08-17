@@ -88,22 +88,21 @@ function TrajectoriesObserver(videoDetections, canvasElement) {
 
         for (var id in this.videoDetections.selectedDetections) {
             //Get the trajectory points for the current detection
-            var trajPoints = $(this.videoDetections.detections[id].xmlTrajectory).find('point');
+            var trajPoints = this.videoDetections.detections[id].trajectory.points;
             context.beginPath();
-            context.moveTo(videoProportion * parseInt($(trajPoints[0]).attr('x')),
-                videoProportion * parseInt($(trajPoints[0]).attr('y')));
+            var firstFrame = this.videoDetections.detections[id].trajectory.firstFrame;
+            context.moveTo(videoProportion * trajPoints[firstFrame].x,
+                videoProportion * trajPoints[firstFrame].y);
             context.lineWidth = 3;
 
             //Select the color
             context.strokeStyle = this.videoDetections.detections[id].getCurrentColor();
 
-            var i = 1;
-            var f = 0;
-            while ((i < trajPoints.length) && f <= this.videoDetections.getCurrentFrame()) {
-                context.lineTo(videoProportion * parseInt($(trajPoints[i]).attr('x')),
-                    videoProportion * parseInt($(trajPoints[i]).attr('y')));
-                i++;
-                f = $(trajPoints[i]).attr('frame');
+            var p;
+            for (var f = firstFrame; f <= this.videoDetections.getCurrentFrame() &&
+            f <= this.videoDetections.detections[id].trajectory.lastFrame; f++) {
+                p = this.videoDetections.detections[id].getPositionPoint(f);
+                context.lineTo(videoProportion * p.x, videoProportion * p.y);
             }
             context.stroke();
         }

@@ -31,7 +31,7 @@ function updateStatus() {
         lastUpdateTimes[updateIndex] = Date.now() - time;
         //Waits the fps time least data processing time
         var updateTime = Math.floor((1000 / zoomVD.fps) - arrayMean(lastUpdateTimes));
-        //console.log("(fps: " + zoomVD.fps + ")estimateTime: " + updateTime);
+        console.log("(fps: " + zoomVD.fps + ")estimateTime: " + updateTime);
         return setTimeout(updateStatus, updateTime);
     } else {
         loop_running = false;
@@ -244,37 +244,31 @@ function SuspiciousTrajectoriesObserver(zoomVideoDetections, canvasElement) {
             return;
         }
 
-        //var videoProportion = 1;
-
         var context = this.canvasElement.getContext('2d');
         context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
 
         //Get the trajectory points for the current detection
-        var trajPoints = $(this.videoDetections.detection.xmlTrajectory).find('point');
         context.beginPath();
 
         // Window coordinates with respect to the to right margin Video
         var lefTopDistance = this.videoDetections.centerToLeftTop(this.videoDetections.center,
             this.videoDetections.window_size, this.videoDetections.videoElement);
 
-        var x = parseInt($(trajPoints[0]).attr('x')) - lefTopDistance.left;
-        var y = parseInt($(trajPoints[0]).attr('y')) - lefTopDistance.top;
+        var p = this.videoDetections.detection.getPositionPoint(
+            this.videoDetections.detection.trajectory.firstFrame);
 
-        context.moveTo(x, y);
+        context.moveTo(p.x - lefTopDistance.left, p.y - lefTopDistance.top);
         context.lineWidth = 3;
 
         //Select the color
         context.strokeStyle = this.videoDetections.detection.getCurrentColor();
 
-        var i = 1;
-        var f = 0;
-        while ((i < trajPoints.length) && f <= this.videoDetections.getCurrentFrame()) {
-            x = parseInt($(trajPoints[i]).attr('x')) - lefTopDistance.left;
-            y = parseInt($(trajPoints[i]).attr('y')) - lefTopDistance.top;
-
-            context.lineTo(x, y);
-            i++;
-            f = $(trajPoints[i]).attr('frame');
+        var f = this.videoDetections.detection.trajectory.firstFrame;
+        while (f <= this.videoDetections.getCurrentFrame() &&
+        f <= this.videoDetections.detection.trajectory.lastFrame) {
+            p = this.videoDetections.detection.getPositionPoint(f);
+            context.lineTo(p.x - lefTopDistance.left, p.y - lefTopDistance.top);
+            f++;
         }
         context.stroke();
     };
