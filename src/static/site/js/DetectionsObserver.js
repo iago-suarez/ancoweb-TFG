@@ -471,6 +471,6 @@ function PopupLauncherObserver(videoDetections) {
 }
 
 // PopupLauncherObserver.prototype create the object that inherits from DetectionsObserver.prototype
-PopupLauncherObserver.prototype = Object.create(PopupLauncherObserver.prototype);
+PopupLauncherObserver.prototype = Object.create(DetectionsObserver.prototype);
 
 

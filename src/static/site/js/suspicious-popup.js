@@ -1,16 +1,11 @@
 /**
  * Created by iago on 16/07/15.
  */
-const MAX_ZOOM = 20; // In pixels
-const INITIAL_W_SIZE = 50;
-var detection;
-var video;
-var window_size = INITIAL_W_SIZE;
-var context;
-var center = {x: 10, y: 28}; //Object with x and y fields
-var zoomedOut = false;
 
-var firstResize = true;
+var video;
+var loop_running = false;
+var systemStarted = false;
+var zoomVD;
 
 Number.prototype.between = function (a, b) {
     return ((this >= a) && (this <= b));
@@ -18,89 +13,17 @@ Number.prototype.between = function (a, b) {
 
 function loop() {
     if (!video.paused) {
+        loop_running = true;
 
-        var newCenter = detection
-            .getPositionPoint(detection.videoDetections.getCurrentFrame());
-        if (newCenter !== undefined) {
-            center = newCenter;
-        } else if (detection.videoDetections.getCurrentFrame() > detection.lastFrame) {
-            // Zoom out
-            const zoomOuVelocity = 0.01;
-            var slider = $('#zoom-slider');
-            var sliderVal = slider.slider("option", "value");
-            var newVal;
-            if (( sliderVal < 1) && !zoomedOut) {
-                slider.slider('value', sliderVal + zoomOuVelocity);
-                newVal = slider.slider("option", "value");
-                zoomedOut = newVal === 1;
-                sliderFun(null, {value: newVal});
-            }
-        }
-
-        console.log("(" + detection.videoDetections.getCurrentFrame()
-            + "): Center.x: " + center.x + ", center.y: " + center.y + ", wSize: " + window_size);
-
-        drawZoomedImage(video, context);
+        zoomVD.updateState();
         // We suppose 25 fps
         return setTimeout(loop, 40);
-    }
+    } else {
+        loop_running = false;
+        }
     console.log("EXIT!!");
 }
 
-function sliderFun(event, ui) {
-    //TODO chequear que al estar dentro del resize no se ejecute 2 veces con el cambio de tanaño
-    var min_zoom = Math.max(video.videoHeight, video.videoWidth);
-    window_size = MAX_ZOOM + (min_zoom - MAX_ZOOM) * ui.value;
-    $('#suspicious-layer').attr('height', window_size).attr('width', window_size);
-    drawZoomedImage(video, context);
-}
-
-/**
- * Given the center to the window, this function calc the
- * distance in pixels to the top margin and left margin of
- * the video for a windows with size window_size
- * @param center
- * @param window_size
- * @param video
- * @returns {{left: number, top: number}}
- */
-function centerToLeftTop(center, window_size, video) {
-    var x = center.x - window_size / 2;
-    //If the box is over the video size adjust it
-    if (x < 0) {
-        x = 0;
-    } else if ((x + window_size) > video.videoWidth) {
-        x = video.videoWidth - window_size;
-    }
-    var y = center.y - window_size / 2;
-    //If the box is over the video size adjust it
-    if (y < 0) {
-        y = 0;
-    } else if ((y + window_size) > video.videoHeight) {
-        y = video.videoHeight - window_size;
-    }
-
-    if (video.videoWidth < window_size) {
-        // The video is less wide than the canvas element
-        x = -(Math.abs(video.videoWidth - window_size) / 2);
-
-    } else if (video.videoHeight < window_size) {
-        // The video is less high than the canvas element
-        y = -(Math.abs(video.videoHeight - window_size) / 2);
-    }
-    return {left: x, top: y};
-}
-
-function drawZoomedImage(video, context) {
-
-    context.fillStyle = 'black';
-    var canvas = document.getElementById("suspicious-layer");
-    context.fillRect(0, 0, canvas.width, canvas.height);
-
-    var pos = centerToLeftTop(center, window_size, video);
-    context.drawImage(video, -pos.left, -pos.top);
-
-}
 
 function adjustCanvas(video) {
     $('#video-player').width(window.innerWidth -30);
@@ -109,38 +32,250 @@ function adjustCanvas(video) {
         .height($(video).height())
         .width($(video).width())
         .offset({top: $(video).offset().top, left: $(video).offset().left});
-    $('#suspicious-layer').attr('height', window_size).attr('width', window_size);
+    $('.drawing-layer').attr('height', zoomVD.window_size)
+        .attr('width', zoomVD.window_size);
 
-    if (context !== undefined) {
-        drawZoomedImage(video, context);
-    }
+    zoomVD.updateState();
 }
 
-function initVideo(video, detection) {
+/**
+ * Sets the handlers for the video events
+ *
+ * @param video
+ */
+function bindVideoEvents(video) {
     adjustCanvas(video);
-
-    //Get canvas context
-    context = document.getElementById("suspicious-layer").getContext("2d");
 
     $("#zoom-slider").slider({
         min: 0,
         max: 1,
         step: 0.01,
-        value: (INITIAL_W_SIZE - MAX_ZOOM) / ( Math.max(video.videoHeight, video.videoWidth) - MAX_ZOOM),
+        value: (zoomVD.maxZoom - zoomVD.maxZoom) /
+        ( Math.max(video.videoHeight, video.videoWidth) - zoomVD.maxZoom),
         orientation: "vertical",
-        slide: sliderFun
+        slide: function (event, ui) {
+            zoomVD.sliderFun(event, ui)
+        }
     });
     $(video).bind('timeupdate', function () {
-        drawZoomedImage(video, context)
+        zoomVD.updateState();
     });
 
     $(video).bind('play', function () {
-        loop();
+        //Checks if the loop is still running
+        if (!loop_running) {
+            loop();
+        }
     });
-
-    detection.videoDetections.videoElement.play();
-    loop();
 }
+
+
+function ZoomVideoDetections(videoElement, xmlTrajectories, xmlDetections, detId) {
+    VideoDetections.call(this, videoElement, xmlTrajectories, xmlDetections);
+
+    this.detection = this.detections[detId];
+    this.maxZoom = Math.max(this.detection.maxSize.h, this.detection.maxSize.w);
+    this.minZoom = Math.max(this.videoElement.videoHeight, this.videoElement.videoWidth);
+    this.window_size = this.maxZoom * 2;
+    this.center = {x: 10, y: 28}; //Object with x and y fields
+    this.zoomedOut = false;
+
+    /**
+     * Updates the zoom state in function of the time and the detection position
+     */
+    this.updateState = function () {
+        var newCenter = this.detection
+            .getPositionPoint(this.getCurrentFrame());
+        if (newCenter !== undefined) {
+            this.center = newCenter;
+        } else if (this.getCurrentFrame() > this.detection.lastFrame) {
+            // Zoom out
+            this.zoomOut();
+        }
+
+        console.log("(" + this.getCurrentFrame()
+            + "): Center.x: " + this.center.x + ", center.y: "
+            + this.center.y
+            + ", wSize: " + this.window_size);
+
+        this.notify();
+    };
+
+    /**
+     * Update the zoom level and the state
+     *
+     * @param event
+     * @param ui value between 0 and 1 that defines the windows size between
+     * this.minZoom - this.maxZoom
+     */
+    this.sliderFun = function (event, ui) {
+        this.window_size = this.maxZoom + (this.minZoom - this.maxZoom) * ui.value;
+        $('.drawing-layer').attr('height', this.window_size).attr('width', this.window_size);
+        this.updateState();
+    };
+
+    /**
+     * Change the value of window_size global variable updating the view
+     * according that
+     */
+    this.zoomOut = function () {
+        const zoomOuVelocity = 0.01;
+        var slider = $('#zoom-slider');
+        var sliderVal = slider.slider("option", "value");
+        var newVal;
+        if (( sliderVal < 1) && !this.zoomedOut) {
+            slider.slider('value', sliderVal + zoomOuVelocity);
+            newVal = slider.slider("option", "value");
+            this.zoomedOut = newVal === 1;
+
+            this.window_size = this.maxZoom + (this.minZoom - this.maxZoom) * newVal;
+            $('.drawing-layer').attr('height', this.window_size).attr('width', this.window_size);
+        }
+    };
+
+    /**
+     * Given the center to the window, this function calc the
+     * distance in pixels to the top margin and left margin of
+     * the video for a windows with size window_size
+     * @param center
+     * @param window_size
+     * @param video
+     * @returns {{left: number, top: number}}
+     */
+    this.centerToLeftTop = function (center, window_size, video) {
+        var x = center.x - window_size / 2;
+        //If the box is over the video size adjust it
+        if (x < 0) {
+            x = 0;
+        } else if ((x + window_size) > video.videoWidth) {
+            x = video.videoWidth - window_size;
+        }
+        var y = center.y - window_size / 2;
+        //If the box is over the video size adjust it
+        if (y < 0) {
+            y = 0;
+        } else if ((y + window_size) > video.videoHeight) {
+            y = video.videoHeight - window_size;
+        }
+
+        if (video.videoWidth < window_size) {
+            // The video is less wide than the canvas element
+            x = -(Math.abs(video.videoWidth - window_size) / 2);
+
+        } else if (video.videoHeight < window_size) {
+            // The video is less high than the canvas element
+            y = -(Math.abs(video.videoHeight - window_size) / 2);
+        }
+        return {left: x, top: y};
+    };
+
+    /**
+     *
+     * @returns {number} the proportion between the video and the window
+     */
+    this.getProportion = function () {
+        return this.window_size / this.minZoom;
+    }
+}
+
+// ZoomVideoDetections.prototype create the object that inherits from VideoDetections.prototype
+ZoomVideoDetections.prototype = Object.create(VideoDetections.prototype);
+
+
+/**
+ * Manage the popup suspicious windows
+ *
+ * @param zoomVideoDetections
+ * @constructor
+ */
+function PopupManagerObserver(zoomVideoDetections, canvasElement) {
+    DetectionsObserver.call(this, zoomVideoDetections);
+    this.canvasElement = canvasElement;
+
+    this.update = function () {
+        if (!this.isEnable) {
+            return;
+        }
+
+        this.drawZoomedImage();
+    };
+
+    /**
+     * Draw the zoomed image in the canvas element
+     *
+     */
+    this.drawZoomedImage = function () {
+
+        var context = this.canvasElement.getContext('2d');
+        context.fillStyle = 'black';
+        context.fillRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+
+        var pos = this.videoDetections.centerToLeftTop(this.videoDetections.center,
+            this.videoDetections.window_size, video);
+        context.drawImage(video, -pos.left, -pos.top);
+
+    };
+}
+
+// PopupManagerObserver.prototype create the object that inherits from DetectionsObserver.prototype
+PopupManagerObserver.prototype = Object.create(DetectionsObserver.prototype);
+
+/**
+ * Paints the trajectories into the canvas element
+ *
+ * @param zoomVideoDetections
+ * @param canvasElement
+ * @constructor
+ */
+function SuspiciousTrajectoriesObserver(zoomVideoDetections, canvasElement) {
+    //Call to the father constructor to init his values
+    DetectionsObserver.call(this, zoomVideoDetections);
+    this.canvasElement = canvasElement;
+
+    this.update = function () {
+        if (!this.isEnable) {
+            return;
+        }
+
+        //var videoProportion = 1;
+
+        var context = this.canvasElement.getContext('2d');
+        context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+
+        //Get the trajectory points for the current detection
+        var trajPoints = $(this.videoDetections.detection.xmlTrajectory).find('point');
+        context.beginPath();
+
+        // Window coordinates with respect to the to right margin Video
+        var lefTopDistance = this.videoDetections.centerToLeftTop(this.videoDetections.center,
+            this.videoDetections.window_size, this.videoDetections.videoElement);
+
+        var x = parseInt($(trajPoints[0]).attr('x')) - lefTopDistance.left;
+        var y = parseInt($(trajPoints[0]).attr('y')) - lefTopDistance.top;
+
+        context.moveTo(x, y);
+        context.lineWidth = 3;
+
+        //Select the color
+        context.strokeStyle = this.videoDetections.detection.getCurrentColor();
+
+        var i = 1;
+        var f = 0;
+        while ((i < trajPoints.length) && f <= this.videoDetections.getCurrentFrame()) {
+            x = parseInt($(trajPoints[i]).attr('x')) - lefTopDistance.left;
+            y = parseInt($(trajPoints[i]).attr('y')) - lefTopDistance.top;
+
+            context.lineTo(x, y);
+            i++;
+            f = $(trajPoints[i]).attr('frame');
+        }
+        context.stroke();
+    };
+}
+
+// TrajectoriesObserver.prototype create the object that inherits from DetectionsObserver.prototype
+SuspiciousTrajectoriesObserver.prototype = Object.create(DetectionsObserver.prototype);
+
 
 /**************************************************************************/
 
@@ -149,39 +284,55 @@ $(document).ready(function () {
     video = document.getElementById('video-player');
 
     $(video).ready(function () {
-        console.log("ready h: " + video.videoHeight + ", w: " + video.videoWidth);
-        adjustCanvas(video);
+        if (systemStarted) {
+            console.log("ready h: " + video.videoHeight + ", w: " + video.videoWidth);
+            adjustCanvas(video);
+        }
     });
 
     $(video).resize(function () {
 
-        if (firstResize) {
+        if (!systemStarted) {
             var xmlUrl = decodeURIComponent(getUrlParameter("xmlResult"));
             $.get(xmlUrl, function (xmlResult) {
 
                 //Create the videoDetections object from the xml result and add its observers
-                var videoDetections = new VideoDetections(video, $(xmlResult).find('trajectories'),
-                    $(xmlResult).find('objects'));
-                detection = videoDetections.detections[getUrlParameter("suspiciousDetId")];
+                zoomVD = new ZoomVideoDetections(video, $(xmlResult).find('trajectories'),
+                    $(xmlResult).find('objects'), getUrlParameter("suspiciousDetId"));
+
+                console.log("Initial size: (h:" + zoomVD.detection.maxSize.h
+                    + ", w:" + zoomVD.detection.maxSize.w + ")");
+
                 //Sets the initial time to the video
-                console.log("ff: " + detection.firstFrame);
-                console.log("f ms: " + (detection.firstFrame * (1000 / videoDetections.fps) / 1000));
+                zoomVD.videoElement.currentTime = zoomVD.detection.firstFrame *
+                    ((1000 / zoomVD.fps) / 1000);
 
-                videoDetections.videoElement.currentTime = detection.firstFrame *
-                    ((1000 / videoDetections.fps) / 1000);
+                zoomVD.addObserver(new PopupManagerObserver(zoomVD,
+                    document.getElementById("suspicious-layer")));
+                zoomVD.addObserver(
+                    new SuspiciousTrajectoriesObserver(zoomVD,
+                        document.getElementById("trajectories-layer")));
 
-                initVideo(video, detection);
+                systemStarted = true;
+                bindVideoEvents(video);
+
+                video.play();
+                //Checks if the loop is still running
+                if (!loop_running) {
+                    loop();
+                }
             });
-            firstResize = false;
+        } else {
+            //Here we have the necessary data of the video
+            console.log("resize1 h: " + video.videoHeight + ", w: " + video.videoWidth);
+            adjustCanvas(video);
         }
-
-        //Here we have the necessary data of the video
-        console.log("resize1 h: " + video.videoHeight + ", w: " + video.videoWidth);
-        adjustCanvas(video);
     });
 
     $(window).resize(function () {
-        console.log("resizeW h: " + video.videoHeight + ", w: " + video.videoWidth);
-        adjustCanvas(video);
+        if (systemStarted) {
+            console.log("resizeW h: " + video.videoHeight + ", w: " + video.videoWidth);
+            adjustCanvas(video);
+        }
     });
 });

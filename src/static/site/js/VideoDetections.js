@@ -40,9 +40,21 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
                 if (selfVD.detections[objId] === undefined) {
                     var trajectory = $(xmlTrajectories).find('trajectory#' + objId)[0];
                     selfVD.detections[objId] = new Detection(selfVD, objId,
-                        parseInt(fNumber), parseInt(fNumber) + 1, trajectory);
+                        parseInt(fNumber), parseInt(fNumber) + 1, {
+                            h: $(this).find('box').attr('h'),
+                            w: $(this).find('box').attr('w')
+                        }, trajectory);
                 } else {
+                    // Update the last frame and the maxSize fields if it's necessary
                     selfVD.detections[objId].lastFrame = parseInt(fNumber);
+                    var h = $(this).find('box').attr('h');
+                    var w = $(this).find('box').attr('w');
+                    if (h > selfVD.detections[objId].maxSize.h) {
+                        selfVD.detections[objId].maxSize.h = h;
+                    }
+                    if (w > selfVD.detections[objId].maxSize.w) {
+                        selfVD.detections[objId].maxSize.w = w;
+                    }
                 }
             });
         });

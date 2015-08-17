@@ -87,7 +87,7 @@ function MockVideoDetections() {
 QUnit.test('getCurrentAbnormalityRate', function (assert) {
     var originDet = videoDetections.detections[93083010];
     var mockVD = new MockVideoDetections();
-    var testDet = new Detection(mockVD, originDet.id, 395, 93083010, originDet.xmlTrajectory);
+    var testDet = new Detection(mockVD, originDet.id, 395, 93083010, {h: 0, w: 0}, originDet.xmlTrajectory);
 
     //The object wasn't detected in this frame
     mockVD.setMockCurrentFrame(200);
@@ -127,7 +127,7 @@ QUnit.test('getMaxAbnormalityRate', function (assert) {
     //Only one value
     var originDet = videoDetections.detections[212013006];
     var testDet = new Detection(mockVD, originDet.id, originDet.firstFrame,
-        originDet.lastFrame, originDet.xmlTrajectory);
+        originDet.lastFrame, {h: 0, w: 0}, originDet.xmlTrajectory);
     assert.equal(testDet.getMaxAbnormalityRate(), 0);
 
     //Multiple values
@@ -136,16 +136,32 @@ QUnit.test('getMaxAbnormalityRate', function (assert) {
     // ,0.321909,0.447445,0.389718,0.627357) = 6.411281
     originDet = videoDetections.detections[210207176];
     testDet = new Detection(mockVD, originDet.id, originDet.firstFrame,
-        originDet.lastFrame, originDet.xmlTrajectory);
+        originDet.lastFrame, {h: 0, w: 0}, originDet.xmlTrajectory);
     assert.equal(testDet.getMaxAbnormalityRate(), 0.627357);
 
     //All zeros
     originDet = videoDetections.detections[190207005];
     testDet = new Detection(mockVD, originDet.id, originDet.firstFrame,
-        originDet.lastFrame, originDet.xmlTrajectory);
+        originDet.lastFrame, {h: 0, w: 0}, originDet.xmlTrajectory);
     assert.equal(testDet.getMaxAbnormalityRate(), 0);
 
 });
 
+QUnit.test('checkMaxSize', function (assert) {
+
+    // max h = 29, max w = 35
+    var det = videoDetections.detections[144193126];
+
+    //A lot of values
+    assert.equal(det.maxSize.h, 29);
+    assert.equal(det.maxSize.w, 35);
+
+    // max h = 33, max w = 59
+    var det = videoDetections.detections[50152232];
+    //Less appearences
+    assert.equal(det.maxSize.h, 33);
+    assert.equal(det.maxSize.w, 59);
+
+});
 //$('video').remove();
 videoDetections = null;

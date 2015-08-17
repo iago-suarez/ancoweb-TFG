@@ -62,10 +62,11 @@ Detection.idToRgba = function (id, a) {
  * @property {String} lastFrame
  * @constructor
  */
-function Detection(videoDetections, id, firstFrame, lastFrame, xmlTrajectory) {
+function Detection(videoDetections, id, firstFrame, lastFrame, maxSize, xmlTrajectory) {
     this.id = id;
     this.firstFrame = firstFrame;
     this.lastFrame = lastFrame;
+    this.maxSize = maxSize;
     this.color = Detection.idToRgb(id);
     this.selected = false;
     this.xmlTrajectory = xmlTrajectory;
