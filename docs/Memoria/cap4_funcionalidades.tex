@@ -116,9 +116,14 @@
     % If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
     \begin{table}[]
         \centering
-        \caption{My caption}
-        \label{my-label}
+        \label{supported-video-formats}
         \begin{tabular}{llll}
+         \hline
+            \multicolumn{1}{c}{\bfseries Navegador} & 
+            \multicolumn{1}{c}{\bfseries MP4} & 
+            \multicolumn{1}{c}{\bfseries WebM} & 
+            \multicolumn{1}{c}{\bfseries Ogg} \\
+
             \rowcolor[HTML]{EFEFEF} 
             Internet Explorer & SI                                                                                              & NON & NON \\
             Chrome            & SI                                                                                              & SI  & SI  \\
@@ -128,8 +133,10 @@
             \rowcolor[HTML]{EFEFEF} 
             Opera             & \begin{tabular}[c]{@{}l@{}}SI\\ dende Opera 25\end{tabular}                                     & SI  & SI 
         \end{tabular}
+        \caption{Táboa de formatos de vídeo soportados polos distintos navegadores}
     \end{table}
 
+    
 \section{Análise de Vídeo}
 	Para a análise de vídeo será preciso definir unha interface de liña de comandos mediante
 	a cal a aplicación web chamará ao Sistema de Recoñecemento, indicándolle aqueles parámetros

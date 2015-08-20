@@ -49,8 +49,9 @@ function paintRect(context, xc, yc, w, h, color, lineWidth) {
  */
 function frameToSecondsStr(nFrame, fps) {
     var sec = nFrame / fps;
+
     return ("0" + Math.floor(sec / 60)).slice(-2) + ':' +
-        ("0" + Math.floor(sec % 60)).slice(-2);
+        ("0" + sec.toFixed(2)).slice(-5);
 }
 
 /**
@@ -105,7 +106,7 @@ function loadXmlResult(video) {
                 updateIndex = (updateIndex + 1) % lastUpdateTimes.length;
                 lastUpdateTimes[updateIndex] = Date.now() - time;
                 var updateTime  = Math.floor((1000 / videoDetections.fps) - arrayMean(lastUpdateTimes));
-                //console.log("(fps: " + videoDetections.fps + ")estimateTime: " + updateTime);
+                console.log("(fps: " + videoDetections.fps + ")estimateTime: " + updateTime);
                 return setTimeout(updateStatus, updateTime);
             }
         }

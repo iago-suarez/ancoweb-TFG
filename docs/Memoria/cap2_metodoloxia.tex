@@ -5,16 +5,35 @@ un proxecto de un solo Developer.
 
 Esta metodoloxía áxil tamén chamada melé pola súa inspiración no Rugby, permite un
 desenvolvemento rápido en situacións de requisitos inestables. Apoiase no seu carácter 
-iterativo e incremental, divindoo traballo a realizar en períodos de aproximadamente un mes
+iterativo e incremental, divindo o traballo a realizar en períodos de aproximadamente un mes
 chamados Sprint's.
 
 Para a realización deste traballo de fin de grao foi preciso adaptala, pois está pensada en 
-principio para organizar equipos de entre 3 a 9 persoas (Team). Por outro lado, o marco de 
+principio para organizar equipos de entre 3 a 9 persoas (Team) mentres que neste caso só se contará 
+cunha única persoa para desenvolver todo o proxecto. Por outro lado, o marco de 
 traballo planifica reunións diarias (Daily Scrum), ao supoñer que todos os membros do equipo 
 traballan unha xornada laboral enteira entre cada unha destas reunións, o cal tampouco se dá 
 no caso deste proxecto, xa que a dedicación será de determinadas horas nos momentos dispoñibles.
 
 \section{As metodoloxías áxiles}
+    Escolleuse unha metodoloxía áxil como SCRUM para este proxecto xa que as metodoloxías áxiles en
+    xeral son unha forma excepcional de minimizar os riscos asociados grazas ao seu carácter 
+    iterativo (abordase por iteracións curtas de tempo) e incremental(as funcionalidades do proxecto
+    crecen en cada iteración). Este carácter obriga a levar a cabo as fases de planificación, análise 
+    de requisitos, deseño, codificación, revisión e documentación en cada Sprint, o cal se se 
+    compara coas metodoloxías clásicas fai que tras un Sprint se poida axustar o seguinte en función
+    de todo o aprendido, sen a necesidade dunha longa experiencia para poder planificar con 
+    exactitude.
+    
+    Outra faceta importante das metodoloxías áxiles é a falta de documentación, isto está motivado 
+    polos sucesivos cambios que se producen nestes proxectos por mor do seu caracter adaptativo, e 
+    que serían moito mais custosos se ademais de modificar o propio software fose preciso modificar
+    longas listas de documentación asociada. Por este motivo, neste sistema: a análise de requisitos 
+    plasmarase como unha lista de tarefas que pasan ao Sprint Backlog, os diagramas de deseño só se 
+    elaborarán para as partes mais críticas do sistema, no código evitaranse comentarios 
+    innecesarios, e o plan de probas realizarase empregando unha folla excel en vez de un extenso 
+    documento de texto.
+
 
 \section{Persoas}
 
@@ -96,4 +115,31 @@ As reunións pola súa parte modifícanse do seguinte xeito:
     
     
 \section{Control da cobertura con Coveralls}
+
 \section{Xestión de Incidencias e Control de Proxecto con YouTrack}
+    Co fin de levar a cabo un control das tarefas do Product Backlog e Sprint Backlog realizadas e 
+    pendentes empregarase YouTrack como Sistema de Xestión de Incidencias (Issue Tracking System). 
+    Un sistema de xestión de incidencias serve para xestionar as distintas incidencias (Tarefas 
+    pendentes, Bug's, Problemas de usabilidade ou rendemento...) que poidan ter lugar nun entorno 
+    como o proxecto web que nos ocupa. A estes efectos YouTrack mostrase como un completo sistema 
+    de incidencias que permite a estimación e xestión de tempos, o emprego de comentarios para cada
+    incidencia, buscas avanzadas, filtrado de incidencias, etc.
+    
+    Nótese que tamén se tiveron en conta outros sistemas de xestión de Incidencias como Redmine ou
+    o sistema de xestión de incidencias integrado de GitHub, pero finalmente escolleuse YouTrack 
+    pola súa coherencia coa filosofía áxil que se pode ver nos seus Paneis Áxiles, neles pódense
+    xestionar todas as incidencias dun Sprint mediante o modelo Kanban, simplemente desprazando unha
+    tarefa da columna de Tarefas Abertas á de Tarefas en Curso ou de esta última á de Tarefas 
+    Solucionadas.
+    
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.4]{figures/AgilePanel.png}
+        \caption{Panel Áxil da ferramenta de xestión de incidencias YouTrack}
+    \label{fig:travisYml}
+    \end{center}
+    \end{figure}
+    
+    
+    
+
