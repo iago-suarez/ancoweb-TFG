@@ -117,6 +117,14 @@ function loadXmlResult(video) {
     });
 }
 
+function onDetectionIdClick(aElement) {
+
+    var detId = parseInt($(aElement).text());
+    videoDetections.videoElement.currentTime =
+        videoDetections.detections[detId].firstFrame / videoDetections.fps;
+    return false;
+}
+
 /**
  * Adjust Canvas Element including fullScreen mode
  * @param video

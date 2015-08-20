@@ -293,7 +293,6 @@ function DetectionsTableObserver(videoDetections, tableBodyElement) {
         }
     };
 
-
     /**
      * Return the detection as a table row
      *
@@ -302,6 +301,7 @@ function DetectionsTableObserver(videoDetections, tableBodyElement) {
      * @param opts can contain {'color' , 'selected' }
      */
     this.detectionAsTableRow = function (detection, opts) {
+
         // Javascript method overloading pattern {'color' , 'selected' }
         var color;
         var selected;
@@ -323,7 +323,7 @@ function DetectionsTableObserver(videoDetections, tableBodyElement) {
         if (selected) {
             result += ' class="selected" style="background-color: ' + color + ';"';
         }
-        result += '><th scope="row"><a href="#">' + detection.id + '</a></th><td>'
+        result += '><th scope="row"><a onclick="return onDetectionIdClick(this);" href="#">' + detection.id + '</a></th><td>'
             + frameToSecondsStr(detection.firstFrame, detection.videoDetections.fps) + '</td><td>'
             + frameToSecondsStr(detection.lastFrame, detection.videoDetections.fps) + '</td><td>'
             + frameToSecondsStr(detection.lastFrame - detection.firstFrame,
