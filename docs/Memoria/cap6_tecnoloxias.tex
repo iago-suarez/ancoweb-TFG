@@ -1,125 +1,3 @@
-\chapter{Estudo comparativo das tecnoloxías web}
-
-Para a elaboración de este traballo de fin de grao, é preciso seleccionar unha serie de
-tecnoloxías tanto para o lado servidor coma para o lado cliente, vamos a empregar os seguintes
-criterios para poder comparalas entre si e escoller entre elas a que mellor se adecúan ás 
-necesidades do proxecto.
-
-\begin{itemize}
-
-	\item {\textbf{Plataforma e Portabilidade\\}}
-		Segundo as especificacións iniciais do proxecto, e de cara a facilitar a 
-		implementación deste, as ferramentas empregadas deben de executarse baixo os
-		Sistemas Operativos baseados en Linux.
-
-	\item {\textbf{Compatibilidade co algoritmo de Procesado de Vídeo\\}}
-		Dado que o algoritmo que procesa o vídeo foi parcialmente implementado en C++,
-		a tecnoloxía que se empregue para o desenvolvemento da parte web debe dispoñer da
-		máxima compatibilidade con esta linguaxe de programación.
-
-	\item {\textbf{Desenvolvemento Áxil\\}}
-		A tecnoloxía que se seleccione ten que minimizar o custe en tempo e esforzo da 
-		implementación, por este motivo valorarase positivamente que dispoña de IDE's axeitados,
-		facilidades de acceso a BD(Base de Datos),se é posible ORM(Object-Relational Mapping) 
-		integrado, recarga en quente... En xeral todo aquelo que permita axilidade e flexibilidade.
-
-\end{itemize}
-
-Posto que empregamos unha arquitectura baseada no modelo cliente-servidor, temos que determinar 
-por un lado en que tecnoloxías vamos a construír o Servidor ou Back-End, e por outra parte o 
-Cliente ou Front-End que se executará nun navegador.  
-
-\section{Back-End}
-	En canto ás tecnoloxías para a elaboración do Back-End, hai que ter en conta que procesará
-	os datos proporcionados polo Front-End, atendendo as súas peticións, e xestionando o modelo de 
-	datos e os procesos implicados na aplicación. A maiores neste caso en concreto, o Back-End será
-	o encargado de interactuar directamente co sistema de Análise de Vídeo.\\
-	
-	As tecnoloxías estudadas para esta parte do sistema son as seguintes:
-
-	\subsection{Java}
-  	Java é unha das linguaxes mais empregadas actualmente. Ademais existen diversos
-  	frameworks web como Tapestry ou SpringMVC e en canto as BD Hibernate, que facilitan o 
-  	seu uso, mais é preciso integralos xa que non forman parte da plataforma en si. A súas 
-  	posibilidades de integración con c++ son altas grazas á interface JNI(Java Native 
-  	Interface), pero a súa configuración pódese volver tediosa. Un dos proxectos estudados
-  	para ver o seu funcionamento é Red5 \cite{red5-github-url}.
-  	
-	\subsection{C\#}
-	Esta linguaxe en combinación con .NET resulta unha combinación bastante áxil de cara
-	á programación web, integrando na propia plataforma un deseñador Web e un ORM moi 
-	intuitivo. O gran problema polo que se descartou este entorno foi polo seu baixo grao
-	de compatibilidade cos sistemas operativos Linux.
-	
-	\subsection{C - C++}
-	C++ presenta como era de esperar a maior compatibilidade co algoritmo implementado, non
-	obstante, inda que existen algunhas utilidades que facilitan o desenvolvemento web con 
-	esta linguaxe como Wt (Web Toolkit)\cite{wt-url}, o grado de axilidade está moi por 
-	baixo do que facilitan o resto das combinacións. Tamén pode resultar de interese o
-	coñecido proxecto Icecast\cite{icecast-url}, que fai streaming de vídeo sobre unha 
-	interface web.
-	
-	\subsection{Python + Django}
-	Python presentase como a mellor opción para desenvolver o lado servidor, por unha parte
-	dispón do módulo Subprocess\cite{subprocess-module-url} que permite executar calquera
-	comando pola terminal maximizando así a modularidade e a integración co algoritmo en C++.
-	Por outra parte Django\cite{django-web-page-url} contén un potente ORM e un sistema de 
-	"Templates" que simplifica a parte web. Para concluír cabe destacar o feito de que 
-	python sexa unha linguaxe interpretada, xa que isto evita o paso previo de compilación.
-	
-	
-\section{Front-End}
-	Unha vez seleccionada a tecnoloxía do lado servidor, é hora de ver que opcións existen para
-	o Front-End, a parte do Sistema encargada da interacción co usuario.
-	
-	Por unha parte están as tecnoloxías que pola súa transcendencia e nivel de aceptación
-	cosideranse xa imprescindibles no desenvolvemento web, estamos a falar de HTML e CSS linguaxes
-	de facto para definir o contido e o aspecto visual respectivamente dunha páxina web.
-	De estas linguaxes seleccionaremos as súas versións mais recentes, que a día de hoxe son HTML5 e
-	CSS3.
-	
-	Sen embargo, noutros campos coma son a reprodución de vídeo e o control de elementos dinámicos
-	non existe unha tecnoloxía que abarque a case completitude da rede, é por elo que neste capítulo
-	estudaremos aqueles xeitos que permitan a reprodución de vídeo e a maiores o debuxado de 
-	figuras en movemento sobre este vídeo.\\
-	
-	En canto á reprodución de vídeo e o control deste destacan principalmente dúas alternativas:
-	
-	\subsection{Vídeo en Flash}
-		Vídeo Flash é a tecnoloxía de reprodución de vídeo mais empregada e madura en
-		internet dende hai anos. Inicialmente creada por Macromedia e mercada por Adobe 
-		en 2005, permite crear elaboradas animacións vectoriais, que logo poden proxectarse
-		sobre un vídeo, mentres que tamén manexa os eventos de reprodución de vídeo como o 
-		play ou o stop.\\
-		
-		Ten certos problemas en tanto ao Posicionamento Web(SEO), reprodución en 
-		dispositivos móbiles, accesibilidade... pero o meirande de todos eles é que mentres
-		que outros dos exemplos estudados son 100\% libres, Flash é un programa propietario
-		para o que é preciso adquirir unha licencia.		
-		
-	
-	\subsection{Vídeo HTML5 + Javascript}
-		Esta é outra das combinacións mais empregadas actualmente, xa que segue o estándar
-		do W3C (World Wide Web Consortium)\cite{w3schools-video-tag} no que se defíne como se
-		han de mostrar e obter os vídeos dunha páxina codificada coa linguaxe HTML5., e 
-		destaca por seres extremadamente sinxelo en comparación con Flash ou outras tecnoloxías.
-		
-		Se o comparamos con Flash podemos ver a seguintes \textbf{vantaxes:}
-		\begin{itemize}
-            \item Resulta moito mais sinxelo de codificar grazas a que é o navegador o que se 
-            encarga da reprodución do vídeo mentres que o programador só define o xeito de obtelo.
-            \item Non precisa da instalación de ningún Plugin que poida dar problemas por exemplo 
-            en dispositivos móbiles.
-            \item Mentres que HTML5 e Javascript son libres, Flash é unha tecnoloxía propiedade de 
-            Adobe.
-            \item HTML5 + CSS3 dispón de mais facilidades se buscamos un deseño ``responsive''.
-        \end{itemize}
-
-		Será por tanto a alternativa escollida para a construción deste proxecto, e en canto ao 
-		debuxo de figuras sobre o vídeo escolleremos o elemento $<canvas>$ tamén de HTML5. Todas
-		estas tecnoloxías e moitas mais explícanse en detalle no seguinte capítulo.
-		
-		
 \chapter{Tecnoloxías Empregadas}
     
     O feito de traballar na web, e moito mais o de facelo no ámbito da análise de vídeo, requiren 
@@ -264,12 +142,13 @@ Cliente ou Front-End que se executará nun navegador.
         
         \subsection{tablesorter}
         
-            A derradeira biblioteca empregada, tamén baseada en jQuery é tablesorter. Tablesorter é 
-            un plugin baseado en jQuery para transformar unha táboa HTML estándar coas etiquetas
-            $<thead>$ e $<tbody>$ nunha táboa que se pode ordenar polo contido das distintas 
-            columnas sen ter que recarga-la páxina. No noso caso será de moita utilidade á hora de 
-            amosar os resultados da análise, pois así poderanse ordenar as deteccións segundo 
-            aparecen no vídeo, segundo o tempo que pasan en pantalla... 
+            A derradeira biblioteca empregada, tamén baseada en jQuery é tablesorter
+            \cite{tablesorter-webPage}. Tablesorter é un plugin baseado en jQuery para transformar 
+            unha táboa HTML estándar coas etiquetas $<thead>$ e $<tbody>$ nunha táboa que se pode 
+            ordenar polo contido das distintas columnas sen ter que recarga-la páxina. Neste
+            caso será de moita utilidade á hora de amosar os resultados da análise, pois así 
+            poderanse ordenar as deteccións segundo aparecen no vídeo, segundo o tempo que pasan 
+            en pantalla... 
         
     Todas estas tecnoloxías de capa web axudarannos a mostrar con mais facilidade a análise que o
     sistema de recoñecemento faga do vídeo, e en canto as ferramentas empregadas para esta análise

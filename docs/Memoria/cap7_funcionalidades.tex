@@ -335,13 +335,12 @@
     clase DetectionsObserver, isto faise para que no caso de que algún observador non se atope 
     activo nun momento determinado non reciba as notificacións de actualización. O motivo deste
     cambio é o incremento de eficiencia que produce, moi importante dado que o proceso de actualización
-    do Suxeito e todo-los seus observadores tense que executar entre 10 e 30 veces por segundo.
-    
-    A continuación pódese ver un diagrama de clases que amosa o deseño desta capa:
+    do Suxeito e todo-los seus observadores tense que executar entre 10 e 30 veces por segundo, todo
+    isto pódese ver reflexado no diagrama da figura \ref{fig:CapaWebJS}.
     
     \begin{figure}[htp]
     \begin{center}
-        \includegraphics[scale=0.2]{figures/CapaWebJS.png}
+        \includegraphics[scale=0.45]{figures/CapaWebJS.png}
         \caption{Diagrama de clases do patrón observador na capa web}
     \label{fig:CapaWebJS}
     \end{center}
@@ -354,8 +353,8 @@
     
     Nun comezo, pensouse en asociar a actualización de estado ao evento timeupdate do elemento 
     $<video>$, que segundo a súa definición lanzase cando a posición do vídeo varía. Por desgraza, 
-    e como reflexa a reflexión que podemos atopar no libro ... COMPLETAR CON REFERENCIA AO LIBRO DE
-    VIDEO EN HTML5 ... este evento é lento de mais para o seu emprego, polo que o que se fará será
+    e como reflexa a reflexión que podemos atopar no libro \cite[Capítulo 6.1]{video-con-html5}
+    este evento é lento de mais para o seu emprego, polo que o que se fará será
     crear un bucle que se execute cando o vídeo se estea a reproducir. Para tentar que o bucle se 
     execute unha soa vez en cada un dos fotogramas empregase a función setTimeout que fará que o 
     código agarde unha cantidade de tempo antes de volver a executarse. Esta cantidade de tempo 
@@ -385,21 +384,87 @@
     
 \section{Traxectorias}
 
-    As traxectorias son outra parte fundamental do noso sistema, debese mostrar a ruta seguida por 
+    As traxectorias son outra parte fundamental do sistema, debese mostrar a ruta seguida por 
     cada un dos obxectos detectados dende o momento no que entra en escena ata a súa saída. Para 
-    seres detectadas no sistema de recoñecemento hai que invocar a biblioteca de análise de alto 
-    nivel que require de unha cantidade de tempo considerable, é por elo que se precisa un argumento
-    de frecuencia na interface de liña de comando que indica cada cantos fotogramas se realizará a 
-    análise de alto nivel(por defecto cada 5 fotogramas).
+    que as traxectorias sexan detectadas no sistema de recoñecemento hai que invocar á biblioteca 
+    de análise de alto nivel que require de unha cantidade de tempo considerable. É por elo que na 
+    interface de liña de comando precisase un argumento de frecuencia que indique cada cantos 
+    fotogramas se realizará a análise de alto nivel(por defecto cada 5 fotogramas).
     
-    As traxectorias chegan ao sistema web como parte do XML resultado do sistema de análise, para 
+    As traxectorias chegan á capa cliente como parte do XML resultado do sistema de análise, para 
     mostralas empregarase unha nova capa canvas en conxunto cun novo observador 
     TrajectoriesObserver que itera sobre as deteccións actuais pintando as liñas entre cada un dos
-    puntos da súa ruta, dende o comezo desta ate o punto actual.
+    puntos da súa ruta, dende o comezo desta ate o punto no que se atopa actualmente o obxecto. 
+    Estes puntos son parseados polo obxecto Detection nada mais recibir o documento XML, quedando
+    almacenados como parte do seu campo trajectory.
+    
+    Xa que a traxectoria forma parte da análise de alto nivel, e esta 
+    non é executada en tódolos fotogramas, unha traxectoria estará composta por puntos que indican a
+    posición do obxecto detectado con certa frecuencia. Para que entre un punto de detección e o seu
+    seguinte pareza que hai avance, dando así sensación de fluidez, o que se fai é calcular dado o
+    seguinte punto e o momento actual, cal é o lugar no que debería estar dito obxecto se se movese
+    en liña recta entre ambos puntos, debuxando a liña da traxectoria ate esa posición calculada.
+    
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.4]{figures/calcTrajectory.png}
+        \caption{Diagrama do cálculo da traxectoria}
+    \label{fig:calcTrajectory}
+    \end{center}
+    \end{figure}
+    
+    O cálculo realizase en base ao ``ratio'' que indica a distancia de entre os dous puntos que o coche 
+    leva percorrido.
+    
+    \begin{verbatim}
+        var ratio = Math.abs((nFrame - f1) / (f1 - f2));
+        var x = p1.x + ratio * (p2.x - p1.x);
+        var y = p1.y + ratio * (p2.y - p1.y);    
+    \end{verbatim}
+    
+    Os resultados destes cálculos gárdanse para ser empregados en frames posteriores en caso de que
+    sexa preciso.
+
+\section{Táboa de Deteccións}
+
+    Co fin de poder ollar todas as deteccións e podelas ordenar por orde de aparición, tempo en 
+    escena, etc, crease unha táboa de obxectos detectados que ademais indica os obxectos que están
+    a aparecer agora mesmo no vídeo. A estes obxectos asígnaselle unha cor en función do seu 
+    identificador unívoco, que ven xa composto por tres valores entre 0 e 255, e que se trata 
+    segundo o model RGB como se mostra na figura \ref{fig:lightColor} para obter cores mais 
+    brillantes e vistosas.
+    
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.7]{figures/lightColor.png}
+        \caption{Diagrama que mostra o aclarado de cores}
+    \label{fig:lightColor}
+    \end{center}
+    \end{figure}
+
+    Para o ordenamento da táboa empregouse a biblioteca javascript tablesorter que permite ordenar
+    ascendente ou descendentemente a táboa facendo click na cabeceira do elemento polo que se desexa
+    ordenar. Tamén é de destacar que os identificadores situados na primeira columna conteñen un 
+    enlace que ao facer click leva o vídeo ao momento no que ese obxecto aparece por primeira vez en
+    escena, función de tremenda utilidade á hora de recoñecelo.
+    
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.4]{figures/DetectionsTable.png}
+        \caption{Captura de pantalla que amosa a táboa de obxectos detectados}
+    \label{fig:DetectionsTable}
+    \end{center}
+    \end{figure}
     
     
-\section{Lista de Deteccións}
+\section{Lista de Deteccións actuais}
 
-
-
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.4]{figures/detectedObjects.png}
+        \caption{Captura de pantalla que amosa a lista de obxectos detectados}
+    \label{fig:detectedObjects}
+    \end{center}
+    \end{figure}
+    
 \section{Comportamento anormal}

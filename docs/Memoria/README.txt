@@ -1,7 +1,7 @@
-PLANTILLA PARA PFC - UDC
+MEMORIA DO TFG ANCOWEB - UDC
 
 --------------------------------------------------------------------------------
-1. Software necesario
+1. Software preciso
 --------------------------------------------------------------------------------
 
 Paquetes debian/ubuntu:
@@ -23,33 +23,30 @@ Paquetes debian/ubuntu:
 	texlive-latex-recommended  
 	texlive-math-extra	   
 	texlive-science
+	aspell-gl-minimos
 	
 	kile -> editor latex de kde 	   
 
 
 --------------------------------------------------------------------------------
-2. Ficheros
+2. Ficheiros
 --------------------------------------------------------------------------------
 
 memoria.tex
-	Fichero principal. Incluye el resto de ficheros .tex. Si se modifica
-	el nombre de algún otro fichero .tex será necesario modificarlo en 
-	este fichero.
+	Ficheiro principal. Inclue o resto de ficheiros .tex. Se se modifica
+	o nome dalgún outro fichero .tex será preciso modificalo neste fichero.
 	
 portada.tex
 	Portada 
 
 agradecimientos.tex
-	Dedicatoria y agradecimientos
+	Dedicatoria e agradecementos
 	
-especificación.tex
-	Especificación estándar requerida por las normas
-
 resumen.tex
 	Resumen del proyecto
 	
-cap1.tex
-cap2.tex
+cap1_X.tex
+cap2_X.tex
 	Capítulos del proyecto. Podemos crear un fichero por capítulo
 	o agrupar varios capítulos en un mismo fichero. Si creamos más ficheros
 	debemos incluirlos en memoria.tex
@@ -58,30 +55,30 @@ biblio.bib
 	Bibliografía en formato bibtex
 	
 apen1.tex
-	Apéndices del proyecto. Podemos crear un fichero por apéndice o
-	agrupar todos los apéndices en un sólo fichero. Si creamos más ficheros
-	debemos incluirlos en memoria.tex	
+	Apéndices do proxecto. Podese crear un fichero por apéndice ou
+	agrupar todo-los apéndices nun só fichero. Se creamos mais ficheiros
+	debemos incluilos en memoria.tex	
 	
 Makefile
-	Contiene reglas para compilar el código fuente. 
+	Contén reglas para compilar o código fonte. 
 
 pfc-fic.bst
-	Estilo de bibliografía
+	Estilo da bibliografía
 
 --------------------------------------------------------------------------------
 3. Compilación
 --------------------------------------------------------------------------------
 
-Reglas principales del fichero Makefile:
+Regras principais do fichero Makefile:
 
 make all
-	Compila código fuente y bibliografía y genera los ficheros ps y pdf
+	Compila código fonte e bibliografía e xera os ficheiros ps e pdf
 
 make pdf
-	Compila código fuente y bibliografía y genera el fichero pdf
+	Compila código fonte e bibliografía e xera o fichero pdf
 	
 make clean 
-	Elimina ficheros auxiliares (mantiene pdf y ps)
+	Elimina ficheros auxiliares (mantiene pdf e ps)
 
 
 --------------------------------------------------------------------------------
@@ -91,10 +88,10 @@ make clean
 a. Codificación de caracteres
 	
 ISO-8859-15
-	Otra codificación de caracteres puede ocasionar problemas en la 
+	Outra codificación de caracteres pode ocasionar problemas na
 	compilación de acentos. 
-	En kile, por ejemplo, es posible seleccionar el tipo de codificación
-	de los ficheros.
+	En kile, por exemplo, é posibel seleccionar el tipo de codificación
+	dos ficheros.
 	
 b. Formato de las figuras
 
@@ -103,10 +100,10 @@ EPS/PS
 	
 JPG/PNG/PDF
 	Formato aceptados por pdflatex. 
-	Si se desea utilizar este tipo de formatos, sustituir Makefile por
+	Se se desexa empregar este tipo de formatos, sustituir Makefile por
 	Makefile.pdflatex
 	
 	
-IMPORTANTE: se insertan figuras en formato eps/ps ó en formato jpg/png/pdf pero
-NUNCA se pueden mezclar ambos tipos de figuras en un mismo código latex.
+IMPORTANTE: Insertanse figuras en formato eps/ps ou en formato jpg/png/pdf pero
+NUNCA se pueden mesturar ambos tipos de figuras no mesmo código latex.
 		
