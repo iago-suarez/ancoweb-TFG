@@ -456,9 +456,19 @@
     \end{center}
     \end{figure}
     
+    Como é lóxico esta táboa actualizarase en cada un dos fotogramas se hai algún novo obxecto 
+    detectado ou se algún de eles desaparece, marcando ou desmarcando este como obxectos en escena.
+    Este comportamento implementase mediante dúas listas no obxecto VideoDetections: 
+    \textbf{detRecentlyDeleted} e \textbf{detRecentlySelected}, que son lidas polo observador 
+    DetectionsTableObserver, encargado de remarcar todas as Deteccións da lista detRecentlySelected
+    e de desmarcar todas as da lista detRecentlyDeleted.
     
 \section{Lista de Deteccións actuais}
 
+    Probablemente a función mais necesaria e vistosa é a de amosar os obxectos detectados de forma 
+    individualizada mentres estes están en pantalla. A estes efectos crease unha lista de deteccións
+    actuais que amosa unha imaxe de tódolos obxectos presentes no vídeo.
+    
     \begin{figure}[htp]
     \begin{center}
         \includegraphics[scale=0.4]{figures/detectedObjects.png}
@@ -466,5 +476,119 @@
     \label{fig:detectedObjects}
     \end{center}
     \end{figure}
+   
+    Esta sección de deteccións actuais ao igual que a táboa de obxectos detectados precisa ser 
+    actualizada en cada fotograma, para elo empréganse as listas de detRecentlyDeleted e 
+    detRecentlySelected explicadas anteriormente, só que agora é o observador 
+    CurrentDetectionsObserver o encargado de engadir ou borrar unha detección desta sección.
+    
+    Tamén hai que destacar que xa que os observadores CurrentDetectionsObserver e 
+    DetectionsTableObserver son os que mais tempo de execución consumen, a súa execución é 
+    complementaria dependendo do estado do checkbox ``Show all detections''. De estar
+    deshabilitado mantén o observador DetectionsTableObserver inactivo mentres que o 
+    CurrentDetectionsObserver está activo, e estando habilitado fai o contrario. Isto obriga aos
+    observadores a reimplementar os métodos ``enable()'' e ``disable()'', cargando ou
+    descargando nestes métodos todos os valores actuais das deteccións que non actualizaron mentres
+    estaban deshabilitados. Todo isto pódese observar no diagrama de deseño da capa Web (figura 
+    \ref{fig:CapaWebJS}).
+    
+    
+    As imaxes que se amosan como icona de cada un dos obxectos detectados son calculadas en tempo de
+    reprodución do vídeo, isto é posible grazas aos elementos data URI\cite{data-uris} de javascript,
+    que permiten almacenar unha imaxe como se fose unha URL e empregar esta URL para logo mostrar a 
+    imaxe, por poñer o caso, no fondo (background-image) de un elemento HTML. Esta URI calcúlase 
+    no método da clase VideoDetections ``captureImg'' empregando unha chamada a ``canvas.toDataURL()''
+    onde canvas é un elemento HTMLCanvasElement obtido a partir do fotograma actual do vídeo.
+    
+    Por último para mostrar a información asociada a este obxecto detectado de algún xeito, 
+    empregase a compoñente da librería bootstrap popover, que é unha ventá flotante que xurde ao
+    carón da detección cando o rato pasa por enriba dela. Este popover personalizase coa cor 
+    concreta desa detección.
+    
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.5]{figures/popoverCapture.png}
+        \caption{Captura de pantalla que amosa o popover da lista de deteccións actuais}
+    \label{fig:popoverCapture}
+    \end{center}
+    \end{figure}
+
     
 \section{Comportamento anormal}
+
+    Un dos factores nos que destacan os algoritmos dos laboratorios VARPA é precisamente a análise
+    de comportamento co fin de detectar o comportamento anormal de un dos obxectos implicados nunha
+    escena. Isto faise calculando cal é o camiño polo que un obxecto soe viaxar do punto A ao 
+    punto B, para calquera que sexan os puntos A e B, de xeito que podemos medir o anormal que é
+    o seu comportamento en función do que o seu camiño se diferencie do camiño habitual. Isto pode
+    axudar a detectar por exemplo un peón que non cruza polo paso de cebra, un coche facendo unha 
+    manobra perigosa...
+    
+    O sistema de recoñecemento facilitado polo laboratorio foi deseñado para poder devolver un ratio
+    de esa anormalidade en cada unha das chamadas ao sistema de análise de Alto nivel, que como se 
+    dixo anteriormente executase cada determinado período de tempo. E dado que é este sistema o que
+    proporciona a traxectoria do obxecto, o ratio de anormalidade para cada un dos momentos 
+    asociouse pois a cada un dos puntos da traxectoria como se pode ver na imaxe \ref{fig:abXmlRate}.
+    Como se pode comprobar nesta imaxe, existen unha serie de momentos iniciais nos que o ratio inda
+    non puido ser calculado, e neste caso o valor asociado será 0.
+    
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.5]{figures/abXmlRate.png}
+        \caption{Ratio de anormalidade gardado nun documento XML}
+    \label{fig:abXmlRate}
+    \end{center}
+    \end{figure}
+    
+    Non obstante un número é algo moi pouco gráfico, que dificilmente pode axudar a resaltar unha 
+    detección anómala de unha que non o é, por este motivo se deseñou unha serie de compoñentes que
+    permiten seleccionar un límite (un ratio de anormalidade máximo) a partir do cal un obxecto será
+    considerado sospeitoso. A nivel de interface web, este límite pode marcarse cunha barra 
+    selectora chamada slider, que  se importou da libraría jQuery UI\cite{ComponenteSliderJqueryUi},
+    e que se complementou cunha entrada de texto para dar a posibilidade de que o valor se seleccione
+    ou ben escribíndoo, ou ben a través do slider. Os valores a seleccionar variarán sempre entre 0
+    e o máximo valor atopado entre os ratios de anormalidade das deteccións.
+
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.5]{figures/sliderCapture.png}
+        \caption{Captura de pantalla do compoñente slider da biblioteca jQuery UI}
+    \label{fig:sliderCapture}
+    \end{center}
+    \end{figure}
+    
+    Agora que xa se pode seleccionar o valor a partir do cal queremos marcar unha detección como
+    anómala, falemos do xeito no que se vaia realizar este marcado. A idea xeral consiste en 
+    inabilitar o uso de diferentes cores e marcar de azul todas as deteccións, con excepción de 
+    aquelas que teñan un comportamento anormal que serán marcadas de vermello, e aquelas cuxo 
+    comportamento inda non fose analizado que serán marcada en cor negra. Este uso de cores no só
+    se emprega nas capas $<canvas>$ de información que se amosan sobre o vídeo senón tamén na táboa
+    de obxectos detectados e na lista de deteccións actuais.
+
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.4]{figures/suspiciousDetections.png}
+        \caption{Captura de pantalla que amosa o comportamento das deteccións sospeitosas}
+    \label{fig:suspiciousDetections}
+    \end{center}
+    \end{figure}
+    
+    Para conseguir isto, centralizase a xestión da cor sobre o obxecto Detection, facendo que sexa 
+    este o que determine de forma unívoca de que cor se ten que debuxar, para isto creanse os 
+    métodos ``getCurrentColor'' que devolve a cor para as capas $<canvas>$ e 
+    ``getCurrentLightColor'' que devolve un color mais claro para a táboa e a lista de deteccións.
+    O obxecto Detection á súa vez calculara a cor a devolver en función do seu ratio de anormalidade
+    e o valor das propiedade: videoDetections.alarmAbnormalRate, videoDetections.useAbnormalityRate
+    e videoDetections.useColors.
+    
+    A parte deste mecanismo para centralizar a xestión do color que será empregado por tódolos 
+    observadores, os observadores DetectionsTableObserver e CurrentDetectionsObserver precisan 
+    coñecer aquelas deteccións que cambiaron a un estado sospeitoso, de confianza ou sen datos,
+    con este obxectivo crease a lista VideoDetections.abChangingDetections, que indicará aquelas
+    deteccións que cambiaron de estado e polo tanto, no caso da táboa e a lista de deteccións, 
+    precisan mudar a súa cor.
+    
+
+\section{Popups de deteccións sospeitosas}
+
+
