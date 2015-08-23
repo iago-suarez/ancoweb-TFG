@@ -2,6 +2,8 @@
 [![Build Status](https://travis-ci.org/iago-suarez/ancoweb-TFG.svg?branch=master)](https://travis-ci.org/iago-suarez/ancoweb-TFG)
 [![Coverage Status](https://coveralls.io/repos/iago-suarez/ancoweb-TFG/badge.svg?branch=master)](https://coveralls.io/r/iago-suarez/ancoweb-TFG?branch=master)
 ## Web application for the analysis of human behavior
+![alt tag](https://raw.githubusercontent.com/iago-suarez/ancoweb-TFG/master/docs/ImagesAndDiagrams/frontCapture.png)
+
 Ancoweb is a Web application for the analysis of human behavior built with [Python][0] using the [Django Web Framework][1].
 
 This project has the following basic apps:

@@ -273,3 +273,36 @@ input [type="file"] {
     width: 150px;
     margin-top: 15px;
 }
+
+/************ ABOUT PAGE **********************/
+
+.about-box {
+    padding: 9px 14px;
+    margin-bottom: 14px;
+    margin-top: 14px;
+    background-color: #f7f7f9;
+    border: 1px solid #e1e1e8;
+    border-radius: 4px;
+}
+
+.img-circle {
+    height: 150px;
+    width: 150px;
+}
+
+.img-rect {
+    height: 150px;
+    width: 150px;
+}
+
+#udc-logo-img {
+    height: 100px;
+}
+
+#varpa-info h3 {
+    margin-top: 40px;
+}
+
+.about-info {
+    margin-top: 40px;
+}

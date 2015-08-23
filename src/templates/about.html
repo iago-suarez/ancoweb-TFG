@@ -11,117 +11,166 @@
 
 <!-- Benefits of the Django application -->
 {% block container %}
+    <div class="container about-box">
+        <h2 class="text-center">About the Project</h2>
 
-    <div id="sec1" class="text-page">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h1>{% include "_brandname.html" %}</h1>
-
-                    <p class="lead">An Awesome Tagline Goes Here</p>
-                </div>
+        <div class="col-md-6 about-info">
+            <div class="text-center">
+                <img class="img-circle centered"
+                     src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAN4AAAAJDE2NGMxNmY2LTFhZjAtNDU5OC04MWZiLTlhZGYzZDVjNzYyNg.jpg"
+                     alt="profile pic">
             </div>
+            <p class="heavy text-center">Iago Suárez</p>
+
+            <h3 class="text-center">Author Site</h3>
+
+            <p class="text-justify">I'm a student of computer engineering at the University of A Coruña.
+                This is my End-of-Degree
+                <Project></Project>
+                that aims to demonstrate my skills in web
+                programming and systems design. For more information you can visit
+                my website at GitHub or LinkedIn.
+            </p>
+            <div class="text-center">
+                <a class="btn btn-primary" href="https://github.com/iago-suarez/ancoweb-TFG">GitHub</a>
+                <a class="btn btn-info"
+                   href="https://es.linkedin.com/pub/xoan-iago-su%C3%A1rez-canosa/92/741/574">
+                    LinkdeIn</a>
+            </div>
+        </div>
+        <div id="varpa-info" class="col-md-6 about-info">
+            <div class="text-center"><img class="img-circle centered"
+                                          src="http://www.varpa.es/Imagenes/logobig.gif"
+                                          alt="profile pic"></div>
+
+            <h3 class="text-center">Varpa Lab's</h3>
+
+            <p class="text-justify"> VARPA is a research group affiliated to
+                the <a href="http://www.dc.fi.udc.es" target="_top">Department of Computer
+                    Science </a> of the <a href="http://www.fi.udc.es" target="_top"> Faculty of
+                    Informatics </a> of the <a href="http://www.udc.es" target="_top"> University
+                    of Coruña </a>. The group promotes industrial development of computer
+                vision applications and collaboration with research in the same
+                field. VARPA fundamental goals are innovation and industrial
+                competitiveness promotion based on computer vision research and
+                development, and collaboration with industry in technological
+                projects development.
+                <br/>
+                This project was developed in collaboration with Varpa laboratories, in order to
+                create a web interface for algorithms that they develop.
+            </p>
+
+            <div class="text-center">
+                <a class="btn btn-primary" href="http://www.varpa.es/">Web Page</a>
         </div>
     </div>
 
-    <div id="sec2" class="text-page">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h2>Meet The Team</h2>
+        <div class="col-md-6 about-info">
+            <div class="text-center"><img id="udc-logo-img" class="centered"
+                                          src="{% static 'site/img/udc-logo.png' %}"
+                                          alt="profile pic"></div>
+            <h3 class="text-center">University of A Coruña</h3>
 
-                    <p class="lead">The Wonderful People Behind the Site</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="text-center"><img class="img-circle centered"
-                                                  src="http://lorempixel.com/128/128/people/9/"
-                                                  alt="profile pic"></div>
-                    <p class="heavy text-center">Cassidy Coder</p>
+            <p class="text-justify">
+                The University of A Coruña is a public institution whose primary objective
+                is the generation, management and dissemination of culture and scientific,
+                technological and professional knowledge through the development of
+                research and teaching.
+            </p>
 
-                    <h2>Front-end developer</h2>
+            <div class="text-center">
+                <a class="btn btn-primary" href="http://www.udc.es/">Web Page</a>
+        </div>
+    </div>
+    </div>
 
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
-                        mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
-                        magna
-                        mollis euismod. Donec sed odio dui. </p>
-                </div>
-                <div class="col-lg-4">
-                    <div class="text-center"><img class="img-circle centered"
-                                                  src="http://lorempixel.com/128/128/people/2/"
-                                                  alt="profile pic"></div>
-                    <p class="heavy text-center">James King</p>
+    <div class="container about-box">
+        <h2 class="text-center">Related Pages</h2>
 
-                    <h2>CEO</h2>
+        <div class="col-md-6 about-info">
+            <div class="text-center"><img class="img-rect centered"
+                                          src="{% static 'site/img/youtrack-icon.svg' %}"
+                                          alt="profile pic"></div>
+            <h3 class="text-center">Issue Tracking</h3>
 
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
-                        mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
-                        magna
-                        mollis euismod. Donec sed odio dui. </p>
-                </div>
-                <div class="col-lg-4">
-                    <div class="text-center"><img class="img-circle centered"
-                                                  src="http://lorempixel.com/128/128/people/1/"
-                                                  alt="profile pic"></div>
-                    <p class="heavy text-center">Kate Lamport</p>
+            <p class="text-justify">
+                YouTrack is a proprietary, commercial browser-based bug tracker, issue tracking
+                system and project management software developed by JetBrains. I've created a page
+                for this project where, if you log in, you can find all tasks and create new issues.
+            </p>
 
-                    <h2>Front-end designer</h2>
-
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
-                        mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
-                        magna
-                        mollis euismod. Donec sed odio dui. </p>
-                </div>
-            </div>
+            <div class="text-center">
+                <a class="btn btn-primary" href="http://iago-suarez.myjetbrains.com/youtrack/issues?q=*">
+                    Go to Issue tracker
+                </a>
         </div>
     </div>
 
-    <div id="sec3">
-        <div class="container">
-            <div class="row">
-                <div id="map-outer" class="col-md-12">
-                    <div id="address" class="col-md-4">
-                        <h2>Our Location</h2>
-                        <address>
-                            <strong>Edge Solutions Ltd.</strong><br>
-                            Taj Mahal<br>
-                            Agra<br>
-                            Uttar Pradesh<br>
-                            India - 282001<br>
-                            <abbr>P:</abbr> +91 0562 222 6431
-                        </address>
-                    </div>
-                    <div id="map-container" class="col-md-8"></div>
-                </div>
+        <div class="col-md-6 about-info">
+            <div class="text-center"><img class="img-rect centered"
+                                          src="{% static 'site/img/GitHub-logo.svg' %}"
+                                          alt="profile pic"></div>
+            <h3 class="text-center">GitHub project Page</h3>
+
+            <p class="text-justify">
+                GitHub is a Web-based Git repository hosting service, which offers all of the
+                distributed revision control and source code management (SCM) functionality
+                of Git as well as adding its own features. Here you can find all related
+                information from the documentation to the project source code.
+            </p>
+
+            <div class="text-center">
+                <a class="btn btn-primary" href="https://github.com/iago-suarez/ancoweb-TFG">Go to GitHub</a>
             </div>
         </div>
+
+        <div class="col-md-6 about-info">
+            <div class="text-center"><img class="img-rect centered"
+                                          src="{% static 'site/img/travis-logo.png' %}"
+                                          alt="profile pic"></div>
+            <h3 class="text-center">Travis CI</h3>
+
+            <p class="text-justify">
+                Travis CI is an open-source hosted, distributed continuous integration service
+                used to build and test projects hosted at GitHub. I use it to built and test the
+                project for each commit pushed to the GitHub repository.
+            </p>
+
+            <div class="text-center">
+                <a class="btn btn-primary" href="https://travis-ci.org/iago-suarez/ancoweb-TFG">
+                    Travis CI Repository
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-6 about-info">
+            <div class="text-center"><img class="img-circle centered"
+                                          src="{% static 'site/img/coveralls-logo.png' %}"
+                                          alt="profile pic"></div>
+            <h3 class="text-center">COVERALLS</h3>
+
+            <p class="text-justify">
+                Coveralls is a web service to help you track your code coverage over time,
+                and ensure that all your new code is fully covered.
+
+                Coveralls is a web service used to measure the source code coverage. It indicates
+                what parts of the code have been covered by the tests and what not, helping
+                to identify potential bug's. This coverage is sent from the Travis CI server
+                whenever there is a successful build.
+            </p>
+
+            <div class="text-center">
+                <a class="btn btn-primary" href="https://coveralls.io/github/iago-suarez/ancoweb-TFG">
+                    Coveralls Repository
+                </a>
+            </div>
+        </div>
+
+
     </div>
+
 {% endblock container %}
 
 {% block scripts %}
-    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
-    <script>
 
-        function init_map() {
-            // Enter the latitude and longitude of your office here
-            var myLocation = new google.maps.LatLng(27.176141, 78.042370);
-
-            var mapOptions = {
-                center: myLocation,
-                zoom: 14
-            };
-
-            var marker = new google.maps.Marker({
-                position: myLocation,
-                title: "We are here"
-            });
-
-            var map = new google.maps.Map(document.getElementById("map-container"),
-                    mapOptions);
-            marker.setMap(map);
-        }
-
-        google.maps.event.addDomListener(window, 'load', init_map);
-    </script>
 {% endblock scripts %}
