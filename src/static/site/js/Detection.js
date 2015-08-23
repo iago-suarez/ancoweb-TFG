@@ -183,7 +183,7 @@ Detection.State = {
  *
  * @returns {number}
  */
-Detection.prototype.calcCurrAbState = function () {
+Detection.prototype.getCurrentAbState = function () {
     var abRate = this.getCurrentAbnormalityRate();
     if (abRate === 0) {
         // We haven't got abnormality rate

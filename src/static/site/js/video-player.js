@@ -106,7 +106,7 @@ function loadXmlResult(video) {
                 updateIndex = (updateIndex + 1) % lastUpdateTimes.length;
                 lastUpdateTimes[updateIndex] = Date.now() - time;
                 var updateTime  = Math.floor((1000 / videoDetections.fps) - arrayMean(lastUpdateTimes));
-                console.log("(fps: " + videoDetections.fps + ")estimateTime: " + updateTime);
+                //console.log("(fps: " + videoDetections.fps + ")estimateTime: " + updateTime);
                 return setTimeout(updateStatus, updateTime);
             }
         }

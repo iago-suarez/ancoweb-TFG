@@ -14,7 +14,7 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
     this.videoElement = videoElement;
     this.observers = [];
     this.useColors = true;
-    this.fps = this.getVideoFps(videoElement);
+    this.fps = this._getVideoFps(videoElement);
     this.detections = {};
     this.selectedDetections = {};
     this.detRecentlyDeleted = [];
@@ -154,7 +154,7 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
             }
             //Manages the changes in the Detection.State
             if (selected && this.useAbnormalityRate) {
-                var state = det.calcCurrAbState();
+                var state = det.getCurrentAbState();
                 if (state !== det.abnormalityState) {
                     //Update the current state and mark the detection to be updated
                     det.abnormalityState = state;
@@ -227,7 +227,7 @@ function VideoDetections(videoElement, xmlTrajectories, xmlDetections) {
  * @param video
  * @returns {Number}
  */
-VideoDetections.prototype.getVideoFps = function (video) {
+VideoDetections.prototype._getVideoFps = function (video) {
     var ext = video.currentSrc.split('.').pop();
     var fps = $(video).children('source[src$="' + ext + '"]').attr('fps');
     return parseInt(fps);

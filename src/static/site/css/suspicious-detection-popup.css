@@ -45,3 +45,7 @@ canvas {
     height: 100%;
     position: absolute;
 }
+
+video::-webkit-media-controls-panel {
+    z-index: 10;
+}

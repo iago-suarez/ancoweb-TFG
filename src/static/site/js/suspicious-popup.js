@@ -146,47 +146,46 @@ function ZoomVideoDetections(videoElement, xmlTrajectories, xmlDetections, detId
             $('.drawing-layer').attr('height', this.window_size).attr('width', this.window_size);
         }
     };
-
-    /**
-     * Given the center to the window, this function calc the
-     * distance in pixels to the top margin and left margin of
-     * the video for a windows with size window_size
-     * @param center
-     * @param window_size
-     * @param video
-     * @returns {{left: number, top: number}}
-     */
-    this.centerToLeftTop = function (center, window_size, video) {
-        var x = center.x - window_size / 2;
-        //If the box is over the video size adjust it
-        if (x < 0) {
-            x = 0;
-        } else if ((x + window_size) > video.videoWidth) {
-            x = video.videoWidth - window_size;
-        }
-        var y = center.y - window_size / 2;
-        //If the box is over the video size adjust it
-        if (y < 0) {
-            y = 0;
-        } else if ((y + window_size) > video.videoHeight) {
-            y = video.videoHeight - window_size;
-        }
-
-        if (video.videoWidth < window_size) {
-            // The video is less wide than the canvas element
-            x = -(Math.abs(video.videoWidth - window_size) / 2);
-
-        } else if (video.videoHeight < window_size) {
-            // The video is less high than the canvas element
-            y = -(Math.abs(video.videoHeight - window_size) / 2);
-        }
-        return {left: x, top: y};
-    };
 }
+
+/**
+ * Given the center to the window, this function calc the
+ * distance in pixels to the top margin and left margin of
+ * the video for a windows with size window_size
+ * @param center
+ * @param window_size
+ * @param video
+ * @returns {{left: number, top: number}}
+ */
+ZoomVideoDetections.centerToLeftTop = function (center, window_size, video) {
+    var x = center.x - window_size / 2;
+    //If the box is over the video size adjust it
+    if (x < 0) {
+        x = 0;
+    } else if ((x + window_size) > video.videoWidth) {
+        x = video.videoWidth - window_size;
+    }
+    var y = center.y - window_size / 2;
+    //If the box is over the video size adjust it
+    if (y < 0) {
+        y = 0;
+    } else if ((y + window_size) > video.videoHeight) {
+        y = video.videoHeight - window_size;
+    }
+
+    if (video.videoWidth < window_size) {
+        // The video is less wide than the canvas element
+        x = -(Math.abs(video.videoWidth - window_size) / 2);
+
+    } else if (video.videoHeight < window_size) {
+        // The video is less high than the canvas element
+        y = -(Math.abs(video.videoHeight - window_size) / 2);
+    }
+    return {left: x, top: y};
+};
 
 // ZoomVideoDetections.prototype create the object that inherits from VideoDetections.prototype
 ZoomVideoDetections.prototype = Object.create(VideoDetections.prototype);
-
 
 /**
  * Manage the popup suspicious windows
@@ -195,7 +194,7 @@ ZoomVideoDetections.prototype = Object.create(VideoDetections.prototype);
  * @constructor
  * @param canvasElement
  */
-function PopupManagerObserver(zoomVideoDetections, canvasElement) {
+function ZoomManagerObserver(zoomVideoDetections, canvasElement) {
     DetectionsObserver.call(this, zoomVideoDetections);
     this.canvasElement = canvasElement;
 
@@ -217,15 +216,15 @@ function PopupManagerObserver(zoomVideoDetections, canvasElement) {
         context.fillStyle = 'black';
         context.fillRect(0, 0, this.canvasElement.width, this.canvasElement.height);
 
-        var pos = this.videoDetections.centerToLeftTop(this.videoDetections.center,
+        var pos = ZoomVideoDetections.centerToLeftTop(this.videoDetections.center,
             this.videoDetections.window_size, video);
         context.drawImage(video, -pos.left, -pos.top);
 
     };
 }
 
-// PopupManagerObserver.prototype create the object that inherits from DetectionsObserver.prototype
-PopupManagerObserver.prototype = Object.create(DetectionsObserver.prototype);
+// ZoomManagerObserver.prototype create the object that inherits from DetectionsObserver.prototype
+ZoomManagerObserver.prototype = Object.create(DetectionsObserver.prototype);
 
 /**
  * Paints the trajectories into the canvas element
@@ -251,7 +250,7 @@ function SuspiciousTrajectoriesObserver(zoomVideoDetections, canvasElement) {
         context.beginPath();
 
         // Window coordinates with respect to the to right margin Video
-        var lefTopDistance = this.videoDetections.centerToLeftTop(this.videoDetections.center,
+        var lefTopDistance = ZoomVideoDetections.centerToLeftTop(this.videoDetections.center,
             this.videoDetections.window_size, this.videoDetections.videoElement);
 
         var p = this.videoDetections.detection.getPositionPoint(
@@ -308,7 +307,7 @@ $(document).ready(function () {
                 zoomVD.videoElement.currentTime = zoomVD.detection.firstFrame *
                     ((1000 / zoomVD.fps) / 1000);
 
-                zoomVD.addObserver(new PopupManagerObserver(zoomVD,
+                zoomVD.addObserver(new ZoomManagerObserver(zoomVD,
                     document.getElementById("suspicious-layer")));
                 zoomVD.addObserver(
                     new SuspiciousTrajectoriesObserver(zoomVD,
