@@ -340,7 +340,7 @@
     
     \begin{figure}[htp]
     \begin{center}
-        \includegraphics[scale=0.45]{figures/CapaWebJS.png}
+        \includegraphics[scale=0.35]{figures/CapaWebJS.png}
         \caption{Diagrama de clases do patrón observador na capa web}
     \label{fig:CapaWebJS}
     \end{center}
@@ -591,4 +591,85 @@
 
 \section{Popups de deteccións sospeitosas}
 
+    Para completar a funcionalidade de detectar o comportamento anómalo, solicitase unha faceta a 
+    maiores do marcado das deteccións sospeitosas, deberase dar a opción de lanzar unha nova ventá
+    por cada obxecto sospeitoso detectado coa posibilidade de ver este obxecto de preto ao largo do
+    seu percorrido.
+    
+    Tras estudar varios xeito de facer isto, a mellor solución parece ser a de empregar pop-ups 
+    tamén chamados ventás emerxentes, que inda que normalmente se evitan por estares asociados 
+    con contido publicitario, neste caso compren á perfección coa tarefa que se desexa realizar.
+    
+    Xa que haberá que ampliar a imaxe facendo un efecto zoom para poder mostrar a zoa do vídeo na
+    que está a detección con mais detalle, prantexase a construción dun sistema que mediante unha
+    barra selectora (slider) permita achegarse ou afastarse para ver mais de preto ou de lonxe o 
+    obxecto detectado. Para estas ventás emerxentes empregarase un novo ficheiro .css e tamén un 
+    novo ficheiro .js, que conterá os mecanismos precisos para crear este efecto zoom.
+    
+    A esta nova ventá pasaranse como parámetros da URL o identificador da detección e a ULR do 
+    ficheiro XML que contén a análise. Con estes datos o ficheiro javascript principal chamado
+    suspicious-popup.js, que segue unha distribución similar ao de video-player.js para a páxina
+    que amosa o vídeo, obterá o ficheiro XML e en base a el iniciará o sistema. Esta
+    páxina tamén constará dun elemento $<video>$, con capas $<canvas>$ superpostas, a primeira delas 
+    ocultará o vídeo por completo mostrando a porción del que sexa precisa para lograr o efecto 
+    zoom e as sucesivas mostrarán a información desexada.
+    
+    Ao manter a estrutura dun elemento $<video>$ coas capas $<canvas>$ superpostas, a mellor 
+    arquitectura posible e a dun patrón Observador, no que o suxeito manteña ademais das referencias
+    ao vídeo, os datos sobre o nivel de zoom, que será necesariamente empregado polos seus 
+    observadores. Para esta tarefa reempregouse gran parte do deseño do diagrama \ref{fig:CapaWebJS}
+    engadindo as características precisas nunha clase herdada de VideoDetections que se nomea 
+    ZoomVideoDetections como se pode ver na figura \ref{fig:SuspiciousPopupJS}.
+    
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.4]{figures/SuspiciousPopupJS.png}
+        \caption{Diagrama de clases para a ventá emerxente de deteccións sospeitosas}
+    \label{fig:SuspiciousPopupJS}
+    \end{center}
+    \end{figure} 
+    
+    Este sistema é iniciado na carga do XML e ao igual que na páxina que reproduce o vídeo, cando a 
+    carga finaliza crease
+    un bucle coa función updateStatus que actualizará en cada fotograma o estado dos compoñentes 
+    chamando á función ZoomVideoDetections.updateState(). Esta función tamén é chamada cando o vídeo
+    lanza o evento play, ou ao cambiar o nivel de zoom mediante a barra selectora (slider).
 
+    
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.4]{figures/suspiciousPopupCapture.png}
+        \caption{Captura de pantalla que amosa a ventá de deteccións sospeitosas}
+    \label{fig:suspiciousPopupCapture}
+    \end{center}
+    \end{figure} 
+    
+    A continuación explicase en detalle o mecanismo empregado para crear o efecto zoom e para 
+    levar a cabo o seguimento do obxecto mantendo este nivel de zoom. Empréganse 
+    basicamente dúas variables, por un lado o tamaño da fracción de vídeo a amosar (w\_size), que
+    variará entre un mínimo(dúas veces o tamaño da detección) e un máximo que é o tamaño do vídeo, 
+    e por outro lado o centro (center) da escena que será unha variable composta de dúas 
+    compoñentes (x,y) que indican a distancia en píxeles á parte superior esquerda do vídeo.
+    
+    A función ZoomVideoDetections.centerToLeftTop é a encargada de calcular dado un tamaño de ventá 
+    e un centro, esta distancia á marxe esquerda superior do vídeo. Este cálculo no é sinxelo, xa que 
+    hai que evitar que o recadro a seleccionar exceda das dimensións do vídeo. Esta casuística 
+    amosase na figura \ref{fig:centerToLeftTop}
+    
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.8]{figures/centerToLeftTop.png}
+        \caption{Diagrama que explica os problemas resoltos para implementar o efecto zoom}
+    \label{fig:centerToLeftTop}
+    \end{center}
+    \end{figure}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
