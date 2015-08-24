@@ -3,10 +3,15 @@ import threading
 from random import randint
 
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from ancoweb import settings
 from video_upload import utils, tasks
+
+
+# 30 MB
+MAX_FILE_SIZE = 1024 * 1024 * 30
 
 
 def get_valid_filename(filename, bad_extensions=None, directory=""):
@@ -47,9 +52,19 @@ def video_file_path(self, filename):
     return get_valid_filename(name, settings.USED_VIDEO_EXTENSIONS, settings.MEDIA_ROOT)
 
 
+class VideoField(models.FileField):
+    def validate(self, value, model_instance):
+        "Check if value consists only of valid emails."
+        if model_instance.video.size > MAX_FILE_SIZE:
+            raise ValidationError("The so large file exceeds "
+                                  + str(MAX_FILE_SIZE / (1024 * 1024)) + "MB", code=500)
+        # Use the parent's handling of required fields, etc.
+        super(VideoField, self).validate(value, model_instance)
+
+
 class VideoModel(models.Model):
     title = models.CharField(max_length=50)
-    video = models.FileField(upload_to=video_file_path)
+    video = VideoField(upload_to=video_file_path)
     detected_objs = models.FileField(null=True)
     image = models.ImageField(null=True)
     description = models.CharField(max_length=250, blank=True)
