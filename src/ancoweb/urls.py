@@ -15,4 +15,4 @@ urlpatterns = [url(r'^$', HomeView.as_view(), name='home'),
                url(r'^admin/', include(admin.site.urls)),
                url(r'^djangojs/', include('djangojs.urls')),
                url(r'^qunit/$', MyQUnitView.as_view(), name='my_qunit_view')] + static(settings.MEDIA_URL,
-                                                                                      document_root=settings.MEDIA_ROOT)
+                                                                                       document_root=settings.MEDIA_ROOT)

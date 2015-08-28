@@ -165,7 +165,7 @@ class TimeUtils:
 
 def media_url_to_path(file_url):
     """
-    Convert a media file url to a relative path into MEDIA_ROOT folder
+    Convert a media file url to a absolute path into MEDIA_ROOT folder
     :param file_url:
     :return:
     """

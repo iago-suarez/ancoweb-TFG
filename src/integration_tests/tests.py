@@ -1,6 +1,6 @@
 import os
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from djangojs.runners import QUnitSuite, PhantomJsRunner, JsTestException
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -32,8 +32,7 @@ class VideoUploadSeleniumTests(SeleniumAncowebTest):
             'a[href*="' + upload_url + '"]').click()
         self.selenium.find_element_by_id('id_title').send_keys(video_title)
         self.selenium.find_element_by_id('id_video').send_keys(
-            os.path.join(str(settings.BASE_DIR),
-                         str(settings.MEDIA_ROOT),
+            os.path.join(str(settings.MEDIA_ROOT),
                          "tests_resources/v296.mpg"))
         self.selenium.find_element_by_id('id_description') \
             .send_keys("Funcional Tests Description \n this is a quite "

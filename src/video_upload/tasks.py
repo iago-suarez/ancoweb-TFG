@@ -95,7 +95,7 @@ class AnalyzeVideo(ProcessState):
             return os.path.join(directory, ("x" + str(randint(1, 1000)) + ".xml"))
 
         xml_relative_file = generate_xml_filename(self.process.video_model)
-        xml_file = os.path.join(str(settings.BASE_DIR), settings.MEDIA_ROOT, xml_relative_file)
+        xml_file = os.path.join(settings.MEDIA_ROOT, xml_relative_file)
         mp4_name = os.path.splitext(self.process.video_model.video.name)[0]
         mp4_name += settings.USED_VIDEO_EXTENSIONS[0]
         video_file = os.path.join(settings.BASE_DIR,

@@ -110,7 +110,7 @@ class VideoManagerTests(TestCase):
 class VideoModelTests(TestCase):
     def test_get_valid_filename(self):
         # Test without bad_ext
-        video_filename = os.path.join(str(settings.BASE_DIR), str(settings.MEDIA_ROOT),
+        video_filename = os.path.join(str(settings.MEDIA_ROOT),
                                       "tests_resources/v296.mpg")
         self.assertNotEqual(video_filename, get_valid_filename(video_filename))
 
