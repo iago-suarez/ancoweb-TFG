@@ -43,13 +43,14 @@ this line to `ancoweb/bin/activate`:
 ## Installation
 
 Install the necessary packages, here's an example for ubuntu 14.04:
+
     $ sudo apt-add-repository ppa:mc3man/trusty-media
     $ sudo apt-get update
     $ sudo apt-get install -y ffmpeg phantomjs python3-pip firefox xvfb
 
 Make python 3.4 default python version:
 
->   echo -e "python='/usr/bin/python3.4' \nalias pip='/usr/bin/pip3' \nalias sudo='sudo '" > ~/.bash_aliases
+>   echo -e "alias python='/usr/bin/python3.4' \nalias pip='/usr/bin/pip3' \nalias sudo='sudo '" > ~/.bash_aliases
 
 Now restart the terminal and the pip commands should work smoothly. Install all dependencies:
 
@@ -71,3 +72,9 @@ Take a look at the docs for a detailed instructions guide.
 
 [0]: https://www.python.org/
 [1]: https://www.djangoproject.com/
+
+### Issue Tracking
+
+After registering you can track a new issue or see the current issues in: <a href="http://iago-suarez.myjetbrains.com/">Jetbrains YouTrack page</a>
+
+
