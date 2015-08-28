@@ -6,9 +6,10 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import Client
 
+from django.conf import settings
+
 from video_upload.models import UploadProcess
 from video_upload.utils import TimeUtils, VideoUtils, ImageUtils
-from ancoweb import settings
 from video_manager.models import VideoModel
 from video_upload import utils
 

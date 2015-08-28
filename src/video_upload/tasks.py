@@ -3,7 +3,8 @@ from random import randint
 from subprocess import Popen, PIPE, STDOUT
 from xml.etree import ElementTree
 
-from ancoweb import settings
+from django.conf import settings
+
 from video_upload import utils
 from video_upload.utils import VideoUtils, TimeUtils, ImageUtils
 

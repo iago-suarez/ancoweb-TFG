@@ -4,13 +4,14 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from djangojs.runners import QUnitSuite, PhantomJsRunner, JsTestException
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
+
 from selenium.webdriver.support import expected_conditions
 
 from ancoweb.tests import SeleniumAncowebTest
 from video_upload.models import UploadProcess
-from ancoweb import settings
 from video_manager.models import VideoModel
 from video_upload import utils
 

@@ -3,8 +3,8 @@ from django.core.exceptions import PermissionDenied, SuspiciousOperation
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.views import generic
+from django.conf import settings
 
-from ancoweb import settings
 from video_manager.models import VideoModel, AnalysisProcess
 
 VIDEOS_FOLDER = 'videos/'

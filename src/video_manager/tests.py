@@ -4,9 +4,11 @@ import io
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import Client
+
 from django.test import TestCase
 
-from ancoweb import settings
+from django.conf import settings
+
 from ancoweb.tests import SeleniumAncowebTest
 from video_manager.models import VideoModel, get_valid_filename
 

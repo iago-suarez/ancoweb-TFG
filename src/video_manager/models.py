@@ -5,9 +5,10 @@ from random import randint
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.conf import settings
 
-from ancoweb import settings
 from video_upload import utils, tasks
+
 
 
 # 30 MB
