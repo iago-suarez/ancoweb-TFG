@@ -1,5 +1,5 @@
 # Tutorial para a configuración nun servidor Ubuntu Server 14.04  
-## Empregando Apache2 mais o módulo mod_wsgi
+## Empregando Python 3, Apache2 mais o módulo mod_wsgi
 
 
 Para comezar iniciamos sesión como root. Isto podese facer contra un servidor como 45.55.51.164 co comando:
@@ -17,7 +17,7 @@ Para crear un novo usuario chamado django, que conterá o código do proxecto se
 	chmod 755 -R /home/django 
 	usermod -d /home/django django 
 
-Asegurarse de ter bash como predeterminado para o teu novo usuario.
+Asegurarse de ter bash como predeterminado para o novo usuario.
 
 	nano /etc/passwd 
 
@@ -27,15 +27,11 @@ Copiar os arquivos de configuración que creas pertinentes ao novo directorio de
 	
 	cp -R /home/usuarioviejo/.ssh /home/django/ 
 
-Establecer python3.4 como versión de python predeterminada, é preciso sair logo para que os alias que establecemos neste ficheiro teñan efecto.
+Establecer python3.4 como versión de python predeterminada, é preciso sair logo para que os alias que establecemos neste ficheiro teñan efecto. Tamén se cambiará o propietario da nova carpeta por django (repitese o paso para cambiar todos os aquivos copiados)
 
 	echo -e "alias python='/usr/bin/python3.4' \nalias pip='/usr/bin/pip3' \nalias sudo='sudo '" > /home/django/.bash_aliases
-	exit
-
-Cambiar o propietario da nova carpeta por django(repitese o paso para cambiar todos os aquivos copiados)
-
 	chown django:django -R /home/django
-
+	exit
 
 ### Instalación de dependencias
 Volvemos a entrar, pero esta vez co usuario django e instalamos os paquetes precisos tras asegurarnos de que a versión de python por defecto é a 3.4
@@ -102,8 +98,6 @@ Ahora configuraremos o ficheiro /etc/apache2/sites-available/000-default.conf qu
 
 	</VirtualHost>
 
-
-
 Por outra parte sempre podremos botar un vistazo aos erros xerados por Apache no ficheiro de log /var/log/apache2/error.log 
 
 ### Asignamos permisos á carpeta ancoweb-TFG
@@ -118,9 +112,9 @@ Por outra parte sempre podremos botar un vistazo aos erros xerados por Apache no
 
 	sudo su
 	. ancoweb/bin/activate
-	cd ~/ancoweb-TFG/src/
+	cd /home/django/ancoweb-TFG/src/
 	sudo python manage.py collectstatic --settings=ancoweb.settings_production
-	cp -R ~/ancoweb-TFG/src/media/ /var/www
+	cp -R /home/django/ancoweb-TFG/src/media/ /var/www
 	exit
 
 ### Damos permisos aos arquivos de /var/www/

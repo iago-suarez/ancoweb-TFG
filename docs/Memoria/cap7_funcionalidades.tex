@@ -18,9 +18,17 @@
 \section{Carga de Vídeo}
 	Dado que a aplicación traballará con vídeos subidos polos usuarios, o primeiro paso é lograr
 	a subida exitosa de vídeos á plataforma. Para este fin empregarase un formulario HTML que 
-	viaxa sobre unha chamada POST de HTTP. Cando o navegador faga esta chamada incluíndo o vídeo
-	como parte do formulario, este vídeo comezará a subirse ao servidor en pequenos anaquiños 
-	(data chunk).
+	viaxa sobre unha chamada POST de HTTP (figura \ref{fig:SubidaVideoForm}). 
+	Cando o navegador faga esta chamada incluíndo o vídeo como parte do formulario, este vídeo
+	comezará a subirse ao servidor en pequenos anaquiños (data chunk).
+	
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.6]{figures/SubidaVideoForm.png}
+        \caption{Formulario para a creación de vídeos}
+    \label{fig:SubidaVideoForm}
+    \end{center}
+    \end{figure}	
 	
 	É de especial importancia que no caso de que o vídeo teña un peso considerable e precise 
 	duns cantos segundos para subirse á plataforma, o usuario poida coñecer de forma gráfica
@@ -48,7 +56,8 @@
 	os datos do formulario son correctos, encargase de crear un modelo VideoModel. Como parte
 	desta creación o vídeo pasa do directorio temporal no que foi almacenado (baixo linux por 
 	defecto é /tmp) a un directorio calculado pola función get\_valid\_filename. Esta función
-	pásaselle ao modelo como parte do seu campo ''video'' do tipo FileField.
+	pásaselle ao modelo como parte do seu campo ''video'' do tipo FileField. Todo este proceso
+	pódese ver de xeito mais claro no diagrama \ref{fig:SubidaVideo}.
 	
 	\begin{figure}[htp]
 	\begin{center}
@@ -75,8 +84,9 @@
     empregase un parámetro de URL chamado 'name'.\\
     
     Outra funcionalidade interesante de cara a amosar unha lista de vídeos é a de poder mostrar unha
-    imaxe representativa de cada un deles. Con este fin crease a vista SuccessfulUpload, á que se
-    redirecciona unha vez o vídeo é subido correctamente para seleccionar a súa \textbf{imaxe de portada}.
+    imaxe representativa de cada un deles. Con este fin crease a vista SuccessfulUpload (imaxe
+    \ref{fig:SuccessfulUploadScreen}), á que se redirecciona unha vez o vídeo é subido correctamente
+    para seleccionar a súa \textbf{imaxe de portada}.
     
     \begin{figure}[htp]
     \begin{center}
@@ -214,9 +224,18 @@
 		encargada de analizalo comportamento a alto nivel a partir dos resultados que proporciona a primeira.\\
 		
 		Para a construción do Sistema de recoñecemento integraranse estas dúas librerías como módulos, e 
-		crearase un terceiro módulo C++ chamado XmlRecognition. Este novo módulo será o responsable de definir e
-		implementar a interface de liña de comandos, xestionar a comunicación entre as dúas librerías e gardar
-		o resultado da análise en formato XML.\\
+		crearase un terceiro módulo C++ chamado XmlRecognition (figura \ref{fig:PaqXmlRecognition}).
+		Este novo módulo será o responsable de definir e implementar a interface de liña de 
+		comandos, xestionar a comunicación entre as dúas librerías e gardar o resultado da análise
+		en formato XML.
+        
+        \begin{figure}[htp]
+        \begin{center}
+            \includegraphics[scale=0.25]{figures/PaqXmlRecognition.png}
+            \caption{Diagrama de clases do paquete XmlRecognition}
+        \label{fig:PaqXmlRecognition}
+        \end{center}
+        \end{figure}
 		
 		Para elo, crease un ficheiro principal chamado \textbf{main.cpp} que describe a interface de liña de comandos
 		independente da librería que se emprega para as deteccións, un ficheiro \textbf{XmlUtils} que contén as
@@ -226,16 +245,8 @@
 		poder escribilo coas funcionalidades de XmlUtils.
 		
 		Para maximizar o rendemento evitase crear clases innecesarias: para o caso da DetectionDto é dabondo
-		cunha estructura, e no caso de XmlUtils y RecognitionFacade, ao non ter estado chega con ficheiros
+		cunha estrutura, e no caso de XmlUtils y RecognitionFacade, ao non ter estado chega con ficheiros
 		que definen funcións.
-		
-		\begin{figure}[htp]
-		\begin{center}
-			\includegraphics[scale=0.25]{figures/PaqXmlRecognition.png}
-			\caption{Diagrama de clases do paquete XmlRecognition}
-		\label{fig:PaqXmlRecognition}
-		\end{center}
-		\end{figure}
 		
 		Coa elaboración deste paquete queda listo o sistema de recoñecemento, agora solo resta que a capa web
 		sexa capaz de chamar ao sistema e mostrar as análises en XML sobre o vídeo. Será o que abordaremos
@@ -251,7 +262,8 @@
 		
 		A solución deseñada é un sistema de notificacións que permite ao usuario rexistrado navegar libremente
 		pola aplicación mentres o vídeo se está a analizar, mostrando en todo momento unha barra de progreso
-		para o proceso que se está a seguir nestes intres.
+		para o proceso que se está a seguir nestes intres como se pode observar na imaxe 
+		\ref{fig:Notificacions}.
 		
 		\begin{figure}[htp]
 		\begin{center}
@@ -262,7 +274,7 @@
 		\end{figure}
 		
 		Para albergar tanto o sistema de notificacións como os procesos que engloba, creouse o módulo de 
-		Django video\_upload composto polas clases que se poden observar no seguinte diagrama:
+		Django video\_upload composto polas clases que se poden observar no diagrama \ref{fig:ClassDiagram}.
 
 		\begin{figure}[htp]
 		\begin{center}
@@ -289,10 +301,8 @@
 		dadas as complicacións de base de datos que isto carrexa. En lugar diso empregase o 
 		tipado dinámico de Python para pasar os obxectos tanto de UploadProcess como de 
 		AnalysisProcess á clase ProcessState, que ao invocar só os métodos comúns non é capaz de 
-		percibir a diferenza
-		entre ambas.
-		
-		O seu funcionamento mostrase no gráfico:
+		percibir a diferenza entre ambas. O seu funcionamento mostrase no gráfico
+		\ref{fig:AnaliseVideoWeb}.
 		
 		\begin{figure}[htp]
 		\begin{center}
@@ -371,7 +381,8 @@
     código agarde unha cantidade de tempo antes de volver a executarse. Esta cantidade de tempo 
     calculase en base a execucións anteriores e ao número de fotogramas por segundo desa fonte de 
     vídeo, que o servidor inclúe no HTML mediante o atributo fps tras obtelos datos dunha chamada ao
-    método VideoUtils.get\_fps que á súa vez chama ao ffmpeg.
+    método VideoUtils.get\_fps que á súa vez chama ao ffmpeg como se ve no diagrama de secuencia 
+    \ref{fig:GenerateFpsDjango}.
     
     \begin{figure}[htp]
     \begin{center}
@@ -411,7 +422,8 @@
     
     Xa que a traxectoria forma parte da análise de alto nivel, e esta 
     non é executada en tódolos fotogramas, unha traxectoria estará composta por puntos que indican a
-    posición do obxecto detectado con certa frecuencia. Para que entre un punto de detección e o seu
+    posición do obxecto detectado con certa frecuencia (figura \ref{fig:calcTrajectory}).
+    Para que entre un punto de detección e o seu
     seguinte pareza que hai avance, dando así sensación de fluidez, o que se fai é calcular dado o
     seguinte punto e o momento actual, cal é o lugar no que debería estar dito obxecto se se movese
     en liña recta entre ambos puntos, debuxando a liña da traxectoria ate esa posición calculada.
@@ -440,7 +452,8 @@
 
     Co fin de poder ollar todas as deteccións e podelas ordenar por orde de aparición, tempo en 
     escena, etc, crease unha táboa de obxectos detectados que ademais indica os obxectos que están
-    a aparecer agora mesmo no vídeo. A estes obxectos asígnaselle unha cor en función do seu 
+    a aparecer agora mesmo no vídeo, vexase figura\ref{fig:DetectionsTable}.
+    A estes obxectos asígnaselle unha cor en función do seu 
     identificador unívoco, que ven xa composto por tres valores entre 0 e 255, e que se trata 
     segundo o model RGB como se mostra na figura \ref{fig:lightColor} para obter cores mais 
     brillantes e vistosas.
@@ -478,7 +491,8 @@
 
     Probablemente a función mais necesaria e vistosa é a de amosar os obxectos detectados de forma 
     individualizada mentres estes están en pantalla. A estes efectos crease unha lista de deteccións
-    actuais que amosa unha imaxe de tódolos obxectos presentes no vídeo.
+    actuais que amosa unha imaxe de tódolos obxectos presentes no vídeo. O resultado pódese observar
+    na figura \ref{fig:detectedObjects}.
     
     \begin{figure}[htp]
     \begin{center}
@@ -514,7 +528,7 @@
     Por último para mostrar a información asociada a este obxecto detectado de algún xeito, 
     empregase a compoñente da librería bootstrap popover, que é unha ventá flotante que xurde ao
     carón da detección cando o rato pasa por enriba dela. Este popover personalizase coa cor 
-    concreta desa detección.
+    concreta desa detección (ver figura \ref{fig:popoverCapture}).
     
     \begin{figure}[htp]
     \begin{center}
@@ -557,8 +571,9 @@
     considerado sospeitoso. A nivel de interface web, este límite pode marcarse cunha barra 
     selectora chamada slider, que  se importou da libraría jQuery UI\cite{ComponenteSliderJqueryUi},
     e que se complementou cunha entrada de texto para dar a posibilidade de que o valor se seleccione
-    ou ben escribíndoo, ou ben a través do slider. Os valores a seleccionar variarán sempre entre 0
-    e o máximo valor atopado entre os ratios de anormalidade das deteccións.
+    ou ben escribíndoo, ou ben a través do slider (vexase figura \ref{fig:sliderCapture}).
+    Os valores a seleccionar variarán sempre entre 0 e o máximo valor atopado entre os ratios de
+    anormalidade das deteccións.
 
     \begin{figure}[htp]
     \begin{center}
@@ -572,7 +587,8 @@
     anómala, falemos do xeito no que se vaia realizar este marcado. A idea xeral consiste en 
     inabilitar o uso de diferentes cores e marcar de azul todas as deteccións, con excepción de 
     aquelas que teñan un comportamento anormal que serán marcadas de vermello, e aquelas cuxo 
-    comportamento inda non fose analizado que serán marcada en cor negra. Este uso de cores no só
+    comportamento inda non fose analizado que serán marcada en cor negra como se pode ver na imaxe
+    \ref{fig:suspiciousDetections}. Este uso de cores no só
     se emprega nas capas $<canvas>$ de información que se amosan sobre o vídeo senón tamén na táboa
     de obxectos detectados e na lista de deteccións actuais.
 
@@ -645,8 +661,8 @@
     un bucle coa función updateStatus que actualizará en cada fotograma o estado dos compoñentes 
     chamando á función ZoomVideoDetections.updateState(). Esta función tamén é chamada cando o vídeo
     lanza o evento play, ou ao cambiar o nivel de zoom mediante a barra selectora (slider).
+    O resultado final, mostrase quedou como se pode ver na figura \ref{fig:suspiciousPopupCapture}.
 
-    
     \begin{figure}[htp]
     \begin{center}
         \includegraphics[scale=0.4]{figures/suspiciousPopupCapture.png}
@@ -665,7 +681,7 @@
     A función ZoomVideoDetections.centerToLeftTop é a encargada de calcular dado un tamaño de ventá 
     e un centro, esta distancia á marxe esquerda superior do vídeo. Este cálculo no é sinxelo, xa que 
     hai que evitar que o recadro a seleccionar exceda das dimensións do vídeo. Esta casuística 
-    amosase na figura \ref{fig:centerToLeftTop}
+    amosase na figura \ref{fig:centerToLeftTop}.
     
     \begin{figure}[htp]
     \begin{center}
@@ -675,7 +691,89 @@
     \end{center}
     \end{figure}
     
+\section{Fase de Produción}
+
+    Para a publicación desta aplicación web, realizarase a súa montaxe sobre un servidor on-line,
+    é dicir, unha máquina conectada a internet que dispón de conexión directa a unha dirección IP
+    fixa, e a capacidade para manterse en funcionamento de forma continua. A esta IP referenciará un
+    servidor DNS, que se contratará xunto co dominio www.ancoweb.es a través do cal poderase acceder
+    á páxina.
+
+    \subsection{Dominio}
+        O dominio ten que ser rexistrado cos datos da persoa responsable, neste caso o autor do 
+        proxecto, a través dunha empresa rexistradora. Seleccionase a empresa 1\&1
+        \cite{1and1-website} xa que tamén oferta servizo DNS(Domain Name System) para apuntar ao 
+        servidor que contén a aplicación.
+        
+        Unha vez creado o dominio, a única configuración a establecer para que este funcione 
+        é a dirección do servidor, que indicaremos no rexistro de tipo A como se pode
+        ver na figura \ref{fig:1and1Capture} onde a dirección IP do servidor é 45.55.51.164.
+
+        \begin{figure}[htp]
+        \begin{center}
+            \includegraphics[scale=0.5]{figures/1and1Capture.png}
+            \caption{Panel de control da ferramenta 1and1}
+        \label{fig:1and1Capture}
+        \end{center}
+        \end{figure}
     
+    \subsection{Hosting}
+        Na dirección IP 45.55.51.164 reside o servidor montado para distribuír a aplicación web a 
+        todo aquel que se conecte. Este servidor pertence á empresa DigitalOcean
+        \cite{digitalocean-website} que se seleccionou de entre outros servizos de hosting por 
+        permitir a posibilidade de crear o entorno de produción dende zero, podendo así instalar 
+        todos os paquetes preciso para a integración das múltiples tecnoloxías implicadas neste 
+        proxecto.
+        
+        Neste caso seleccionouse como punto de partida unha máquina Ubuntu Server 14.04 con 1GB de 
+        memoria RAM, un só núcleo de CPU e 30GB de memoria SSD, todo elo localizado en Nova York.
+    
+    \subsection{Configuración do Servidor}
+        A partir da base que nos proporciona DigitalOcean, que é unha máquina Ubuntu Server 14.04 
+        completamente limpa, pódese seguir a guía contida no ficheiro production-README.md situado
+        na base do proxecto que indica con detalle todos os comandos a executar para una correcta 
+        configuración. 
+        
+        Como peza central escolleuse o servidor Apache2, este servidor será o encargado de servir 
+        tódolos arquivos, tanto páxinas web como ficheiros multimedia e recursos da aplicación. Mais
+        este servidor de por si só, non pode executar o framework de Django que se precisa para 
+        atender as peticións dos clientes, co que se engade un módulo chamado mod\_wsgi
+        que permite executar código python sobre o servidor mediante o ficheiro do proxecto
+        ``src/ancoweb/wsgi.py''. A dificultade especia está en configurar adecuadamente todo o entorno
+        para executar Python 3.4, pois é unha versión soportada por mod\_wsgi recentemente.
+        
+    \subsection{Axustes de Produción}
+        En produción existen toda unha serie de parámetros que cambian en relación co entorno de 
+        desenvolvemento, para soportalos creouse un novo ficheiro de configuración que herda do 
+        anterior chamado ``settings\_production.py'' e que está situado no directorio 
+        ``/src/ancoweb''.
+        
+        Para indicar ao sistema que empregue este ficheiro en lugar de settings.py, o que se fixo 
+        foi modificar o ficheiro ``src/ancoweb/wsgi.py'' facendo que este apunte ao ficheiro de 
+        produción en lugar de ao de desenvolvemento, así cada vez que o proxecto se execute mediante
+        mod\_wsgi empregaranse os axustes de produción, e en caso contrario os axustes por defecto.
+        
+        Un dos axustes de configuración mais importantes é o da variable STATIC\_ROOT, esta indica
+        onde se almacenarán os recursos da aplicación, e neste caso decidiuse empregar o directorio
+        ``/var/www/static/'' polo que antes de ser despregada todos o recursos precisos de tódalas 
+        aplicacións incluídas deben ser movidos a este directorio empregando o comando:
+        
+        \begin{verbatim}
+        sudo python manage.py collectstatic 
+            --settings=ancoweb.settings_production
+        \end{verbatim}
+
+        O outro axuste de gran interese é o lugar no que se almacenan os ficheiros multimedia, pois
+        a meirande parte da aplicación xira en torno a eles. Neste caso a variable en conflito é 
+        MEDIA\_ROOT, que no caso do entorno de produción tomará o valor ``/var/www/media/'', e en 
+        caso de estar en desenvolvemento ``MEDIA\_ROOT = str(BASE\_DIR / 'media/')''. Isto obriga ao 
+        igual que cos recursos do proxecto a mover os arquivos multimedia cada vez que se desexe 
+        despregar a aplicación, neste caso co comando:
+        
+        \begin{verbatim}
+        sudo cp -R ancoweb-TFG/src/media/ /var/www
+        \end{verbatim}
+
     
     
     
