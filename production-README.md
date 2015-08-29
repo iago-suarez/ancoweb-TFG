@@ -79,29 +79,33 @@ Ahora configuraremos o ficheiro /etc/apache2/sites-available/000-default.conf qu
 
 	sudo nano /etc/apache2/sites-available/000-default.conf
 
-> <VirtualHost *:80>
-> 	...
-> 	Alias /static /var/www/static
-> 	<Directory /var/www/static>
-> 		Require all granted
-> 	</Directory>
-> 
-> 	Alias /media /var/www/media
-> 	<Directory /var/www/media>
-> 		Require all granted
-> 	</Directory>
-> 
-> 	<Directory /home/django/ancoweb-TFG/src/ancoweb>
-> 	<Files wsgi.py>
-> 		Require all granted
-> 	</Files>
-> 	</Directory>
-> 
-> 	WSGIDaemonProcess ancoweb python-path=/home/django/ancoweb-TFG/src:/home/django/ancoweb/lib/python3.4/site-packages
-> 	WSGIProcessGroup ancoweb
-> 	WSGIScriptAlias / /home/django/ancoweb-TFG/src/ancoweb/wsgi.py
-> 
-> </VirtualHost>
+
+	<VirtualHost *:80>
+	...
+
+	    Alias /static /var/www/static
+	    <Directory /var/www/static>
+	        Require all granted
+	    </Directory>
+
+	    Alias /media /var/www/media
+	    <Directory /var/www/media>
+	        Require all granted
+	    </Directory>
+
+	    <Directory /home/django/ancoweb-TFG/src/ancoweb>
+	        <Files wsgi.py>
+	            Require all granted
+	        </Files>
+	    </Directory>
+
+	    WSGIDaemonProcess ancoweb python-path=/home/django/ancoweb-TFG/src:/home/django/ancoweb/lib/python3.4/site-packages
+	    WSGIProcessGroup ancoweb
+	    WSGIScriptAlias / /home/django/ancoweb-TFG/src/ancoweb/wsgi.py
+
+	</VirtualHost>
+
+
 
 Por outra parte sempre podremos botar un vistazo aos erros xerados por Apache no ficheiro de log /var/log/apache2/error.log 
 
