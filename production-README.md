@@ -77,9 +77,6 @@ Por último desactivamos o entorno virtual creado anteriormente para pasar a con
 
 Ahora configuraremos o ficheiro /etc/apache2/sites-available/000-default.conf que controla o comportamento do módulo mod_wsgi, que é o encargado de executar dende apache todo o comportamento programado na aplicación django
 
-	sudo nano /etc/apache2/sites-available/000-default.conf
-
-
 	<VirtualHost *:80>
 	...
 
