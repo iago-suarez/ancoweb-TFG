@@ -84,24 +84,31 @@ continuación.
         programación web, xa que o seu functionamento asemellase moito ao que un humano faría para 
         comprobar o correcto funcionamento da web sendo por tanto moi intuitivo.
         
-        %TODO Modificar si se testean mais cousas 
         No noso caso comprobanse con Selenium, o logueado de Usuarios, a subida de vídeos e o listado de
         vídeos.
     
 \section{Probas de Sistema}
-
-    %TODO 
+    As probas de sistema neste caso consisten na comprobación manual de que a páxina se desprega 
+    correctamente no entorno de produción. Para esta proba procedese subindo á plataforma mediante 
+    o dominio \url{www.ancoweb.es} dous vídeo diferentes: Un representativo de un entorno aberto e público
+    e outro pertencente a un espazo interior, posteriormente comprobase que ambos vídeos foron
+    subidos e analizados correctamente así como que as distintas compoñentes que interactúan na 
+    páxina de reprodución do vídeo funcionan de forma coherente co contido de este. 
 
 \section{Probas de Aceptación}
-    Por último están as probas de Aceptación que se fan co obxectivo de comprobar se o software cumpre
+    Por último están as probas de Aceptación fanse co obxectivo de comprobar se o software cumpre
     coas expectativas que o cliente tiña de el. A estes efectos cada vez que se finalizaba unha 
-    funcionalidade realizouse acorde coa metodoloxía unha proba completa por parte do titor Brais 
+    funcionalidade realizouse, acorde coa metodoloxía, unha proba completa por parte do titor Brais 
     Cancela que garantise que todo o implementado era acorde cos que se desexaba. Ocasionalmente o 
-    proxecto tamén foi revisado polos outros titores aportandolle así un toque mais plural.
+    proxecto tamén foi revisado polos outros titores aportándolle así un carácter mais plural.
     
 
-\chapter{Calidade}
-	Os parámetros de calidade empregados para a codificación do código fonte son:
-		JavaScript Style Guide and Coding Conventions\cite{javascript-style-guide}
-		JavaScript Best Practices:\cite{javascript-best-practices}
-		PEP8 Style Guide for Python Code: \cite{pepe8-style-guide}
+\section{Calidade}
+	Os parámetros de calidade empregados para a codificación do código fonte son os seguintes:
+    \begin{itemize}
+     \item Para o código \textbf{Javascript}: JavaScript Style Guide and Coding Conventions 
+     \cite{javascript-style-guide}, tamén apoiado nas JavaScript Best Practices 
+     \cite{javascript-best-practices}.
+     \item Con respecto ao código \textbf{Python} seguiuse a PEP8 Style Guide for Python Code
+     \cite{pepe8-style-guide}.
+    \end{itemize}
