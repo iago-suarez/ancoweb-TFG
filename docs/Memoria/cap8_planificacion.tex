@@ -11,7 +11,9 @@ Como se explicou no capítulo referente á metodoloxía, o proxecto subdividiras
 iteracións de aproximadamente un mes de duración\footnote{As datas non son de un mes exacto xa que
 se adaptaron estes períodos en función da carga lectiva e de outras variables de carácter persoal 
 para cumprir así coa faceta incremental do proxecto, facendo que cada nova Release aportase unha
-serie de características de interese.}, nas que se acometerán unha serie de 
+serie de características de interese.} e trinta horas de traballo aproximadamente\footnote{ 
+A excepción do último sprint pertencente ao mes de Agosto, no que se dipoñerá de tempo completo},
+nas que se acometerán unha serie de 
 funcionalidades concretas. Para o seguimento do avance do proxecto, o seu control e avaliación 
 empregase a ferramenta YouTrack, que a parte de xestionar de forma áxil as tarefas a realizar, 
 permite xerar informes de proxecto como os que se verán a continuación. A parte disto, por cada 
@@ -25,7 +27,7 @@ seu comentario asociado. As Releases pódense ver na seguinte lista:
  \item \textbf{v0.4 - Solventados bug's e mellorada a estratexia de probas} (15 maio - 11 xuño)
  \item \textbf{v0.5 - Traxectorias}  (11 xuño - 10 xulio)
  \item \textbf{v0.6 - Detección do comportamento anómalo} (10 xulio - 24 xulio)
- \item \textbf{v0.7 - Memoria y últimos detalles} (24 xulio - 30 agosto)
+ \item \textbf{v1.0 - Memoria e últimos detalles} (24 xulio - 30 agosto)
 \end{itemize}
 
 A primeira iteración do proxecto estivo principalmente centrada na formación sobre o framework
@@ -43,37 +45,57 @@ foi configurando Travis CI como servidor de integración continua, inda que a am
 de linguaxes e tecnoloxías presentes no proxecto fixo que esta integración continua fallase 
 eventualmente por motivos de configuración.
 
-\begin{figure}[htp]
-\begin{center}
-    \includegraphics[scale=0.5]{figures/YouTrack/taboaCompletaHoras.png}
-    \caption{Táboa completa de horas estimadas fronte a empregadas por versión}
-\label{fig:taboaCompletaHoras}
-\end{center}
-\end{figure}
+
+Na gráfica \ref{fig:fluxoAcumulado} podemos ver o fluxo acumulado de tarefas no cal se distinguen
+as tarefas \textbf{abertas}, \textbf{en curso} e \textbf{solucionadas}. A gráfica amosa un fluxo 
+crecente de tarefas solucionadas correspondentes ás tarefas realizadas en cada iteración e tamén 
+unha serie de tarefas pendentes que corresponden as tarefas do Product Backlog que nunca chegaron
+a entrar en ningún Sprint por falta de prioridade e que conformarán a meirande parte das liñas 
+futuras do capítulo\ref{sec:linhasFuturas} sobre as liñas futuras da aplicación.
 
 \begin{figure}[htp]
 \begin{center}
-    \includegraphics[scale=0.35]{figures/YouTrack/fluxoAcumulado.png}
+    \includegraphics[scale=0.6]{figures/YouTrack/fluxoAcumulado.png}
     \caption{Gráfica do fluxo de tarefas acumulado ao longo do proxecto}
 \label{fig:fluxoAcumulado}
 \end{center}
 \end{figure}
 
+Por outra parte o gráfico de evolución do proxecto (figura \ref{fig:evolucionProxecto}) marcou 
+durante o desenvolvemento dos sprints a liña idónea e por tanto a velocidade en relación ao ritmo
+ideal. Nótese que a gráfica estima por número de tarefas e non por horas estimadas, isto 
+explica as desviacións como as do mes de agosto, xa que ao dedicarse esta iteración practicamente á
+memoria, a gráfica permanece estanca aínda que se sigan sumando horas de traballo de forma continua.
+
 \begin{figure}[htp]
 \begin{center}
-    \includegraphics[scale=0.35]{figures/YouTrack/evolucionProxecto.png}
+    \includegraphics[scale=0.6]{figures/YouTrack/evolucionProxecto.png}
     \caption{Gráfica da evolución do proxecto}
-\label{fig:fluxoAcumulado}
+\label{fig:evolucionProxecto}
 \end{center}
 \end{figure}
 
-Na figura \ref{fig:taboaCompletaHoras} pódense ver toda-las horas adicadas fronte ás horas
-previstas, xeralmente a predición é acertada, inda que como é lóxico non é cen por cen exacta. No 
-total das horas pódese ver unha gran diferencia entre as horas estimadas e as horas adicadas, isto é
-así porque YouTrack contabiliza tamén as horas asignadas a tarefas que non foron estimadas, como son
-a elaboración da memoria ou a comprobación en distintos navegadores.
 
 
+\begin{figure}[htp]
+\begin{center}
+    \includegraphics[scale=0.7]{figures/YouTrack/taboaHoras2_1.png}
+    \caption{Táboa de horas adicadas ao proxecto por versión (1)}
+\label{fig:taboaHoras2_1}
+\end{center}
+\end{figure}
 
-Os datos do total de horas empregadas suman XXXXX horas, que a un prezo de 10 \euro a hora fan un custo
-total de XXXXXXXXX \euro.
+Nas figuras\ref{fig:taboaHoras2_1} \ref{fig:taboaHoras2_2} pódense ver toda-las horas adicadas 
+fronte ás horas previstas, xeralmente a predición é acertada, inda que como é lóxico non é cen por
+cen exacta.
+
+\begin{figure}[htp]
+\begin{center}
+    \includegraphics[scale=0.7]{figures/YouTrack/taboaHoras2_2.png}
+    \caption{Táboa de horas adicadas ao proxecto por versión (2)}
+\label{fig:taboaHoras2_2}
+\end{center}
+\end{figure}
+
+Os datos do total de horas empregadas para a versión v1.0 suman 238 horas, que a un prezo de 
+12 \euro a hora fan un custo total de 2.856,00 \euro.
