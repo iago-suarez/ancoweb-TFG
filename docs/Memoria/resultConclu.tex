@@ -9,11 +9,12 @@ que nun futuro próximo se siga a mellorar esta aplicación de cara a dar visibi
 traballos de investigación que moitas veces teñen tan complicado amosar a potencia dos seus 
 resultados.
 
+
 \chapter{Liñas Futuras}
 \label{sec:linhasFuturas}
     En canto ás liñas futuras da aplicación, estas están compostas en parte por incidencias do 
     Product Backlog que por falta de tempo ou por ter unha baixa prioridade quedaron como tarefas 
-    abertas no sitema de Xestión de Incidencias, e tamén en parte por outras funcionalidades que se
+    abertas no sistema de Xestión de Incidencias, e tamén en parte por outras funcionalidades que se
     consideran de interese no futuro pero que en ningún momento chegaron a entrar no Product Backlog
     polas súas esixencias en tempo.
     
@@ -21,14 +22,14 @@ resultados.
     
     \begin{itemize}
      \item \textbf{Cambiar as sentencias Popen shell='TRUE':}     
-        Popen é unha clase empregada dende o código python do servidor para executar dende a 
+        Popen é unha clase empregada dende o código Python do servidor para executar dende a 
         terminal unha acción determinada, pero ao executar co parámetro shell=TRUE, a información
-        de se se produciu algún erro perdese. Deberíase empregar co modo shell=TRUE inda que isto
+        de se se produciu algún erro perdese. Deberíase empregar co modo shell=FALSE inda que isto
         require de varias adaptacións no código.
      \item \textbf{Internacionalización:}
         Estaría ben traducir a aplicación a Español e Galego.
      \item \textbf{Cancelar Subida:}
-        Actualmente existe un bug que non permite cancela unha subida mentres esta está en proceso,
+        Actualmente existe un bug que non permite cancelar unha subida mentres esta está en proceso,
         o problema está asociado ao uso de thread's debido ao acceso a Base de datos.
      \item \textbf{Modificar o algoritmo de actualización da barra de progreso:}
         En un futuro, deberíase modificar o algoritmo de progreso de unha notificación de subida para intentar
@@ -36,7 +37,7 @@ resultados.
         cando o avance de barra de progreso sexa lento e se acelere este cando o avance sexa veloz.
     \item \textbf{Mostrar Potencial:}
         Unha funcionalidade futura sería a de mostrar en cada momento cales son os puntos polo que 
-        pasan mais obxectos, isto está almacenado no sistema de recoñecemento como unha matriz que 
+        pasan máis obxectos, isto está almacenado no sistema de recoñecemento como unha matriz que 
         contén o potencial de cada punto da imaxe, e a tarefa consistiría en amosar estes potenciais
         nunha capa de información superposta ao vídeo.
     \item \textbf{Mostrar velocidade:}
@@ -50,11 +51,11 @@ resultados.
     \item \textbf{Error ao subir dous vídeos simultaneamente}
         Revisar esta casuística na que se soben dous vídeos simultaneamente pois en certos momentos
         parece ter un comportamento erróneo.
-    \item \textbf{Illar Tracking da análise de alto nivel}
+    \item \textbf{Illar Tracking da análise de alto nivel:}
         De cara a facilitar a investigación estaría ben poder realizar solo o análise de alto nivel 
-        proporcionando a lista de deteccións, ou simplemente empregar unha análise de baixo nivel 
+        proporcionando a lista de deteccións, ou simplemente empregar a análise de baixo nivel 
         para detectar obxectos.
-    \item \textbf{Engadir compatibilidade con IE}
+    \item \textbf{Engadir compatibilidade con IE:}
         Actualmente a aplicación non é compatible con Internet Explorer, en un futuro estaría ben 
         soportar este navegador.
     \end{itemize}
@@ -63,33 +64,33 @@ resultados.
     \section{Outras funcionalidades de interese}
     
         \subsection{Vídeo en Directo}
-            De cara a un futuro a funcionalidade mais desexada é a de facer o análise en directo 
+            De cara a un futuro a funcionalidade máis desexada é a de facer o análise en directo 
             empregando o vídeo procedente dunha cámara. Pero isto prantexa unha serie de retos 
             importantes como é a sincronización do vídeo co tempo de análise ou o envío dos datos desta 
-            análise á capa web, xa que isto rompe co modelo HTTP de peticións a un servidor.
+            análise á capa web, xa que isto rompe co modelo HTTP de peticións a un servidor.\\
             
             A solución para o problema da sincronización entre o vídeo e o tracking, pasa por retardar o
             envío do vídeo unha determinada cantidade de tempo, suficiente como para que se procese e se
             faga a análise.
             
             Non obstante como o tempo de análise non se pode prever de forma exacta, habería
-            necesariamente que facer axustes para que cando a análise fose mais veloz que a reprodución
+            necesariamente que facer axustes para que cando a análise fose máis veloz que a reprodución
             do vídeo, a capa web mantese un buffer cos resultados recibidos e os amosase no momento 
-            correcto. E por outra parte se o vídeo evolucionase mais rápido que a análise, o lado 
+            correcto. E por outra parte se o vídeo evolucionase máis rápido que a análise, o lado 
             servidor debería reducir o número de fotogramas a analizar descartando por exemplo un de
             cada dous ou de cada tres fotogramas.
             
-            Para o problema do envío dos datos á capa web, o mais lóxico podería ser empregar unha 
+            Para o problema do envío dos datos á capa web, o máis lóxico podería ser empregar unha 
             modificación do protocolo RTSP (Real-Time Streaming Protocol) visto na sección 
             \ref{sec:streaming}, de xeito que por un lado se envíe o vídeo en directo, e por outra parte
-            toda a información precisa para a súa reprodución mais os datos en XML sobre as deteccións.
+            toda a información precisa para a súa reprodución máis os datos en XML sobre as deteccións.
         
         \subsection{Panel de Control}
             Se se chegase a desenvolver un módulo que permita streaming de vídeo en directo sería de
             gran interese ter un panel no que se poidan visualizar as imaxes procedentes de 
             distintas cámaras simultaneamente. Inda que isto tamén podería facerse integrando a 
             aplicación con algunha outra aplicación de vídeo-vixilancia open-source como as citadas 
-            no apartado \ref{sec:video-vixilancia-libre}
+            no apartado \ref{sec:video-vixilancia-libre}.
   
   
   

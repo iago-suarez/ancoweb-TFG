@@ -1,18 +1,28 @@
 \chapter{Fundamentos Teóricos e Conceptos Previos}
 
-O desenvolvemento dunha aplicación web non é algo trivial e mais se temos en conta todas
+O desenvolvemento dunha aplicación web non é algo trivial e máis se temos en conta todas
 as peculiaridades que este proxecto contén. Para a súa comprensión é preciso coñecer unha
 serie de conceptos teóricos que se expoñen a continuación:
 
 \section{Arquitectura web}
-	Neste proxecto séguese unha Arquitectura Web baseada no modelo cliente-servidor, que 
+	No proxecto séguese unha Arquitectura Web baseada no modelo cliente-servidor, que 
 	consiste nun lado servidor que distribúe os recursos como poden ser o contido multimedia
-	(vídeos, imaxes, etc) ou as páxinas web ao outro lado, o cliente, que típicamente corre 
+	(vídeos, imaxes, etc) ou as páxinas web ao outro lado, o cliente, que tipicamente corre 
 	nun navegador web interpretando as páxinas html e o código javascript asociado a estas.
 	
-	No noso caso a parte servidor estará dividida en dúas compoñentes claramente diferenciadas,
-	o sistema para a análise do comportamento, e a aplicación web que permitirá o acceso a este, 
-	os fundamentos de ámbalas dúas partes explícanse a continuación.
+	Neste caso a parte servidor estará dividida en dúas compoñentes claramente diferenciadas,
+	o sistema para a análise do comportamento e a aplicación web que permitirá o acceso a este, 
+	os fundamentos de ámbalas dúas partes pódense ver no diagrama 
+	\ref{fig:ArqSistemaSimplificado} e os fundamentos nos que están baseadas explícanse a 
+	continuación.
+	
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.45]{figures/ArqSistemaSimplificado.pdf}
+        \caption{Diagrama simplificado da Arquitectura do Sistema}
+    \label{fig:ArqSistemaSimplificado}
+    \end{center}
+    \end{figure}
 	
 \section{Análise do comportamento}
 	É un dos campos de investigación mas activos hoxe en día. A idea principal na que se 
@@ -25,7 +35,7 @@ serie de conceptos teóricos que se expoñen a continuación:
 	un grupo de persoas...).
 	
 	Tanto neste proxecto como nos sistemas para a análise do comportamento en xeral, 
-	pódense discernir tres tarefas importantes que colaboran entre si\cite{brais-thesis}:
+	pódense discernir tres tarefas importantes que colaboran entre si \cite{brais-thesis}:
 	
 	\begin{itemize}
 	
@@ -48,24 +58,28 @@ serie de conceptos teóricos que se expoñen a continuación:
 	
 	\end{itemize}	
 	
-	Os resultados mais destacables destas técnicas cos que a aplicación terá que traballar serán:
+	Os resultados máis destacables destas técnicas cos que a aplicación terá que traballar serán:
 	\begin{itemize}
 		\item A lista de obxectos detectados para cada un dos fotogramas e a súa posición neles
 		\item A traxectoria de cada un dos obxectos detectados
 		\item O grao de anormalidade da traxectoria seguida por un obxecto en cada un dos fotogramas
-		\item A velocidade de un obxecto determinado.
 	\end{itemize}
 	
-	Estas tres tarefas requiren dunha serie de cálculos matemáticos baseados en técnicas moi diversas,
-	para realizar toda esta serie de cálculos, empregase algunha biblioteca de código que simplifique 
-	o traballo a realizar, e neste caso, esta biblioteca é OpenCV.
+	Estas tres tarefas agrupanse baixo un mesmo sistema ao que chamaremos Sistema de Recoñecemento
+	e que xunto co servidor web, apoiado nos fundamentos que veremos a continuación, forman o lado
+	servidor deste proxecto. 
 	
 \section{Programación Web}
 
 	A programación web de aplicacións de carácter empresarial require do coñecemento da rede, ademais
 	do de unha serie de ferramentas e estratexias para chegar a un deseño sostible e de calidade.
 	
-	A arquitectura clásica das aplicacións web pódese ver no gráfico \ref{fig:ArquitecturaAppWeb}
+	A arquitectura clásica das aplicacións web pódese ver no gráfico \ref{fig:ArquitecturaAppWeb}, 
+	ela contén unha parte cliente que se executa no navegador do usuario, e unha parte servidor que
+	á súa vez acostuma a dividirse nunha BD (Base de Datos) que almacena a información precisa, unha 
+	capa modelo que reflexa o modelo de negocio da nosa aplicación tipicamente nalgunha linguaxe 
+	de programación e por último unha capa de IU Web (Interface de Usuario Web) que se encarga de 
+	transformar os datos da capa modelo a un formato web comprensible polo cliente e viceversa.
 	
 	\begin{figure}[htp]
 	\begin{center}
@@ -75,50 +89,58 @@ serie de conceptos teóricos que se expoñen a continuación:
 	\end{center}
 	\end{figure}
 
-	As técnicas e estratexias mais importantes á hora de construír unha aplicación web relátanse nos
+	As técnicas e estratexias máis importantes á hora de construír unha aplicación web relátanse nos
 	puntos subseguistes:
 	
 	\subsection {Desenvolvemento Áxil}
 		Para reducir custos e poder proporcionar solucións rápidas é preciso que as 
-		aplicacións web's de caracter empresarial se leven a cabo en pouco tempo e con
-		bos principios de enxeñaría, a isto contribúen en gran medida as tecnoloxías 
-		que se amosan a continuación.
-	
-	\subsection{Soporte para transaccións}
-		Unha transacción nun Sistema Xestor de Base de Datos (SGBD) é un conxunto de ordes que
-		se executan formando unha unidade de traballo, de forma invisible e atómica. 
-		As transaccións cobran gran importancia nas aplicacións web debido á inestabilidade 
-		da rede e á concorrencia dos distintos clientes conectados, polo que é axuda a un 
-		desenvolvemento moi áxil que a tecnoloxía traia a súa xestión integrada.
-	
-	\subsection{Object-Relational Mapping (ORM)}
-		Os mapeado obxecto-relación é unha das técnicas de programación que mais velocidade imprimen
-		na construcción de webs, xa que converte os datos dunha linguaxe Orientada a Obxectos (OO) a 
-		datos de un sistema relacional no que son persistidos e viceversa, aforrando ao programador
-		o traballo de ter que programar o código para esta tarefa. É desexable pois que a tecnoloxía
-		a empregar dispoña de un mapeador obxecto-relacional ben integrado, algúns exemplos disto poden
-		ser: a combinación Java+Maven+Hibernate, o EF(Entity Framework) de Microsoft ou os Models de Django.
-	
-	\subsection{Xestión de Layout}
-		Tamén resulta moi practico dispoñer dunha linguaxe de prantilla que permitan xerar contido
-		html ben estruturado dinamicamente. Algúns exemplos son o Sistema de Templates de Django, o 
-		Sistema JSP de Spring, a libraría Thymeleaf ou os compoñentes de ASP.NET. Todos eles axudan 
-		a xerar contido HTML de xeito sinxelo e escalable que logo será enviado ao cliente, de
-		todolos xeitos esta parte cliente as veces precisa comunicarse co servidor sen que sexa 
-		preciso unha recarga da páxina e para elo empregase AJAX.
+		aplicacións web's de carácter empresarial se leven a cabo en pouco tempo e con
+		bos principios de enxeñaría, a isto contribúen en gran medida as estratexias de programación 
+		que se explican a continuación e que se ven no diagrama \ref{fig:fundamentos}.
+		
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.4]{figures/fundamentos.pdf}
+        \caption{Diagrama sobre os conceptos de programación}
+    \label{fig:fundamentos}
+    \end{center}
+    \end{figure}
+		
+        \subsubsection{Soporte para transaccións}
+            Unha transacción nun Sistema Xestor de Base de Datos (SGBD) é un conxunto de ordes que
+            se executan formando unha unidade de traballo, de forma invisible e atómica. 
+            As transaccións cobran gran importancia nas aplicacións web debido á inestabilidade 
+            da rede e á concorrencia dos distintos clientes conectados, polo que é axuda a un 
+            desenvolvemento moi áxil que a tecnoloxía traia a súa xestión integrada.
+        
+        \subsubsection{Object-Relational Mapping (ORM)}
+            Os mapeado obxecto-relación é unha das técnicas de programación que máis velocidade imprimen
+            na construcción de webs, xa que converte os datos dunha linguaxe Orientada a Obxectos (OO) a 
+            datos de un sistema relacional no que son persistidos e viceversa, aforrando ao programador
+            o traballo de ter que programar o código para esta tarefa. É desexable pois que a tecnoloxía
+            a empregar dispoña dun mapeador obxecto-relacional ben integrado, algúns exemplos disto poden
+            ser: a combinación Java+Maven+Hibernate, o EF(Entity Framework) de Microsoft ou os Models de Django.
+        
+        \subsubsection{Xestión de Layout}
+            Tamén resulta moi practico dispoñer dunha linguaxe de plantilla que permitan xerar contido
+            html ben estruturado dinamicamente. Algúns exemplos son o Sistema de Templates de Django, o 
+            Sistema JSP de Spring, a libraría Thymeleaf ou os compoñentes de ASP.NET. Todos eles axudan 
+            a xerar contido HTML de xeito sinxelo e escalable que logo será enviado ao cliente. De
+            tódolos xeitos esta parte cliente as veces precisa comunicarse co servidor sen que sexa 
+            preciso unha recarga da páxina e para elo empregase AJAX.
 		
     \subsection{AJAX}
 		AJAX ou Asynchronous JavaScript And XML é unha tecnoloxía da web empregada para crear 
 		aplicacións interactivas, estas aplicacións executanse no navegador dos usuarios mentres 
 		manteñen unha comunicación asíncrona co lado servidor en segundo plano. Normalmente 
-		emplegrase javascript coma linguaxe para a realización das chamadas asíncronas en combinación
+		empregase javascript coma linguaxe para a realización das chamadas asíncronas en combinación
 		con algunha linguaxe para a definición de obxectos como XML ou JSON, para as que ademais os
 		propios navegadores adoitan a facilitar ferramentas de parsing.
 		
 	\subsection{Outras cuestións da web}
 		A maiores existe toda unha gama de outras funcionalidades que cobran importancia cando deseñamos
 		e construímos unha web como o manexo de erros nos formularios, internacionalización (i18n), 
-		visualización de grande cantidades de datos(en listas ou táboas), seguridade...
+		visualización de grande cantidades de datos (en listas ou táboas), seguridade...
 		
 		
 \section{O Vídeo}
@@ -135,13 +157,13 @@ serie de conceptos teóricos que se expoñen a continuación:
     \subsection{Codec's}
         Os codec's teñen como función principal a de transformar unha sinal de vídeo para que poida
         ser visto. A maioría dos codec's provocan con cada transformación unha perda de información
-        para conseguir un tamaño final o mais pequeno posible, estes codec's chámanse lossless (con 
+        para conseguir un tamaño final o máis pequeno posible, estes codec's chámanse lossless (con 
         perdida) e a pesares de que perden calidade soe compensar pola cantidade de espazo que 
-        aforran.
+        aforran ao comprimilo vídeo.
         
         A parte de este fenómeno da compresión tamén cobra moita importancia outros aspectos 
-        relacionados co vídeo como a reprodución e sincronización de son, os subtítulos do vídeo...
-        Todo isto depende do formato no que se almacene o vídeo.
+        relacionados co vídeo como a reprodución e sincronización de son, os subtítulos do vídeo,
+        as imaxes representativas deste... Todo isto depende do formato no que se almacene o vídeo.
         
     \subsection{Formato de Vídeo}
         O formato dun vídeo determina como se almacenan os distintos tipos de información involucrada
@@ -151,9 +173,9 @@ serie de conceptos teóricos que se expoñen a continuación:
         
         \begin{itemize}
         \item \textbf{AVI (Audio Video Interleaved):} 
-            Sendo un dos formatos mais famosos pode conter un vídeo dunha calidade excelente pero
+            Sendo un dos formatos máis famosos pode conter un vídeo dunha calidade excelente pero
             soe requerir dunha gran capacidade. Os codec's que se soen empregar neste formato pola 
-            súa capacidade de compresión e calidade aceptable son DivX y XviD, inda que tamén se 
+            súa capacidade de compresión e calidade aceptable son DivX e XviD, inda que tamén se 
             permiten outros como DV(Digital Video), CinePak... 
             
         \item \textbf{MKV (Matroska):}
@@ -163,7 +185,7 @@ serie de conceptos teóricos que se expoñen a continuación:
             Mentres que para o son é habitual empregar o codec de audio Vorbis.
 
         \item \textbf{ WebM (Google, 2010):}
-            Un dos formatos mais recentes é o WebM (WebMovie), un proxecto lixeiramente baseado en 
+            Un dos formatos máis recentes é o WebM (WebMovie), un proxecto lixeiramente baseado en 
             Matroska adquirido e liberalizado por Google en 2010 co obxectivo de empregalo con HTML5
             como estándar libre. O formato ten un excelente rendemento e xunto ao codec VP9, motivo
             polo cal forma parte dos recomendados pola W3C.
@@ -181,7 +203,7 @@ serie de conceptos teóricos que se expoñen a continuación:
         crear estándares en canto ao mundo do audio e o vídeo.
         
         Froito do traballo deste grupo naceron os formatos MPEG-1 (calidade CD), MPEG-2 (calidade 
-        DVD), MPEG-3 (orientado ao audio MP3) e MPEG-4 que é o que mais nos interesa xa que vai 
+        DVD), MPEG-3 (orientado ao audio MP3) e MPEG-4 que é o que máis nos interesa xa que vai 
         enfocado á compresión de vídeo e son na web, podendo incluír tamén subtítulos ou imaxes de 
         referencia. O ficheiros de este último formato teñen extensión .mp4.
 
@@ -194,7 +216,7 @@ serie de conceptos teóricos que se expoñen a continuación:
         grandes alternativas que varían en canto ao seu grao de escalabilidade, dificultade de 
         implementación, e calidade final do servizo:
         
-        \subsection{Pseudo Streaming ou Descarga Progresiva}
+        \subsubsection{Pseudo Streaming ou Descarga Progresiva}
             Consiste na descarga do vídeo por fragmentos, típicamente empregando o protocolo HTTP. 
             Neste formato, o reprodutor vai acumulando fragmentos de vídeo ata obter os precisos como 
             para comezar a reprodución, mais se o ancho de banda fose insuficiente, o vídeo remataría
@@ -204,14 +226,14 @@ serie de conceptos teóricos que se expoñen a continuación:
             Streaming, xa que é a diferenza do pseudo-streaming pode ser empregado para a emisión de
             contido en directo como o dunha cámara de seguridade.
             
-        \subsection{Streaming}
+        \subsubsection{Streaming}
         \label{sec:streaming}
             O verdadeiro streaming ( do inglés True Streaming) consiste na emisión en directo do 
             contido multimedia a través da rede, que o reprodutor reproduce no momento que recibe.
             Este outro xeito de distribuír vídeo, apoiase en axustar a calidade do vídeo ao ancho de
             banda do que dispón o cliente, evitando así interrupcións na reprodución.
             
-            O protocolo mais destacable á hora de empregar este tipo de streaming é RTSP (Real-Time
+            O protocolo máis destacable á hora de empregar este tipo de streaming é RTSP (Real-Time
             Streaming Protocol) que operando a nivel de aplicación permite controlar un ou varios fluxos 
             sincronizados de contido multimedia como se pode ver na figura \ref{fig:RTPS-diagram}.
             

@@ -1,6 +1,6 @@
 \chapter{Tecnoloxías Empregadas}
     
-    O feito de traballar na web, e moito mais o de facelo no ámbito da análise de vídeo, requiren 
+    O feito de traballar na web, e moito máis o de facelo no ámbito da análise de vídeo, requiren 
     que este sexa un proxecto cuns altos niveis de integración no que toman parte toda unha serie 
     de librerías e ferramentas software que axudan a alcanzar os fins desexado.
     
@@ -41,17 +41,17 @@
 
     \subsection{Back-End}
         En canto ás tecnoloxías para a elaboración do Back-End, hai que ter en conta que procesará
-        os datos proporcionados polo Front-End, atendendo as súas peticións, e xestionando o modelo de 
+        os datos proporcionados polo Front-End, atendendo as súas peticións e xestionando o modelo de 
         datos e os procesos implicados na aplicación. A maiores neste caso en concreto, o Back-End será
         o encargado de interactuar directamente co sistema de Análise de Vídeo.
         
         As tecnoloxías estudadas para esta parte do sistema son as seguintes:
 
         \subsubsection{Java}
-        Java é unha das linguaxes mais empregadas actualmente. Ademais existen diversos
+        Java é unha das linguaxes máis empregadas actualmente. Ademais existen diversos
         frameworks web como Tapestry ou SpringMVC e en canto as BD Hibernate, que facilitan o 
         seu uso, mais é preciso integralos xa que non forman parte da plataforma en si. A súas 
-        posibilidades de integración con c++ son altas grazas á interface JNI(Java Native 
+        posibilidades de integración con C++ son altas grazas á interface JNI (Java Native 
         Interface), pero a súa configuración pódese volver tediosa. Un dos proxectos estudados
         para ver o seu funcionamento é Red5 \cite{red5-github-url}.
         
@@ -74,7 +74,7 @@
         dispón do módulo Subprocess\cite{subprocess-module-url} que permite executar calquera
         comando pola terminal maximizando así a modularidade e a integración co algoritmo en C++.
         Por outra parte Django\cite{django-web-page-url} contén un potente ORM e un sistema de 
-        "Templates" que simplifica a parte web. Para concluír cabe destacar o feito de que 
+        ``Templates'' que simplifica a parte web. Para concluír cabe destacar o feito de que 
         python sexa unha linguaxe interpretada, xa que isto evita o paso previo de compilación.
         
         
@@ -85,7 +85,7 @@
         Por unha parte están as tecnoloxías que pola súa transcendencia e nivel de aceptación
         cosideranse xa imprescindibles no desenvolvemento web, estamos a falar de HTML e CSS linguaxes
         de facto para definir o contido e o aspecto visual respectivamente dunha páxina web.
-        De estas linguaxes seleccionaremos as súas versións mais recentes, que a día de hoxe son HTML5 e
+        De estas linguaxes seleccionaremos as súas versións máis recentes, que a día de hoxe son HTML5 e
         CSS3.
         
         Sen embargo, noutros campos coma son a reprodución de vídeo e o control de elementos dinámicos
@@ -96,11 +96,11 @@
         En canto á reprodución de vídeo e o control deste destacan principalmente dúas alternativas:
         
         \subsubsection{Vídeo en Flash}
-            Vídeo Flash é a tecnoloxía de reprodución de vídeo mais empregada e madura en
+            Vídeo Flash é a tecnoloxía de reprodución de vídeo máis empregada e madura en
             internet dende hai anos. Inicialmente creada por Macromedia e mercada por Adobe 
             en 2005, permite crear elaboradas animacións vectoriais, que logo poden proxectarse
             sobre un vídeo, mentres que tamén manexa os eventos de reprodución de vídeo como o 
-            play ou o stop.\\
+            play ou o stop.
             
             Ten certos problemas en tanto ao Posicionamento Web(SEO), reprodución en 
             dispositivos móbiles, accesibilidade... pero o meirande de todos eles é que mentres
@@ -109,25 +109,25 @@
             
         
         \subsubsection{Vídeo HTML5 + Javascript}
-            Esta é outra das combinacións mais empregadas actualmente, xa que segue o estándar
+            Esta é outra das combinacións máis empregadas actualmente, xa que segue o estándar
             do W3C (World Wide Web Consortium)\cite{w3schools-video-tag} no que se defíne como se
             han de mostrar e obter os vídeos dunha páxina codificada coa linguaxe HTML5., e 
             destaca por seres extremadamente sinxelo en comparación con Flash ou outras tecnoloxías.
             
             Se o comparamos con Flash podemos ver a seguintes \textbf{vantaxes:}
             \begin{itemize}
-                \item Resulta moito mais sinxelo de codificar grazas a que é o navegador o que se 
+                \item Resulta moito máis sinxelo de codificar grazas a que é o navegador o que se 
                 encarga da reprodución do vídeo mentres que o programador só define o xeito de obtelo.
                 \item Non precisa da instalación de ningún Plugin que poida dar problemas por exemplo 
                 en dispositivos móbiles.
                 \item Mentres que HTML5 e Javascript son libres, Flash é unha tecnoloxía propiedade de 
                 Adobe.
-                \item HTML5 + CSS3 dispón de mais facilidades se buscamos un deseño ``responsive''.
+                \item HTML5 + CSS3 dispón de máis facilidades se buscamos un deseño ``responsive''.
             \end{itemize}
 
             Será por tanto a alternativa escollida para a construción deste proxecto, e en canto ao 
             debuxo de figuras sobre o vídeo escolleremos o elemento $<canvas>$ tamén de HTML5. Todas
-            estas tecnoloxías e moitas mais explícanse en detalle no seguinte capítulo.
+            estas tecnoloxías e moitas máis explícanse en detalle no seguinte capítulo.
             
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -150,15 +150,19 @@
     \section{Navegador Ciente}
     
     O navegador do cliente empregará unha serie de tecnoloxías para mostrar os datos obtidos do 
-    servidor, as mais destacables son:
+    servidor, as máis destacables son:
     
     \subsection{HTML5}
+        Á hora de representar o contido dunha web precisase unha linguaxe que defina este contido,
+        estruturándoo e facendo que sexa mais lexible e comprensible para que o navegador poida 
+        representalo en pantalla, esta linguaxe é HTML.
+        
         HTML (HyperText Markup Language) é a linguaxe de marcas empregada en internet para a elaboración
         de páxinas web, define unha estrutura básica e un código para a definición do contido da páxina
         como poden ser texto, imaxes, vídeos... Existen diversas versións deste estándar, mais para este
-        proxecto empregarase a sua última versión HTML5, que inclúe toda unha serie de novos elementos.
+        proxecto empregarase a súa última versión HTML5, que inclúe toda unha serie de novos elementos.
         
-        Un dos compoñentes que mais empregaremos para a construción desta web será o elemento 
+        Un dos compoñentes que máis empregaremos para a construción desta web será o elemento 
         $<video>$ de HTML5 que achega unha serie de Métodos, Eventos e Propiedades
         \cite{w3school-video-events} que poden empregarse dende o código Javascript.
         
@@ -172,35 +176,38 @@
         dispositivos precisamos CSS. CSS(Cascading Style Sheets) é unha linguaxe para definir e 
         crear a presentación dun documento HTML.
         
-        Para elo defínense unha ou mais follas de estilos, que definen para cada elemento 
+        Para elo defínense unha ou máis follas de estilos, que definen para cada elemento 
         seleccionado nelas unha serie de características de estilo. No caso da aplicación a 
         desenvolver a política de follas de estilo será a de crear unha folla de estilo xeral para 
         conter as características de estilo comúns a todo o proxecto e a maiores as que sexan 
         precisas para páxinas ou elementos concretos, todo elo traballando coa versión 3 desta linguaxe.
-    
-        Por sorte, para simplificar o traballo na definición do estilo xeral da páxina existen 
-        librerías CSS como bootstrap que definen parte do código preciso, isto dá un estilo 
-        uniforme á web ao tempo que axuda a reducir o tempo de implementación.
         
         \subsubsection{Twitter Bootstrap}
+            CSS3 permite facer todos os axustes precisos en canto a estilo web, pero o problema é 
+            que elaborar un bo estilo leva unha cantidade de tempo cuantiosa e por ese motivo se 
+            precisa algunha libraría que marque unha pauta de estilo uniforme e que minimice o 
+            traballo a realizar, bootstrap mostrase como unha das librarías mais empregadas a estes
+            efectos e por iso foi seleccionada para este proxecto.
+        
             Twitter bootstrap é un framework ou conxunto de ferramentas de código aberto para 
-            deseñar webs. Contén todo un conxunto de platillas como tipografía, botons, formularios,
+            deseñar web's. Contén todo un conxunto de plantillas como tipografía, botóns, formularios,
             táboas, barras de navegación... Estas plantillas normalmente consisten simplemente nun
             estilo CSS, pero ás veces tamén hai un procesado en javascript como o da función popover
             que permite xerar unha ventá flotante para amosar os datos dos obxectos detectados na 
             aplicación.
             
-            A pesar de todas as cousas que permiten facer HTML + CSS moitas veces é preciso un 
-            tratamento dinámico da información e neste caso é preciso o emprego dunha linguaxe de 
-            scripting como javascript.
+    \subsection{Javascript}
+        A pesar de todas as cousas que permiten facer HTML e CSS moitas veces é preciso un 
+        tratamento dinámico da información para desprazar un elemento na páxina, atender un evento
+        clic, lazar unha ventá... e neste caso é preciso o emprego dunha linguaxe de scripting 
+        como javascript.
     
-    \subsection{Javascrpit}
         Javascript é a linguaxe de programación interpretada que se executa nos navegadores
         cumprindo co estándar ECMAScript, permite executar ordes podendo interactuar coa páxina 
         web a través da arbore DOM (Document Object Model) e co servidor mediante o sistema de
-        chamadas asíncronas. Cada scrpit en javascript está asociado a unha páxina web, de forma
+        chamadas asíncronas. Cada script en javascript está asociado a unha páxina web, de forma
         que todo o que executemos terá efecto sobre a páxina actual e nunca poderemos prolongar
-        a execución dun código .js mais aló da vida desta páxina.\\
+        a execución dun código .js máis aló da vida desta páxina.\\
         
         A pesar de executarse nun navegador javascript é unha linguaxe cunha potencia 
         considerable, esta potencia ven da súa orientación a obxectos que tamén permite 
@@ -234,28 +241,32 @@
         executarse todo no mesmo fio debemos prestar especial atención a non bloquear a 
         interface de usuario con tarefas moi prolongadas.\\
     
-        Javascript tamén é especialmente potente e sinxelo á hora de parsear documentos, xa sexa
-        un documento HTML para acceder á arbore DOM ou ben un XML como o que xera o sistema de 
-        análise. Por desgraza, o manexo de excepcións, e as veces a selección de elementos dentro de un 
-        documento poden ser tarefas tediosas con javascript, co fin de simplificar isto empregaremos
-        a biblioteca jQuery.
-            
         \subsubsection{jQuery}
-        
-            jQuery é unha biblioteca javascript pensada para simplificar os aspectos mais complexos desta 
+    
+            Javascript tamén é especialmente potente á hora de parsear documentos, xa sexa
+            un documento HTML para acceder á arbore DOM ou ben un XML como o que xera o sistema de 
+            análise. Por desgraza, o manexo de excepcións, e a selección de elementos dentro de un 
+            documento son tarefas que se farán de forma moi habitual neste traballo e programar 
+            estas tarefas con javascript resulta tremendamente laborioso, así que co fin de 
+            simplificar esta tarefa empregarase a biblioteca jQuery.
+                
+            jQuery é unha biblioteca javascript pensada para simplificar os aspectos máis complexos desta 
             linguaxe como poden ser a manipulación de documentos HTML/XML ou as chamadas asíncronas 
             mediante AJAX. Está escrita en javascript e é 100\% libre, tal vez por isto sexa a biblioteca
-            javascript mais empregada.
+            javascript máis empregada.
             
             O sistema de selección de jQuery é o mesmo que se emprega en CSS, permitindo seleccionar de 
             xeito sinxelo un conxunto de elementos dentro dun documento, a maiores tamén dispón de un 
             sinxelo acceso e modificación tantos destes elementos como dos seus atributos.
             
-            Os mesmos autores de jQuery, en vista de que no mundo javascript existían outros moitos
-            aspectos a simplificar decidiron outras bibliotecas como as que se amosan a continuación:
-            
         \subsubsection{Qunit}
         
+            Outra faceta tamén moi laboriosa en javascript é a de probar o código escrito e xa que 
+            a meirande parte desta aplicación estará escrita en javascript faise imprescindible 
+            verificar que o código cumpre coa súa función. Por este motivo escolleuse outra 
+            biblioteca tamén deseñada polo equipo de jQuery para simplificar os tests en javascript,
+            esta biblioteca chamase Qunit.
+            
             QUnit é un framework de probas unitarias para código javascript doado de empregar e bastante
             poderoso. Empregase tanto en jQuery, jQuery UI e os proxectos de jQuery Mobile sendo capaz 
             de probar calquera código javascript xenérico.
@@ -271,30 +282,37 @@
             en menor medida suspicious-popup.js.
         
         \subsubsection{Image-picker}
-        
-            Outra librería tamén baseada en jQuery é Image-Picker \cite{ImagePickerPage} que permite
-            xerar un formulario cun campo de tipo ``select'' baseado en imaxes en vez de nunha 
-            entrada despregable, todo elo de forma extremadamente sinxela.
+            Durante a construción da aplicación, nunha das páxinas xurdiu a necesidade de seccionar
+            entre unha lista de imaxes, pero HTML5 é unha linguaxe que por unha parte permite
+            amosar imaxes e por outro lado á hora de enviar información ao lado servidor permite 
+            enviar datos moi simples mediante un formulario. Para dotar a HTML5 de esta 
+            característica empregouse a libraría baseada en jQuery Image-Picker\cite{ImagePickerPage}
+            que permite xerar un formulario cun campo de tipo ``select'' 
+            baseado en imaxes en vez de nunha entrada despregable, todo elo de forma extremadamente
+            sinxela.
         
         \subsubsection{jQuery UI}
         
-            jQuery UI é unha biblioteca de compoñentes para jQuery que lle engade un conxunto de 
-            plugins, widgets e efectos visuais. Pódese descargar dende a súa páxina oficial o 
-            nucleo da biblioteca e os compoñentes nos que se estea interesado, que no caso deste
-            proxecto  empregase o compoñente slider\cite{ComponenteSliderJqueryUi} que
-            xera unha barra selectora.
+            En outro momento da construción viuse a necesidade de engadir unha barra selectora para
+            seleccionar un determinado valor na interface gráfica, e para elo optouse polo plugin 
+            slider\cite{ComponenteSliderJqueryUi} da biblioteca jQuery UI. Esta biblioteca de 
+            compoñentes para jQuery engádelle un conxunto de plugins, widgets e efectos visuais.
+            Pódese descargar dende a súa páxina oficial o núcleo da biblioteca e os compoñentes 
+            nos que se estea interesado.
         
         \subsubsection{tablesorter}
         
-            A derradeira biblioteca empregada, tamén baseada en jQuery é tablesorter
-            \cite{tablesorter-webPage}. Tablesorter é un plugin baseado en jQuery para transformar 
+            Como se verá mais adiante, os requirimentos da aplicación farán preciso que nunha das
+            páxinas webs se amose unha táboa e que esta táboa se poida ordenar segundo o contido de
+            distintas columnas. A estes efectos incorporase a derradeira libraría javascript chamada
+            tablesorter\cite{tablesorter-webPage}. Tablesorter é un plugin baseado en jQuery para transformar 
             unha táboa HTML estándar coas etiquetas $<thead>$ e $<tbody>$ nunha táboa que se pode 
             ordenar polo contido das distintas columnas sen ter que recarga-la páxina. Neste
             caso será de moita utilidade á hora de amosar os resultados da análise, pois así 
             poderanse ordenar as deteccións segundo aparecen no vídeo, segundo o tempo que pasan 
             en pantalla... 
         
-    Todas estas tecnoloxías de capa web axudarannos a mostrar con mais facilidade a análise que o
+    Todas estas tecnoloxías de capa web axudarannos a mostrar con máis facilidade a análise que o
     sistema de recoñecemento faga do vídeo, e en canto as ferramentas empregadas para esta análise
     a ferramenta fundamental que se empregará é OpenCV.
     
@@ -302,7 +320,7 @@
     O sistema de recoñecemento debe ser capaz de ler un vídeo e en base a el recoñecer os obxectos
     de ese vídeo á vez que analiza o seu comportamento. Isto pódese implementar de distintos xeitos,
     mais neste proxecto en concreto fíxose empregando a linguaxe de programación C++ que xa se citou
-    na sección \ref{sec:estudoTecnoloxias}, en combinación coa librería OpenCV e a lingaxe de marcas
+    na sección \ref{sec:estudoTecnoloxias}, en combinación coa librería OpenCV e a linguaxe de marcas
     XML.
 
 \subsection{OpenCV}
@@ -312,22 +330,28 @@
     de proxectos, tanto para detección de movemento como para aplicativos de control de procesos
     que requiren recoñecemento de obxectos.
     
-    OpenCV é multiplataforma, existindo versión para GNU/Linux, Mac OS X e Windows. Contén mais 
+    OpenCV é multiplataforma, existindo versión para GNU/Linux, Mac OS X e Windows. Contén máis 
     de 500 funcións que abarcan unha ampla gama de áreas como o proceso de visión, recoñecemento
     de obxectos (tamén recoñecemento facial), calibrado de cámaras, realidade aumentada e visión
     robótica.
     
-    Por todas estas características OpenCV é unha das bibliotecas mais empregadas hoxe en día, e é
+    Por todas estas características OpenCV é unha das bibliotecas máis empregadas hoxe en día, e é
     por elo tamén que se escolleu para a implementación do sistema de recoñecemento que a aplicación
     web empregará para a análise do vídeo.
     
-    Non obstante, xa que se desexa que a aplicación web sexa o mais versátil posible, contemplase a
+    Non obstante, xa que se desexa que a aplicación web sexa o máis versátil posible, contemplase a
     posibilidade de que poida empregar para a análise sistemas desenvoltos noutras tecnoloxías como
     pode ser Matlab. E para dotala deste grao de versatilidade decídese definir unha interface de
     liña de comando a través da cal se chamará ao sistema, e un formato de ficheiro XML (Extensible 
     Markup Language) no que este sistema de recoñecemento deben escribir os datos da súa análise.
         
 \subsection{Extensible Markup Language (XML)}
+    
+    Como os datos que devolve o sistema de recoñecemento teñen que ser gardados nun ficheiro de 
+    xeito que calquera sistema poida entendelos ou traballar con eles, precisase un formato para
+    ese ficheiro de saída que sexa capaz de almacenar datos estruturados de forma sinxela e 
+    comprensible, este formato é XML.
+
     XML é unha linguaxe de marcas desenvolvida polo W3C (World Wide Web Consortium) e empregado
     para almacenar datos de forma clara e lexible. Permite definir a gramática de linguaxes 
     específicas para estruturar así grandes documentos.
@@ -356,13 +380,13 @@
     ffmpeg.
     
 \subsection{FFmpeg}
-    Falaremos por tanto de FFmpeg, o software que se empregará no proxecto tanto para obter 
-    distinta información de un vídeo como para convertelo a diferentes formatos, unha colección de 
-    software libre que pode gravar, converter (transcodificar) e facer streaming de audio e vídeo,
-    nel está incluído libavcodec unha biblioteca de codecs que contén aqueles mais empregados.
-    
-    FFmpeg é un programa bastante sinxelo a pesar do seu grandioso abanico de opcións, no referente
-    ao proxecto, emprégao a aplicación web para facer diferentes tarefas como obter un determinado
-    fotograma dentro dun vídeo, cambiar o formato no que se almacena ou obter a súa información como
-    duración, numero de fotogramas por segundo, etc.
+    Ao tratarse a nosa aplicación dunha web centrada principalmente no traballo con vídeos, é 
+    preciso dispor de unha ferramenta capaz de proporcionar datos sobre ese vídeo como poden ser 
+    a súa duración, o seu número de fotogramas por segundo... e tamén capaz de transformar vídeo
+    de un formato a outro. O software empregado para esta labor no proxecto é FFmpeg.
+
+    FFmpeg é unha colección de software libre que pode gravar, converter (transcodificar) e facer
+    streaming de audio e vídeo, nel está incluído libavcodec unha biblioteca de codecs que contén 
+    aqueles máis empregados. Pódese dicir ademais de el que a pesar do seu grandioso número de 
+    opcións é un programa bastante sinxelo de empregar.
     
