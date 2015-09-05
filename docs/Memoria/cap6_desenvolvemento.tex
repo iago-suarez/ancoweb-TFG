@@ -137,7 +137,7 @@ o traballo acometido en cada un dos sprint's.
         a velocidade á que o navegador vai amosar os fotogramas do vídeo.\\
         
         Outra cuestión a aclarar é o motivo polo cal non se subministra a fonte de vídeo en formato
-        .ogv que a W3C recomenda. A resposta é que o codec theora que ffmpeg inclue soporta 
+        .ogv que a W3C recomenda. A resposta é que o codec theora que ffmpeg inclúe soporta 
         decodificación pero NON codificación, polo cal é posible pasar de vídeos en .ogv a outros 
         formatos pero non de outros formatos a .ogv imposibilitando pois que se poida ofrecer o 
         vídeo neste formato mentres o codec de ffmpeg non o permita. Non obstante, isto non supón un 
@@ -190,7 +190,7 @@ o traballo acometido en cada un dos sprint's.
         
         Outra funcionalidade interesante de cara a amosar unha lista de vídeos é a de poder mostrar unha
         imaxe representativa de cada un deles. Con este fin crease a vista SuccessfulUpload (imaxe
-        \ref{fig:SuccessfulUploadScreen}), á que se redirecciona unha vez o vídeo é subido correctamente
+        \ref{fig:SuccessfulUploadScreen}), á que se redirixe unha vez o vídeo é subido correctamente
         para seleccionar a súa \textbf{imaxe de portada}.
         
         \begin{figure}[htp]
@@ -340,7 +340,7 @@ o traballo acometido en cada un dos sprint's.
         
         \subsubsection{Paquete XmlRecognition}
             Inicialmente o proxecto conta cun código escrito en C++ e apoiado en OpenCV que está distribuído en
-            dúas librerías EllipseLib e BehaviorLib. A primeira delas encargada da detección de obxetos, e a segunda
+            dúas librerías EllipseLib e BehaviorLib. A primeira delas encargada da detección de obxectos, e a segunda
             encargada de analizalo comportamento a alto nivel a partir dos resultados que proporciona a primeira.
             
             Para a construción do Sistema de recoñecemento integraranse estas dúas librerías como módulos, e 
@@ -423,7 +423,7 @@ o traballo acometido en cada un dos sprint's.
         activo nun momento determinado non reciba as notificacións de actualización. O motivo deste
         cambio é o incremento de eficiencia que produce, moi importante dado que o proceso de actualización
         do Suxeito e todo-los seus observadores tense que executar entre 10 e 30 veces por segundo, todo
-        isto pódese ver reflexado no diagrama da figura \ref{fig:observerPattern}.
+        isto pódese ver reflectido no diagrama da figura \ref{fig:observerPattern}.
         
         \begin{figure}[htp]
         \begin{center}
@@ -507,7 +507,7 @@ o traballo acometido en cada un dos sprint's.
         \begin{figure}[htp]
         \begin{center}
             \includegraphics[scale=0.45]{figures/reloadAnalysis.png}
-            \caption{Capturas de pantalla que amosan os distintos estados do botón de re-analise}
+            \caption{Capturas de pantalla que amosan os distintos estados do botón de re-análise}
         \label{fig:reloadAnalysis}
         \end{center}
         \end{figure}
@@ -596,9 +596,9 @@ o traballo acometido en cada un dos sprint's.
         \end{figure}
 
         Para o ordenamento da táboa empregouse a biblioteca javascript tablesorter que permite ordenar
-        ascendente ou descendentemente a táboa facendo click na cabeceira do elemento polo que se desexa
+        de xeito ascendente ou descendente a táboa facendo clic na cabeceira do elemento polo que se desexa
         ordenar. Tamén é de destacar que os identificadores situados na primeira columna conteñen un 
-        enlace que ao facer click leva o vídeo ao momento no que ese obxecto aparece por primeira vez en
+        enlace que ao facer clic leva o vídeo ao momento no que ese obxecto aparece por primeira vez en
         escena, función de tremenda utilidade á hora de recoñecelo.
         
         \begin{figure}[htp]
@@ -611,7 +611,7 @@ o traballo acometido en cada un dos sprint's.
         
         Como é lóxico esta táboa actualizarase en cada un dos fotogramas se hai algún novo obxecto 
         detectado ou se algún de eles desaparece, marcando ou desmarcando este como obxectos en escena.
-        Este comportamento implementase mediante dúas listas no obxecto VideoDetections: 
+        Este comportamento impleméntase mediante dúas listas no obxecto VideoDetections: 
         \textbf{detRecentlyDeleted} e \textbf{detRecentlySelected}, que son lidas polo observador 
         DetectionsTableObserver, encargado de remarcar todas as Deteccións da lista detRecentlySelected
         e de desmarcar todas as da lista detRecentlyDeleted, estas relacións entre as clases 
@@ -722,7 +722,7 @@ o traballo acometido en cada un dos sprint's.
     
     Agora que xa se pode seleccionar o valor a partir do cal queremos marcar unha detección como
     anómala, falemos do xeito no que se vaia realizar este marcado. A idea xeral consiste en 
-    inabilitar o uso de diferentes cores e marcar de azul todas as deteccións, con excepción de 
+    inhabilitar o uso de diferentes cores e marcar de azul todas as deteccións, con excepción de 
     aquelas que teñan un comportamento anormal que serán marcadas de vermello e aquelas cuxo 
     comportamento inda non fose analizado que serán marcada en cor negra como se pode ver na imaxe
     \ref{fig:suspiciousDetections}. Este uso de cores no só
@@ -835,7 +835,7 @@ o traballo acometido en cada un dos sprint's.
     acumulados nas anteriores versións e á publicación de esta aplicación baixo un entorno de 
     produción.
     
-    Para a publicación desta aplicación web, realizarase a súa montaxe sobre un servidor on-line,
+    Para a publicación desta aplicación web, realizarase a súa montaxe sobre un servidor en liña,
     é dicir, unha máquina conectada a internet que dispón de conexión directa a unha dirección IP
     fixa, e a capacidade para manterse en funcionamento de forma continua. A esta IP referenciará un
     servidor DNS, que se contratará xunto co dominio \url{www.ancoweb.es} a través do cal poderase

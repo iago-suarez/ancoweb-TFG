@@ -75,7 +75,7 @@
         comando pola terminal maximizando así a modularidade e a integración co algoritmo en C++.
         Por outra parte Django\cite{django-web-page-url} contén un potente ORM e un sistema de 
         ``Templates'' que simplifica a parte web. Para concluír cabe destacar o feito de que 
-        python sexa unha linguaxe interpretada, xa que isto evita o paso previo de compilación.
+        Python sexa unha linguaxe interpretada, xa que isto evita o paso previo de compilación.
         
         
     \subsection{Front-End}
@@ -83,13 +83,13 @@
         o Front-End, a parte do Sistema encargada da interacción co usuario.
         
         Por unha parte están as tecnoloxías que pola súa transcendencia e nivel de aceptación
-        cosideranse xa imprescindibles no desenvolvemento web, estamos a falar de HTML e CSS linguaxes
+        considéranse xa imprescindibles no desenvolvemento web, estamos a falar de HTML e CSS linguaxes
         de facto para definir o contido e o aspecto visual respectivamente dunha páxina web.
         De estas linguaxes seleccionaremos as súas versións máis recentes, que a día de hoxe son HTML5 e
         CSS3.
         
         Sen embargo, noutros campos coma son a reprodución de vídeo e o control de elementos dinámicos
-        non existe unha tecnoloxía que abarque a case completitude da rede, é por elo que neste capítulo
+        non existe unha tecnoloxía que abarque a meirande parte da rede, é por elo que neste capítulo
         estudaremos aqueles xeitos que permitan a reprodución de vídeo e a maiores o debuxado de 
         figuras en movemento sobre este vídeo.\\
         
@@ -110,7 +110,7 @@
         
         \subsubsection{Vídeo HTML5 + Javascript}
             Esta é outra das combinacións máis empregadas actualmente, xa que segue o estándar
-            do W3C (World Wide Web Consortium)\cite{w3schools-video-tag} no que se defíne como se
+            do W3C (World Wide Web Consortium)\cite{w3schools-video-tag} no que se define como se
             han de mostrar e obter os vídeos dunha páxina codificada coa linguaxe HTML5., e 
             destaca por seres extremadamente sinxelo en comparación con Flash ou outras tecnoloxías.
             
@@ -147,7 +147,7 @@
     \end{figure}
     
     Comezamos polas tecnoloxías empregadas no lado cliente:
-    \section{Navegador Ciente}
+    \section{Navegador Cliente}
     
     O navegador do cliente empregará unha serie de tecnoloxías para mostrar os datos obtidos do 
     servidor, as máis destacables son:
@@ -230,7 +230,7 @@
         rendemento e alcance, pero exemplos como os que amosa Kevin Roast na súa páxina 
         web\cite{kevin-roast-canvas-examples} despexan toda dúbida posíbel.\\
         
-        Por desgraza, a execución en navegador ten tamén os seus inconvintes como a execución 
+        Por desgraza, a execución en navegador ten tamén os seus inconvenientes como a execución 
         multi-threading empregando \textbf{Web Workers}, estes elementos pensados para permitir
         a execución paralela de código javascript deixan polo de agora moito que desexar xa que 
         cada thread ten as súas propias variables estancas, impedindo polo tanto o acceso á 
@@ -238,7 +238,7 @@
         Opera en vez de facer un multi-threading sobre threads do propio sistema  tan só simulan
         este fenómeno nun único thread. O paralelismo cobrará especial importancia 
         cando executemos os algoritmos que mostran os datos da análise en XML, pois ao 
-        executarse todo no mesmo fio debemos prestar especial atención a non bloquear a 
+        executarse todo no mesmo fío debemos prestar especial atención a non bloquear a 
         interface de usuario con tarefas moi prolongadas.\\
     
         \subsubsection{jQuery}
@@ -303,7 +303,7 @@
         \subsubsection{tablesorter}
         
             Como se verá mais adiante, os requirimentos da aplicación farán preciso que nunha das
-            páxinas webs se amose unha táboa e que esta táboa se poida ordenar segundo o contido de
+            páxinas web's se amose unha táboa e que esta táboa se poida ordenar segundo o contido de
             distintas columnas. A estes efectos incorporase a derradeira libraría javascript chamada
             tablesorter\cite{tablesorter-webPage}. Tablesorter é un plugin baseado en jQuery para transformar 
             unha táboa HTML estándar coas etiquetas $<thead>$ e $<tbody>$ nunha táboa que se pode 
@@ -360,7 +360,7 @@
     que se poden definir nunha Definición de Tipo de Documento ou DTD. \cite{dtd-web-page}
     
     Cando un documento en formato XML segue as directrices definidas no ficheiro DTD asociado,
-    dise que este ficheiro esta ben formado(well formed en ingles), e para validar iso empregarase
+    dise que este ficheiro esta ben formado(well formed en inglés), e para validar iso empregarase
     na elaboración do traballo algún avaliador de XML en liña como por exemplo o da W3Chools.\cite{xml-validator}
     
     XML é especialmente útil para comunicar varias aplicacións que traballan en tecnoloxías 
@@ -374,7 +374,7 @@
     
 \section{Servidor Web}
     Como se explicou anteriormente na sección \ref{sec:estudoTecnoloxias} Django é un framework
-    que traballa sobre python para a creación de páxinas web, as súas funcionalidades empregadas
+    que traballa sobre Python para a creación de páxinas web, as súas funcionalidades empregadas
     explicaranse pouco a pouco no capítulo \ref{cap:desenvolvemento}, polo que aquí explicaranse
     outros compoñentes do servidor empregados que compre coñecer antes de proseguir, en concreto 
     ffmpeg.

@@ -8,7 +8,7 @@ continuación.
 
 \section{Probas Unitarias}
 
-    As probas unitarias proban as funcionalidades máis básica do software. Executanse sempre no 
+    As probas unitarias proban as funcionalidades máis básica do software. Execútanse sempre no 
     ámbito de un só modulo para probar o correcto funcionamento de este, simulando se fose preciso 
     a súa interacción con outros módulos (este proceso chamase mocking).
     
@@ -30,7 +30,7 @@ continuación.
     \subsection{Probas da Capa Web con Javascript}
         As probas da capa web escrita en javascript apoiaranse no framework Qunit de 
         jQuery que proporciona un xeito sinxelo de crear probas unitarias sempre e cando o código 
-        javascript estea convintemente separado do HTML que forma a vista da capa web.
+        javascript estea convenientemente separado do HTML que forma a vista da capa web.
         
         Como resulta lóxico, estas probas estarán escritas en javascript e almacenadas no directorio
         do proxecto ``/src/static/site/tests'', podendo executarse de dous xeitos diferentes: Ou ben 
@@ -55,7 +55,7 @@ continuación.
         Por outro lado PhantomJS é un navegador WebKit de liña de comandos, cunha API Javascript que
         da soporte rápido e nativo para varios estándares web que resultan moi do noso interese,
         como son a manipulación DOM, os selectores CSS, JSON, Canvas e SVG. PhantomJS será chamado
-        implícitamente polo runner de Django.js cando se executen os test, mentres que no caso da 
+        implicitamente polo runner de Django.js cando se executen os test, mentres que no caso da 
         vista QUnitView os tests executaranse directamente no navegador que realice a petición.
         
         Pero só con probas unitarias non se pode asegurar a calidade dos software xa que moitos dos
@@ -69,7 +69,7 @@ continuación.
     
     No noso caso agruparemos as probas de integración nun paquete a parte, para evitar así 
     mesturalas coas probas unitarias de cada módulo. A estes efectos creamos a clase SeleniumAncowebTest
-    que extende StaticLiveServerTestCase engadindo ademais os métodos login\_user(self, user, 
+    que estende StaticLiveServerTestCase engadindo ademais os métodos login\_user(self, user, 
     password) e logout\_user(self, user) xa que todo-los tests que comproben outros módulos precisando
     de un usuario logueado considéranse tests de integración.
 
@@ -82,7 +82,7 @@ continuación.
         Selenium é un framework para a realización de probas funcionais que permite lanzar un navegador
         e indicar as accións a realizar sobre el xunto cunha serie de comprobacións para verificar que
         estas accións provocan na páxina web o efecto desexado. Resultan de especial relevancia na 
-        programación web, xa que o seu functionamento asemellase moito ao que un humano faría para 
+        programación web, xa que o seu funcionamento asemellase moito ao que un humano faría para 
         comprobar o correcto funcionamento da web sendo por tanto moi intuitivo.
         
         No noso caso compróbanse con Selenium, o logueado de Usuarios, a subida de vídeos e o listado de

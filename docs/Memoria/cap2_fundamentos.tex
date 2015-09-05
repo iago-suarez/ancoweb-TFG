@@ -8,7 +8,7 @@ serie de conceptos teóricos que se expoñen a continuación:
 	No proxecto séguese unha Arquitectura Web baseada no modelo cliente-servidor, que 
 	consiste nun lado servidor que distribúe os recursos como poden ser o contido multimedia
 	(vídeos, imaxes, etc) ou as páxinas web ao outro lado, o cliente, que tipicamente corre 
-	nun navegador web interpretando as páxinas html e o código javascript asociado a estas.
+	nun navegador web interpretando as páxinas HTML e o código javascript asociado a estas.
 	
 	Neste caso a parte servidor estará dividida en dúas compoñentes claramente diferenciadas,
 	o sistema para a análise do comportamento e a aplicación web que permitirá o acceso a este, 
@@ -65,7 +65,7 @@ serie de conceptos teóricos que se expoñen a continuación:
 		\item O grao de anormalidade da traxectoria seguida por un obxecto en cada un dos fotogramas
 	\end{itemize}
 	
-	Estas tres tarefas agrupanse baixo un mesmo sistema ao que chamaremos Sistema de Recoñecemento
+	Estas tres tarefas agrúpanse baixo un mesmo sistema ao que chamaremos Sistema de Recoñecemento
 	e que xunto co servidor web, apoiado nos fundamentos que veremos a continuación, forman o lado
 	servidor deste proxecto. 
 	
@@ -115,15 +115,16 @@ serie de conceptos teóricos que se expoñen a continuación:
         
         \subsubsection{Object-Relational Mapping (ORM)}
             Os mapeado obxecto-relación é unha das técnicas de programación que máis velocidade imprimen
-            na construcción de webs, xa que converte os datos dunha linguaxe Orientada a Obxectos (OO) a 
+            na construción de web's, xa que converte os datos dunha linguaxe Orientada a Obxectos (OO) a 
             datos de un sistema relacional no que son persistidos e viceversa, aforrando ao programador
             o traballo de ter que programar o código para esta tarefa. É desexable pois que a tecnoloxía
             a empregar dispoña dun mapeador obxecto-relacional ben integrado, algúns exemplos disto poden
-            ser: a combinación Java+Maven+Hibernate, o EF(Entity Framework) de Microsoft ou os Models de Django.
+            ser: a combinación Java+Maven+Hibernate, o EF(Entity Framework) de Microsoft ou os 
+            Models de Django.
         
         \subsubsection{Xestión de Layout}
             Tamén resulta moi practico dispoñer dunha linguaxe de plantilla que permitan xerar contido
-            html ben estruturado dinamicamente. Algúns exemplos son o Sistema de Templates de Django, o 
+            HTML ben estruturado dinamicamente. Algúns exemplos son o Sistema de Templates de Django, o 
             Sistema JSP de Spring, a libraría Thymeleaf ou os compoñentes de ASP.NET. Todos eles axudan 
             a xerar contido HTML de xeito sinxelo e escalable que logo será enviado ao cliente. De
             tódolos xeitos esta parte cliente as veces precisa comunicarse co servidor sen que sexa 
@@ -131,7 +132,7 @@ serie de conceptos teóricos que se expoñen a continuación:
 		
     \subsection{AJAX}
 		AJAX ou Asynchronous JavaScript And XML é unha tecnoloxía da web empregada para crear 
-		aplicacións interactivas, estas aplicacións executanse no navegador dos usuarios mentres 
+		aplicacións interactivas, estas aplicacións execútanse no navegador dos usuarios mentres 
 		manteñen unha comunicación asíncrona co lado servidor en segundo plano. Normalmente 
 		empregase javascript coma linguaxe para a realización das chamadas asíncronas en combinación
 		con algunha linguaxe para a definición de obxectos como XML ou JSON, para as que ademais os
@@ -167,21 +168,21 @@ serie de conceptos teóricos que se expoñen a continuación:
         
     \subsection{Formato de Vídeo}
         O formato dun vídeo determina como se almacenan os distintos tipos de información involucrada
-        como as imaxes que poden estar codificadas en varios codec, o son, os subtitulos...
+        como as imaxes que poden estar codificadas en varios codec, o son, os subtítulos...
         este formato correspondese cunha extensión específica do arquivo que o contén, como por 
         exemplo:
         
         \begin{itemize}
         \item \textbf{AVI (Audio Video Interleaved):} 
             Sendo un dos formatos máis famosos pode conter un vídeo dunha calidade excelente pero
-            soe requerir dunha gran capacidade. Os codec's que se soen empregar neste formato pola 
+            soe requirir dunha gran capacidade. Os codec's que se soen empregar neste formato pola 
             súa capacidade de compresión e calidade aceptable son DivX e XviD, inda que tamén se 
             permiten outros como DV(Digital Video), CinePak... 
             
         \item \textbf{MKV (Matroska):}
             É un formato de código aberto que basea o seu nome nas clásicas bonecas Matrioskas. Ten
-            capacidade para conter tanto vídeo, son e subtitulos en diferentes idiomas, empregandose
-            como códec de video normalmente algunha implementación de H.264, como por exemplo x264. 
+            capacidade para conter tanto vídeo, son e subtítulos en diferentes idiomas, empregándose
+            como códec de vídeo normalmente algunha implementación de H.264, como por exemplo x264. 
             Mentres que para o son é habitual empregar o codec de audio Vorbis.
 
         \item \textbf{ WebM (Google, 2010):}
@@ -194,7 +195,7 @@ serie de conceptos teóricos que se expoñen a continuación:
             O formato contedor OGG é un formato libre deseñado para incluír vídeo, son, 
             subtítulos e metadatos. O vídeo en este formato soe estar codificado co codec Theora, 
             que se basea nunha versión liberada de VP3. Tamén se emprega para este tipo de 
-            empaquetado a extensión .OGV, mais o que marca o estandar é a extensión .OGG.  
+            empaquetado a extensión .OGV, mais o que marca o estándar é a extensión .OGG.  
             
         \item \textbf{MP4 - MPEG (Moving Pictures Expert Group):}
         
@@ -217,7 +218,7 @@ serie de conceptos teóricos que se expoñen a continuación:
         implementación, e calidade final do servizo:
         
         \subsubsection{Pseudo Streaming ou Descarga Progresiva}
-            Consiste na descarga do vídeo por fragmentos, típicamente empregando o protocolo HTTP. 
+            Consiste na descarga do vídeo por fragmentos, tipicamente empregando o protocolo HTTP. 
             Neste formato, o reprodutor vai acumulando fragmentos de vídeo ata obter os precisos como 
             para comezar a reprodución, mais se o ancho de banda fose insuficiente, o vídeo remataría
             por pararse. Este sistema é o empregado por servizos como YouTube, Vimeo, DailyMotion...
