@@ -1,0 +1,330 @@
+\documentclass[11pt, a4paper, twoside, titlepage]{book}
+
+% Paquetes usados
+
+\usepackage[galician]{babel}
+\usepackage[a4paper, top=4cm, bottom=4cm, left=3.3cm, right=3.2cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{subfigure}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage[official]{eurosym}
+\usepackage{amsmath}
+
+% Aumentar la separación entre líneas
+\renewcommand{\baselinestretch}{1.5}
+\graphicspath{ {figures/} }
+
+
+\begin{document}
+
+
+\pagestyle{empty}
+
+\include{portada}
+\cleardoublepage
+
+% Numeración romana de páginas
+\pagenumbering{roman}
+
+% Definimos el encabezado y pie de página
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{%
+\markboth{\thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{%
+\markright{\thesection.\ #1}{}}
+\fancyhead{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO,ER]{\rightmark}
+\fancyfoot{}
+
+\chapter{Introdución}
+    \section{Descrición xeral da Aplicación}
+
+        Este proxecto consiste nunha aplicación web que emprega funcionalidades relativas á análise do
+        comportamento en zoas transitadas, incluíndo visualización de vídeo e distintas capas que
+        mostran información de alto nivel sobre o comportamento detectado.\\
+
+        En concreto esta ferramenta encargase de detectar a todos aqueles obxectos ou persoas que 
+        aparecen nunha secuencia de vídeo, aplicando un algoritmo para medir o ``grao de anormalidade''
+        da súa conduta en base aos movementos que realizan.\\
+
+    \section{Obxectivos e vantaxes}
+        Esta aplicación proporciona aos investigadores a vantaxe de poder probar os seus algoritmos de
+        análise sobre un vídeo determinado, vendo os resultados a través dunha interface web e 
+        quedando estes resultados almacenados e publicados para que calquera outra persoa que
+        acceda á web poida visualizalos.
+        
+        Ao mesmo tempo tamén ofrece a posibilidade de que un usuario calquera queira probar as 
+        capacidades do determinado algoritmo co que a aplicación estea a funcionar, podendo neste
+        caso observar en que situacións o algoritmo funciona correctamente e en cales funciona de 
+        forma errática.
+        
+    \section{Usuarios e Developers da Aplicación}
+        O Developer principal da aplicación foi Iago Suárez, empregando como mostra un dos algoritmos
+        desenvoltos polo laboratorio VARPA, mais dado que este é un proxecto de software libre 
+        publicado, calquera outra persoa que o desexe pode descargar o software e facer sobre el as
+        modificacións que considere. De feito esta aplicación está especialmente pensada para que 
+        calquera investigador que estea a elaborar un algoritmo de análise de vídeo poida descargala
+        e valerse de ela para amosar os resultados do seu traballo.
+        
+        Por outra parte os usuarios son todas aquelas persoas interesadas en coñecer as capacidades
+        do algoritmo de análise que se estea a empregar.
+        
+\chapter{Requisitos de Hardware e Software}
+
+    \section{Requisitos de Hardware}
+        Non se especifican uns requisitos básicos, pero para o entorno de desenvolvemento é 
+        recomendable polo menos dispor de unha máquina de 1GB de RAM, de un espazo libre en disco de 
+        3 GB que poderá almacenar como mínimo 30 vídeos, procesador de alomenos 1.66 GHz e 
+        obviamente conexión a internet para a descarga das dependencias precisas.
+
+    \section{Requisitos de Software}
+        En canto ao software é preciso un sistema operativo baseado en Linux, sendo recomendada por ser
+        o entorno de desenvolvemento a versión 14.04 de Ubuntu. A linguaxe na que o servidor da 
+        aplicación corre é Python 3.4, polo que compre tela instalada e asignada como versión de
+        python por defecto.
+        
+\chapter{Procedementos de Instalación, arranque e finalización da Aplicación}
+
+    \section{Contido do disco de instalación}
+        \begin{itemize}
+         \item \textbf{docs:} Documentación do proxecto
+         \item \textbf{src:} Código fonte da aplicación
+         \item \textbf{...:} Memoria da aplicación
+         \item \textbf{...:} Manual de Usuario da aplicación
+        \end{itemize}
+
+    
+    \section{Procedemento de Instalación}
+        Todo o proceso de instalación está debidamente explicado nos ficheiros README.md
+        e production-README.md, contendo no primeiro os pasos para a instalación no entorno
+        de desenvolvemento e no segundo os pasos para o entorno de produción, ambos sobre unha
+        máquina Ubuntu 14.04.
+        
+    \section{Arranque da Aplicación}
+        Para arrancar o servidor da aplicación basta con:
+        
+        \begin{verbatim}
+    cd src
+    python manage.py migrate
+    python manage.py createsuperuser --username=admin --email=admin@udc.es
+    python manage.py runserver
+        \end{verbatim}
+
+        Co servidor arrincado xa se pode conectar ao porto local no que se iniciase ( normalmente 
+        a dirección será http://127.0.0.1:8000/) como se ve na figura \ref{fig:Arranque}.
+        
+        \begin{figure}[htp]
+        \begin{center}
+            \includegraphics[scale=0.45]{figures/Arranque.png}
+            \caption{Captura do arranque do servidor de desenvolvemento de Django.}
+        \label{fig:Arranque}
+        \end{center}
+        \end{figure}
+        
+    \section{Finalización da Aplicación}
+        Para deter o servidor chega con pulsar as teclas CONTROL-C sobre a terminal na que o estamos
+        a executar. 
+
+\chapter{Descrición de Menús, Pantallas e Procesos}
+    \section{Menús, pantallas e procesos de la Aplicación}
+        A aplicación está baseada nun menú central que se atopa na parte superior da aplicación como
+        se pode ver na figura \ref{fig:menu} e dende o cal se pode acceder a tódalas partes da
+        aplicación.
+        
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.6]{figures/menu.png}
+        \caption{Captura do arranque do servidor de desenvolvemento de Django.}
+    \label{fig:menu}
+    \end{center}
+    \end{figure}
+        
+    \subsection{Páxina principal}
+    
+    Na páxina principal (figura \ref{fig:paxPrincipal}) vemos unha imaxe de benvida xunto cun breve 
+    resumo do obxectivo da aplicación e de seguido unha lista dos último vídeos subidos.
+    
+        \begin{figure}[htp]
+        \begin{center}
+            \includegraphics[scale=0.4]{figures/paxPrincipal.png}
+            \caption{Páxina principal da aplicación.}
+        \label{fig:paxPrincipal}
+        \end{center}
+        \end{figure}
+
+    \subsection{Listado de Vídeos}
+
+    Se facemos clic no botón do menú ``Videos'' a aplicación conduciramos á páxina que contén o listado de 
+    tódolos vídeos da aplicación da imaxe \ref{fig:paxVideos}. Nela aparecen unha lista de vídeos 
+    ordenados por orde de subida e paxinados de cinco en cinco. Na mesma páxina podemos realizar
+    buscas segundo o nome do vídeo.
+    
+        \begin{figure}[htp]
+        \begin{center}
+            \includegraphics[scale=0.6]{figures/paxVideos.png}
+            \caption{Páxina de Vídeos da aplicación.}
+        \label{fig:paxVideos}
+        \end{center}
+        \end{figure}
+
+    \subsection{Reprodución de vídeos e análise}
+    
+    Se facemos clic sobre algún vídeo da aplicación (tanto da lista de vídeos como da páxina 
+    principal) o seu enlace levaranos a esta páxina na que podemos reproducilo. A maiores 
+    superpóñense sobre o vídeo unha serie de capas de información que podemos configurar co panel de
+    control ``Controls'' como na figura \ref{fig:paxDetails}, nel veremos os seguintes botóns:
+    
+    \begin{itemize}
+     \item \textbf{Show Analysis:} Amosa ou oculta todas as capas de información sobre o vídeo.
+     \item \textbf{Use different colors:} Habilitase ou deshabitase a identificación de obxectos
+        mediante diferentes cores.
+     \item \textbf{Show all detections:} Amosa ou oculta unha táboa na que se ven tódalas deteccións
+        atopadas no vídeo.
+     \item \textbf{Filter by abnormality rate:} Desprega un sub-panel que permite filtrar as 
+        deteccións en función do anómalo que sexa o seu comportamento. Se unha detección é 
+        considerada como sospeitosa marcarase en cor vermella, de ser de confianza en cor azul e por
+        último se inda non foi analizada de cor negra. De estar activado o subpanel
+        poderemos ver:
+        \begin{itemize}
+         \item \textbf{Barra Selectora:} Nela podemos seleccionar a partir de que valor 
+            consideraremos anómala unha traxectoria.
+         \item \textbf{Entrada de Texto:} Nela ao igual que na barra selectora podemos seleccionar 
+            a partir de que valor consideraremos anómala unha traxectoria.
+         \item \textbf{Throw Pop-ups:} Este botón empregase para indicar que se lancen ou non ventás
+            emerxentes ao detectar un obxecto sospeitoso.
+        \end{itemize}
+    \end{itemize}
+
+        \begin{figure}[htp]
+        \begin{center}
+            \includegraphics[scale=0.4]{figures/paxDetails.png}
+            \caption{Páxina de reprodución de vídeos.}
+        \label{fig:paxDetails}
+        \end{center}
+        \end{figure}
+        
+    \subsection{Subida de vídeos}
+    \label{sec:subidaVideo}
+        Unha vez logueados, se facemos clic sobre o nome do noso usuario na marxe superior dereita 
+        despregase unha lista e opcións onde a primeira de elas será ``Upload new video'', facendo
+        clic nela accederemos a esta páxina para a subida de vídeos (imaxe \ref{fig:paxUpload}). No
+        formulario que aparece a continuación poderemos subir un vídeo de menos de 30 MB nun dos
+        seguintes formatos:
+        \begin{itemize}
+         \item .mp4
+         \item .ogv
+         \item .avi
+         \item .flv
+         \item .mpg 
+        \end{itemize}
+
+        \begin{figure}[htp]
+        \begin{center}
+            \includegraphics[scale=0.5]{figures/paxUpload.png}
+            \caption{Páxina de subida de vídeos.}
+        \label{fig:paxUpload}
+        \end{center}
+        \end{figure} 
+        
+    \subsection{Páxina sobre a aplicación}
+        Se facemos clic sobre o botón do menú principal que pon ``About'' poderemos acceder a unha 
+        páxina que nos informa sobre a aplicación e o xeito no que está construída como se ve na 
+        figura \ref{fig:paxAbout}.
+        
+        \begin{figure}[htp]
+        \begin{center}
+            \includegraphics[scale=0.4]{figures/paxAbout.png}
+            \caption{Páxina sobre a aplicación (About).}
+        \label{fig:paxAbout}
+        \end{center}
+        \end{figure}
+        
+    \subsection{Páxina de Administración}
+        
+        A paxina de administración serve para que o administrados do sitio web poida borrar, editar
+        ou crear novas entidades da aplicación como poden ser por exemplo usuarios ou vídeos. A 
+        páxina luce como se ve na imaxe \ref{fig:paxAdmin}.
+        
+        \begin{figure}[htp]
+        \begin{center}
+            \includegraphics[scale=0.55]{figures/paxAdmin.png}
+            \caption{Páxina de administración da aplicación.}
+        \label{fig:paxAdmin}
+        \end{center}
+        \end{figure}
+        
+\chapter{Descrición de Procedementos do Usuario}
+
+    \section{Crear un usuario}
+    Para crear un usuario chega con cubrir o formulario \ref{fig:register} que aparece na páxina principal.
+    
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.6]{figures/register.png}
+        \caption{Páxina de administración da aplicación.}
+    \label{fig:register}
+    \end{center}
+    \end{figure}
+
+    \section{Subir un vídeo}
+    
+    Para subir un vídeo primeiro accederemos á paxina de subida como se explicou no apartado 
+    \ref{sec:subidaVideo}, unha vez aí cubrimos o vídeo e seleccionamos ``Submit'', este vídeo comezará
+    a subirse informándonos do seu proceso mediante unha notificación. Cando a todos os procesos de
+    subida rematen (Carga, conversión, análise e extracción de imaxes) apareceranos unha 
+    notificación cun botón como o que se ve na figura \ref{fig:notFinished}.
+    
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.6]{figures/notFinished.png}
+        \caption{Notificación de que a subida do vídeo rematou.}
+    \label{fig:notFinished}
+    \end{center}
+    \end{figure}
+    
+    Facendo clic nese botón de ``Finish'' a aplicación conduciranos á unha páxina na que se 
+    seleccionará a imaxe representativa do vídeo como se amosa na imaxe 
+    \ref{fig:SuccessfulUploadScreen}, cando teñamos seleccionada esta imaxe e premamos no boton de 
+    ``Submit'' a aplicación levaranos á páxina para a visualización de vídeo na que poderemos ver o 
+    resultado da análise.
+    
+    \begin{figure}[htp]
+    \begin{center}
+        \includegraphics[scale=0.35]{figures/SuccessfulUploadScreen.png}
+        \caption{Captura de pantalla da páxina web SuccessfulUpload.}
+    \label{fig:SuccessfulUploadScreen}
+    \end{center}
+    \end{figure}
+    
+    
+    \section{Visualizar un vídeo e a súa análise}
+    
+    Para reproducir un vídeo o proceso a seguir é primeiro buscar o vídeo que se quere visualizar, 
+    facer clic sobre el para acceder á páxina de reprodución de vídeo e unha vez aí pulsar sobre o
+    elemento vídeo ou sobre a barra espaciadora para que o vídeo comeze a reproducirse.
+    
+    
+% Numeración normal de páginas
+\pagenumbering{arabic}
+
+
+% Definimos el encabezado y pie de página
+\fancyhead{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO]{\rightmark}
+\fancyhead[ER]{\leftmark}
+
+% Definimos el encabezado y pie de página
+\fancyhead{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO,ER]{\rightmark}
+
+% Glosario de términos
+%\printglossary
+
+\end{document}
