@@ -152,7 +152,7 @@
     O navegador do cliente empregará unha serie de tecnoloxías para mostrar os datos obtidos do 
     servidor, as máis destacables son:
     
-    \subsection{HTML5}
+    \subsection{Estrutura da páxina: HTML5}
         Á hora de representar o contido dunha web precisase unha linguaxe que defina este contido,
         estruturándoo e facendo que sexa mais lexible e comprensible para que o navegador poida 
         representalo en pantalla, esta linguaxe é HTML.
@@ -170,7 +170,7 @@
         están tamén asociados á páxina como poden ser ficheiros javascript ou css que se mostran de 
         seguido.
     
-    \subsection{CSS3}
+    \subsection{Aplicando estilos visuais: CSS3}
         HTML permite unha perfecta estruturación dos elementos que compoñen unha páxina web, pero 
         en caso de que queiramos personalizar o estilo da páxina web, ou adaptala a diferentes 
         dispositivos precisamos CSS. CSS(Cascading Style Sheets) é unha linguaxe para definir e 
@@ -182,7 +182,7 @@
         conter as características de estilo comúns a todo o proxecto e a maiores as que sexan 
         precisas para páxinas ou elementos concretos, todo elo traballando coa versión 3 desta linguaxe.
         
-        \subsubsection{Twitter Bootstrap}
+        \subsubsection{Estilo unificado: Twitter Bootstrap}
             CSS3 permite facer todos os axustes precisos en canto a estilo web, pero o problema é 
             que elaborar un bo estilo leva unha cantidade de tempo cuantiosa e por ese motivo se 
             precisa algunha libraría que marque unha pauta de estilo uniforme e que minimice o 
@@ -196,7 +196,7 @@
             que permite xerar unha ventá flotante para amosar os datos dos obxectos detectados na 
             aplicación.
             
-    \subsection{Javascript}
+    \subsection{Execución de código no lado cliente: Javascript}
         A pesar de todas as cousas que permiten facer HTML e CSS moitas veces é preciso un 
         tratamento dinámico da información para desprazar un elemento na páxina, atender un evento
         clic, lazar unha ventá... e neste caso é preciso o emprego dunha linguaxe de scripting 
@@ -241,7 +241,7 @@
         executarse todo no mesmo fío debemos prestar especial atención a non bloquear a 
         interface de usuario con tarefas moi prolongadas.\\
     
-        \subsubsection{jQuery}
+        \subsubsection{Simplificando javascript: jQuery}
     
             Javascript tamén é especialmente potente á hora de parsear documentos, xa sexa
             un documento HTML para acceder á arbore DOM ou ben un XML como o que xera o sistema de 
@@ -259,7 +259,7 @@
             xeito sinxelo un conxunto de elementos dentro dun documento, a maiores tamén dispón de un 
             sinxelo acceso e modificación tantos destes elementos como dos seus atributos.
             
-        \subsubsection{Qunit}
+        \subsubsection{Probas no código javascript: Qunit}
         
             Outra faceta tamén moi laboriosa en javascript é a de probar o código escrito e xa que 
             a meirande parte desta aplicación estará escrita en javascript faise imprescindible 
@@ -281,7 +281,7 @@
             modelo en javascript nos ficheiros Detection.js, DetectionObserver.js, VideoDetections.js e 
             en menor medida suspicious-popup.js.
         
-        \subsubsection{Image-picker}
+        \subsubsection{Creando un formulario con imaxes: Image-picker}
             Durante a construción da aplicación, nunha das páxinas xurdiu a necesidade de seccionar
             entre unha lista de imaxes, pero HTML5 é unha linguaxe que por unha parte permite
             amosar imaxes e por outro lado á hora de enviar información ao lado servidor permite 
@@ -291,7 +291,7 @@
             baseado en imaxes en vez de nunha entrada despregable, todo elo de forma extremadamente
             sinxela.
         
-        \subsubsection{jQuery UI}
+        \subsubsection{Barras selectoras: jQuery UI}
         
             En outro momento da construción viuse a necesidade de engadir unha barra selectora para
             seleccionar un determinado valor na interface gráfica, e para elo optouse polo plugin 
@@ -300,7 +300,7 @@
             Pódese descargar dende a súa páxina oficial o núcleo da biblioteca e os compoñentes 
             nos que se estea interesado.
         
-        \subsubsection{tablesorter}
+        \subsubsection{Ordenar unha táboa: tablesorter}
         
             Como se verá mais adiante, os requirimentos da aplicación farán preciso que nunha das
             páxinas web's se amose unha táboa e que esta táboa se poida ordenar segundo o contido de
@@ -323,7 +323,7 @@
     na sección \ref{sec:estudoTecnoloxias}, en combinación coa librería OpenCV e a linguaxe de marcas
     XML.
 
-\subsection{OpenCV}
+\subsection{Análise do comportamento: OpenCV}
     
     OpenCV é unha biblioteca libre de visión artificial escrita en código C/C++ optimizado.
     Dende a súa aparición publicada por Intel en Xaneiro de 1999, empregouse en infinidade 
@@ -345,12 +345,12 @@
     liña de comando a través da cal se chamará ao sistema, e un formato de ficheiro XML (Extensible 
     Markup Language) no que este sistema de recoñecemento deben escribir os datos da súa análise.
         
-\subsection{Extensible Markup Language (XML)}
+\subsection{Como comunicar sistemas entre si: XML}
     
     Como os datos que devolve o sistema de recoñecemento teñen que ser gardados nun ficheiro de 
     xeito que calquera sistema poida entendelos ou traballar con eles, precisase un formato para
     ese ficheiro de saída que sexa capaz de almacenar datos estruturados de forma sinxela e 
-    comprensible, este formato é XML.
+    comprensible, este formato é XML(Extensible Markup Language).
 
     XML é unha linguaxe de marcas desenvolvida polo W3C (World Wide Web Consortium) e empregado
     para almacenar datos de forma clara e lexible. Permite definir a gramática de linguaxes 
@@ -379,7 +379,7 @@
     outros compoñentes do servidor empregados que compre coñecer antes de proseguir, en concreto 
     ffmpeg.
     
-\subsection{FFmpeg}
+\subsection{Obter información do vídeo con FFmpeg}
     Ao tratarse a nosa aplicación dunha web centrada principalmente no traballo con vídeos, é 
     preciso dispor de unha ferramenta capaz de proporcionar datos sobre ese vídeo como poden ser 
     a súa duración, o seu número de fotogramas por segundo... e tamén capaz de transformar vídeo

@@ -74,21 +74,13 @@ serie de conceptos teóricos que se expoñen a continuación:
 	A programación web de aplicacións de carácter empresarial require do coñecemento da rede, ademais
 	do de unha serie de ferramentas e estratexias para chegar a un deseño sostible e de calidade.
 	
-	A arquitectura clásica das aplicacións web pódese ver no gráfico \ref{fig:ArquitecturaAppWeb}, 
-	ela contén unha parte cliente que se executa no navegador do usuario, e unha parte servidor que
+	A arquitectura clásica das aplicacións web contén unha parte cliente que se executa no navegador
+	do usuario, e unha parte servidor que
 	á súa vez acostuma a dividirse nunha BD (Base de Datos) que almacena a información precisa, unha 
 	capa modelo que reflexa o modelo de negocio da nosa aplicación tipicamente nalgunha linguaxe 
 	de programación e por último unha capa de IU Web (Interface de Usuario Web) que se encarga de 
 	transformar os datos da capa modelo a un formato web comprensible polo cliente e viceversa.
 	
-	\begin{figure}[htp]
-	\begin{center}
-		\includegraphics[scale=0.35]{figures/ArquitecturaAppWeb.png}
-		\caption{Clásica arquitectura dunha aplicación web empresarial}
-	\label{fig:ArquitecturaAppWeb}
-	\end{center}
-	\end{figure}
-
 	As técnicas e estratexias máis importantes á hora de construír unha aplicación web relátanse nos
 	puntos subseguistes:
 	
@@ -97,15 +89,15 @@ serie de conceptos teóricos que se expoñen a continuación:
 		aplicacións web's de carácter empresarial se leven a cabo en pouco tempo e con
 		bos principios de enxeñaría, a isto contribúen en gran medida as estratexias de programación 
 		que se explican a continuación e que se ven no diagrama \ref{fig:fundamentos}.
-		
-    \begin{figure}[htp]
-    \begin{center}
-        \includegraphics[scale=0.4]{figures/fundamentos.pdf}
-        \caption{Diagrama sobre os conceptos de programación}
-    \label{fig:fundamentos}
-    \end{center}
-    \end{figure}
-		
+	
+	    \begin{figure}[htp]
+        \begin{center}
+            \includegraphics[scale=0.4]{figures/fundamentos.pdf}
+            \caption{Diagrama sobre os conceptos de programación}
+        \label{fig:fundamentos}
+        \end{center}
+        \end{figure}
+        
         \subsubsection{Soporte para transaccións}
             Unha transacción nun Sistema Xestor de Base de Datos (SGBD) é un conxunto de ordes que
             se executan formando unha unidade de traballo, de forma invisible e atómica. 
