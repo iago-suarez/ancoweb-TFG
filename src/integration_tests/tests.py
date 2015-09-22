@@ -7,7 +7,6 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
-
 from selenium.webdriver.support import expected_conditions
 
 from ancoweb.tests import SeleniumAncowebTest
@@ -45,6 +44,8 @@ class VideoUploadSeleniumTests(SeleniumAncowebTest):
         wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, 'a.video-finished-btn')))
         self.selenium.find_element_by_css_selector('a.video-finished-btn').click()
         video_images = self.selenium.find_elements_by_class_name('image_picker_image')
+        print("URL: " + self.selenium.current_url)
+        print("Imaxes[" + str(len(video_images)) + "]: " + str(video_images))
         self.assertEqual(utils.DEF_FRAMES_NUM, len(video_images))
         video_images[0].click()
         self.selenium.find_element_by_css_selector('input[type="submit"]').click()

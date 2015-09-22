@@ -15,7 +15,7 @@ DEF_FRAMES_NUM = 5
 class IndexView(generic.ListView):
     template_name = 'videos/index.html'
     model = VideoModel
-    paginate_by = 10
+    paginate_by = 5
 
     def get(self, request, *args, **kwargs):
         return generic.ListView.get(self, request, *args, **kwargs)

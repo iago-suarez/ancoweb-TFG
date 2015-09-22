@@ -31,7 +31,7 @@ function updateStatus() {
         lastUpdateTimes[updateIndex] = Date.now() - time;
         //Waits the fps time least data processing time
         var updateTime = Math.floor((1000 / zoomVD.fps) - arrayMean(lastUpdateTimes));
-        console.log("(fps: " + zoomVD.fps + ")estimateTime: " + updateTime);
+        //console.log("(fps: " + zoomVD.fps + ")estimateTime: " + updateTime);
         return setTimeout(updateStatus, updateTime);
     } else {
         loop_running = false;
@@ -41,7 +41,7 @@ function updateStatus() {
 
 function adjustCanvas(video) {
     $('#video-player').width(window.innerWidth -30);
-    window.resizeTo(window.innerWidth, $('body').height() +30);
+    //window.resizeTo(window.innerWidth, $('body').height() +30);
     $('#canvas-container')
         .height($(video).height())
         .width($(video).width())
@@ -107,10 +107,10 @@ function ZoomVideoDetections(videoElement, xmlTrajectories, xmlDetections, detId
             this.zoomOut();
         }
 
-        console.log("(" + this.getCurrentFrame()
-            + "): Center.x: " + this.center.x + ", center.y: "
-            + this.center.y
-            + ", wSize: " + this.window_size);
+        //console.log("(" + this.getCurrentFrame()
+        //    + "): Center.x: " + this.center.x + ", center.y: "
+        //    + this.center.y
+        //    + ", wSize: " + this.window_size);
 
         this.notify();
     };
@@ -285,7 +285,7 @@ $(document).ready(function () {
 
     $(video).ready(function () {
         if (systemStarted) {
-            console.log("ready h: " + video.videoHeight + ", w: " + video.videoWidth);
+            //console.log("ready h: " + video.videoHeight + ", w: " + video.videoWidth);
             adjustCanvas(video);
         }
     });
