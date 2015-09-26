@@ -1,0 +1,241 @@
+\documentclass{beamer}
+
+\usepackage[spanish]{babel}
+\usepackage[latin1]{inputenc}
+
+\usepackage{pgf}
+\usepackage{color}
+\usepackage{multimedia}
+
+
+
+% Estos son los temas básicos (hay variantes 
+% en cada uno de ellos). Descomenta uno y compila.
+%\usetheme{Goettingen}
+%\usetheme{Warsaw}
+%\usetheme{Dresden}
+
+\usetheme{Singapore}
+
+%\usetheme{Szeged}
+%\usetheme{Pittsburgh}
+%\usetheme{Malmoe}
+%\usetheme{Montpellier}
+
+
+% Algunos temas de colores estándar (son feos!)
+%\usecolortheme{albatross}
+%\usecolortheme{beetle}
+%\usecolortheme{crane}
+
+% Este comando hace los puntos redonditos
+\beamertemplateballitem
+
+% Esta opción sirve para que, cuando pasamos la
+% presentación con pausas, lo que esté oculto 
+% se vea de color muy clarito
+\setbeamercovered{transparent}
+
+
+% Declaración de imágenes a usar 
+%\pgfdeclareimage[opciones]{etiqueta}{path+fichero}
+
+\pgfdeclareimage[width=160pt]{logo}{images/logo}
+\pgfdeclareimage[width=180pt]{logo2}{images/logo}
+
+
+% Título, subtítulo, autor, afiliación y fecha
+\title{Aplicación web para a análise do comportamento humano en zoas transitadas}
+\subtitle{Mención en Enxeñaría do Software}
+\author{Xoan Iago Suárez Canosa}
+\institute{Proxecto clásico de Enxeñaría, Facultade de Informática}
+\date{\today}
+
+
+\begin{document}
+
+
+% Portada
+\begin{frame}
+	\begin{center}
+		\pgfuseimage{logo}\\
+	\end{center}
+	\titlepage
+	%Nota: Se compila con \alert{pdflatex}	
+\end{frame}
+
+
+
+% Índice
+\begin{frame}
+	% Con este comando se pone el título de la diapositiva
+    \frametitle{Índice}
+    \tableofcontents
+\end{frame}
+
+\section{Motivación}
+\begin{frame}
+    \frametitle{Motivación}
+    
+    \begin{center}
+        \pgfdeclareimage[width=260pt]{VarpaMotivation}{images/VarpaMotivation}
+        \pgfuseimage{VarpaMotivation}
+    \end{center}
+    
+\end{frame}
+
+%\section{Estudio de Competencia}
+
+\section{Arquitectura do Proxecto}
+    \begin{frame}
+        \frametitle{Arquitectura}
+        
+        \begin{center}
+            \pgfdeclareimage[width=260pt]{ArqSistemaSimplificado}{images/ArqSistemaSimplificado}
+            \pgfuseimage{ArqSistemaSimplificado}
+        \end{center}
+    
+    \end{frame}
+
+    %\subsection{Servidor Web}
+    \begin{frame}
+        \frametitle{Servidor Web}
+        
+        \begin{center}
+            \pgfdeclareimage[width=220pt]{servidorZoom}{images/servidorZoom}
+            \pgfuseimage{servidorZoom}
+        \end{center}
+        
+        Facilidades aportadas por Django:
+        \begin{itemize}
+         \item Creación de Modelos
+         \item Xestión web de Usuarios e Modelos
+         \item Xeración de páxinas web 
+        \end{itemize}
+        
+    \end{frame}
+    
+    %\subsection{Sistema de Recoñecemento}
+    
+    \begin{frame}
+        \frametitle{Sistema de Recoñecemento}
+        
+        \begin{center}
+            \pgfdeclareimage[width=310pt]{recogSystem}{images/recogSystem}
+            \pgfuseimage{recogSystem}
+        \end{center}
+    
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Navegador Cliente}
+
+        \begin{center}
+            \pgfdeclareimage[width=150pt]{clienteZoom}{images/clienteZoom}
+            \pgfuseimage{clienteZoom}
+        \end{center}
+        
+    \end{frame}
+    
+\section{Casos de Uso e Demo}
+    \begin{frame}
+        \frametitle{Casos de Uso e Demo}
+            \begin{itemize}
+                \item Mínima xestión de usuarios
+                \item Subir Vídeo
+                \begin{itemize}
+                    \item Carga mediante un POST de HTTP
+                    \item Conversión a diferentes formatos( .mp4 e .webm)
+                    \item Análise do vídeo
+                    \item extracción de fotogramas representativos
+                \end{itemize}
+                \item Visualizar Vídeo e Análise
+                \begin{itemize}
+                    \item Reprodución de Vídeo
+                    \item Mostrar obxectos detectados
+                    \item Mostrar traxectorias
+                    \item Listar obxectos
+                    \item Detectar comportamento anómalo
+                    \item Ventás de comportamento sospeitoso
+                \end{itemize}
+            \end{itemize}
+     \end{frame}
+
+\section{Sobre o Proxecto}
+    %\subsection{Validación}
+        \begin{frame}
+            \frametitle{Validación}
+            \begin{itemize}
+             \item \textbf{Probas de unidade:} Django e qUnit.
+             \item \textbf{Probas de integración:} Django e Selenium.
+             \item \textbf{Validación XML:} Documento de Definición de Tipos DTD.
+             \item \textbf{Páxina HTML5:} Validador do World Wide Web Consortium.
+            \end{itemize}
+
+        \end{frame}
+    
+    %\subsection{Entorno de Desenvolvemento}
+        \begin{frame}
+            \frametitle{Entorno de Desenvolvemento}
+            \begin{itemize}
+             \item Control de versións con GitHub.
+             \item Integración continua con Travis CI e Coveralls.
+             \item Issue Tracking con YouTrack. 
+            \end{itemize}
+            \begin{center}
+                \pgfdeclareimage[width=250pt]{entornoDeDesarrollo}{images/entornoDeDesarrollo}
+                \pgfuseimage{entornoDeDesarrollo}
+            \end{center}
+        \end{frame}
+    
+    %\subsection{Posta en produción}
+        \begin{frame}
+            \frametitle{Posta en produción}
+            \begin{center}
+                \pgfdeclareimage[width=320pt]{entornoDeProduccion}{images/entornoDeProduccion}
+                \pgfuseimage{entornoDeProduccion}
+            \end{center}
+            \begin{itemize}
+             \item Hosting dunha máquina Ubuntu Server 14.04 en DigitalOcean
+             \item Sevidor Web HTTP Apache Server 2
+             \item Django versión 1.8.3 sobre Python 3.4
+             \item Base de Datos SQLite para datos os dos usuarios e os vídeos 
+            \end{itemize}
+            \end{frame}
+
+    %\subsection{Planificación e Custos}
+        \begin{frame}
+            \frametitle{Planificación e Custos}
+            \begin{itemize}
+                \item Metodoloxía Spring adaptada.
+                \item Tempo de desenvolvemento de 7 meses divididos en 7 sprints.
+                \item Total de 237 horas con un custo final de 2.856 euros.
+            \end{itemize}
+            
+            \begin{center}
+                \pgfdeclareimage[width=230pt]{fluxoAcumulado}{images/fluxoAcumulado}
+                \pgfuseimage{fluxoAcumulado}
+            \end{center}
+        \end{frame}
+
+\section{Liñas Futuras}
+    \begin{frame}
+        \frametitle{Liñas Futuras}
+        \begin{itemize}
+            \item Vídeo en streaming
+            \item Internacionalización
+            \item Illar Tracking da análise de alto nivel
+            \item Mostrar Potencial
+            \item Amosar velocidades
+            \item Outras pequenas tarefas
+            \begin{itemize}
+                \item Cambiar as sentencias Popen shell='TRUE'
+                \item Cancelar Subida
+                \item Cobertura dos test da capa web
+                \item Engadir compatibilidade con IE
+            \end{itemize}
+        \end{itemize}
+    \end{frame}
+
+\end{document}
+
